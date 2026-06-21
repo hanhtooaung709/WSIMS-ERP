@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ERP.Warehouse.Api.Features.SignIn;
+using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
 using WSIMS_ERP.Shared;
 
@@ -32,6 +33,7 @@ public static class FeatureManager
 
     private static WebApplicationBuilder AddWarehouseServices(this WebApplicationBuilder builder)
     {
+        builder.Services.AddScoped<SignInService>();
         return builder;
     }
 }

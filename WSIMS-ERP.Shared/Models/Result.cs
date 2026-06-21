@@ -5,9 +5,9 @@ public class Result<T>
     public bool IsSuccess => RespType == EnumRespType.Success;
     public bool IsError => !IsSuccess;
     public EnumRespType RespType { get; set; }
-    //public string RespCode { get; set; }
     public string RespDesp { get; set; }
     public T Data { get; set; }
+    
 
     public static Result<T> Success(T data, string respDesp = "Success")
     {
@@ -25,6 +25,24 @@ public class Result<T>
         {
             Data = data,
             RespDesp = respDesp,
+            RespType = EnumRespType.Error
+        };
+    }
+
+    public static Result<T> Error(string respDesp)
+    {
+        return new Result<T> 
+        {
+            RespDesp = respDesp,
+            RespType = EnumRespType.Error
+        };
+    }
+
+    public static Result<T> Error(Exception ex, string code = "ME#999")
+    {
+        return new Result<T>
+        {
+            RespDesp = ex.Message,
             RespType = EnumRespType.Error
         };
     }

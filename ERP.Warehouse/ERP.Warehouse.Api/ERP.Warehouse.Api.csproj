@@ -8,15 +8,19 @@
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+	<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.23" />
+	<PackageReference Include="PuppeteerSharp" Version="20.2.5" />
+	<PackageReference Include="Select.HtmlToPdf.NetCore" Version="25.2.0" />
+	<PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+	<PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
+	<PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Module.CommonDbService\Module.CommonDbService.csproj" />
     <ProjectReference Include="..\..\WSIMS-ERP.Shared\WSIMS-ERP.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\SignIn\" />
+    <ProjectReference Include="..\ERP.Warehouse.Models\ERP.Warehouse.Models.csproj" />
   </ItemGroup>
 
 </Project>

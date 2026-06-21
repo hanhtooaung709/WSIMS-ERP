@@ -1,4 +1,5 @@
 using ERP.Warehouse.Api;
+using WSIMS_ERP.Shared.Services;
 
 try
 {
@@ -8,6 +9,7 @@ try
     builder.Services.AddHttpContextAccessor();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+    builder.Services.AddScoped<DapperService>();
 
     builder.AddModularService();
 
