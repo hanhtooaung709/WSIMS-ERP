@@ -1,0 +1,12 @@
+{
+  "IsDevelopment": true,
+  "DbConnection": "server=.;database=WSIMS-ERP;user id=sa;password=sasa@123;TrustServerCertificate=true;MultipleActiveResultSets=True;Connect Timeout=60;",
+
+  "WarehouseApp": {
+    "WarehouseApiBaseUrl": "https://localhost:7157"
+  },
+
+  "WarehouseApi": {
+    "WarehouseAppBaseUrl": ""
+  }
+}
