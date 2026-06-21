@@ -24,13 +24,6 @@ public static class ConfigurationExtension
 
         builder.Configuration.AddJsonFile(customSettingFilePath, optional: false, reloadOnChange: true);
 
-        string firebaseFileName = $"paylite-ebmb-{stage}-admin-setting.json";
-        string fireBaseConfigPath = Path.Combine(folderPath, firebaseFileName);
-        if (File.Exists(fireBaseConfigPath))
-        {
-            builder.Configuration.AddJsonFile(fireBaseConfigPath, optional: false, reloadOnChange: true);
-        }
-
         builder.Services.AddOptions();
         builder.Services.Configure<CustomSettingModel>(builder.Configuration);
 
@@ -63,10 +56,11 @@ public static class ConfigurationExtension
                 return currentDirectory.Parent?.FullName!;
             }
 
-            var solutionFilePath = Path.Combine(currentDirectory.FullName, "WalletEbmb.sln");
+            var solutionFilePath = Path.Combine(currentDirectory.FullName, "ERP.Warehouse.sln");
             if (File.Exists(solutionFilePath))
             {
-                return currentDirectory.FullName;
+                currentDirectory = currentDirectory.Parent;
+                return currentDirectory.ToString();
             }
 
             currentDirectory = currentDirectory.Parent;
