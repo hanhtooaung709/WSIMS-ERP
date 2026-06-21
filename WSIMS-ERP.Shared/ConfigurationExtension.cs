@@ -50,12 +50,6 @@ public static class ConfigurationExtension
 
         while (currentDirectory is not null)
         {
-            var dllFilePath = Path.Combine(currentDirectory.FullName, "NETCore.Encrypt.dll");
-            if (File.Exists(dllFilePath))
-            {
-                return currentDirectory.Parent?.FullName!;
-            }
-
             var solutionFilePath = Path.Combine(currentDirectory.FullName, "ERP.Warehouse.sln");
             if (File.Exists(solutionFilePath))
             {
