@@ -15,4 +15,8 @@
     <ProjectReference Include="..\..\WSIMS-ERP.Shared\WSIMS-ERP.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\SignIn\" />
+  </ItemGroup>
+
 </Project>
