@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSIMS-ERP.Shared", "WSIMS-ERP.Shared\WSIMS-ERP.Shared.csproj", "{F03C9B7E-D24D-4923-A9BA-513128F32BD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WSIMS-ERP.Shared", "WSIMS-ERP.Shared.csproj", "{4304CDB0-316C-476B-B691-DD4D8A17B0E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F03C9B7E-D24D-4923-A9BA-513128F32BD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F03C9B7E-D24D-4923-A9BA-513128F32BD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F03C9B7E-D24D-4923-A9BA-513128F32BD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F03C9B7E-D24D-4923-A9BA-513128F32BD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4304CDB0-316C-476B-B691-DD4D8A17B0E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4304CDB0-316C-476B-B691-DD4D8A17B0E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4304CDB0-316C-476B-B691-DD4D8A17B0E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4304CDB0-316C-476B-B691-DD4D8A17B0E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {FA0E6BDB-05AA-4D03-B030-F309ECB4AE83}
+		SolutionGuid = {DE4FF40E-E7EB-4AD5-B9AD-E4F9AAA3CD56}
 	EndGlobalSection
 EndGlobal
