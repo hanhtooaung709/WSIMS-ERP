@@ -1,9 +1,6 @@
-﻿using ERP.Warehouse.Api.Common;
-using Microsoft.Extensions.Options;
-using Module.CommonDbService.EfAppDbContextModels;
+﻿using Module.CommonDbService.EfAppDbContextModels;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared;
-using WSIMS_ERP.Shared.Models.ConfigModel;
 using ERP.Warehouse.Models.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +22,7 @@ public class SignInService
 
         try
         {
-            #region Check User Exist
+            #region Check User
 
             var user = await _db.TblWarehouseUsers
                 .AsNoTracking()
@@ -38,14 +35,35 @@ public class SignInService
                 return Result<SigninResModel>.Error("User does not exist.");
             }
 
-            #endregion
-
-            #region Check Password
+            if (user.LockFlag)
+            {
+                return Result<SigninResModel>.Error("Your account is lock.");
+            }
 
             if (!user.LoginPassword.Equals(reqModel.Password))
             {
+                user.LoginFailCount += 1;
+
+                if (user.LoginFailCount == 3)
+                {
+                    user.LockFlag = true;
+                    _db.Entry(user).State = EntityState.Modified;
+                    _db.SaveChanges();
+                    return Result<SigninResModel>.Error("Your account is lock.");
+                }
+
+                _db.Entry(user).State = EntityState.Modified;
+                _db.SaveChanges();
                 return Result<SigninResModel>.Error("User Name or Password is wrong.");
             }
+
+            #endregion
+
+            #region Update LoginFailCount
+
+            user.LoginFailCount = 0;
+            _db.Entry(user).State = EntityState.Modified;
+            _db.SaveChanges();
 
             #endregion
         }

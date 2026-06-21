@@ -23,11 +23,11 @@ public partial class TblWarehouseUser
 
     public string LoginPassword { get; set; } = null!;
 
-    public int FirstTimeLogin { get; set; }
+    public bool FirstTimeLogin { get; set; }
 
     public int LoginFailCount { get; set; }
 
-    public int LockFlag { get; set; }
+    public bool LockFlag { get; set; }
 
     public string CreatedUserId { get; set; } = null!;
 
