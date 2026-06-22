@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BlazorDownloadFile" Version="2.4.0.2" />
+		<PackageReference Include="Humanizer.Core" Version="2.14.1" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.19" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.14.0" />
+		<PackageReference Include="MudBlazor" Version="8.7.0" />
+		<PackageReference Include="Radzen.Blazor" Version="7.0.8" />
+		<PackageReference Include="Refit" Version="8.0.0" />
+		<PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
+		<PackageReference Include="Refit.Newtonsoft.Json" Version="8.0.0" />
+		<PackageReference Include="Serilog" Version="4.3.1-dev-02373" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="6.0.1-dev-00953" />
+		<PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Api\Endpoints\" />
+	</ItemGroup>
+
+</Project>

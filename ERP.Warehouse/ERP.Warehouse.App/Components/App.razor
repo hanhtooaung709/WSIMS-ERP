@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact" dir="ltr" data-theme="theme-default" data-assets-path="theme/assets/"
+      data-template="vertical-menu-template" data-style="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <link rel="icon" type="image/x-icon" href="images/PayLite-Logo.png" />
+
+    <!--En Theme-->
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+
+    <!--Theme-->
+    <!-- Canonical SEO -->
+    @* <link rel="canonical" href="https://1.envato.market/materialize_admin"> *@
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/PayLite-Logo.png" />
+
+    <!-- Fonts -->
+    <link href="css/font_inter.css" rel="stylesheet" />
+    <link href="css/font_roboto.css" rel="stylesheet" />
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="theme/assets/vendor/fonts/remixicon/remixicon.css" />
+    <link rel="stylesheet" href="theme/assets/vendor/fonts/flag-icons.css" />
+
+    <!-- Menu waves for no-customizer fix -->
+    <link rel="stylesheet" href="theme/assets/vendor/libs/node-waves/node-waves.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="theme/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="theme/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="theme/assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="theme/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="theme/assets/vendor/libs/typeahead-js/typeahead.css" />
+    <link rel="stylesheet" href="theme/assets/vendor/libs/bs-stepper/bs-stepper.css">
+    <link rel="stylesheet" href="theme/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css">
+    <link rel="stylesheet" href="theme/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css">
+    <link rel="stylesheet" href="theme/assets/vendor/libs/apex-charts/apex-charts.css" />
+    <link rel="stylesheet" href="theme/assets/vendor/libs/swiper/swiper.css" />
+    <link rel="stylesheet" href="theme/Select2/dist/css/select2.min.css">
+    <link rel="stylesheet" href="theme/assets/vendor/libs/select2/select2.css">
+
+    <!-- Page CSS -->
+    <link rel="stylesheet" href="theme/assets/vendor/css/pages/cards-statistics.css" />
+    <link rel="stylesheet" href="theme/assets/vendor/css/pages/page-auth.css">
+
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/dropdown.css" />
+
+    <!-- Helpers -->
+    <script src="theme/assets/vendor/js/helpers.js"></script>
+    <script src="theme/assets/js/config.js"></script>
+
+    <link href="plugins/notiflix/notiflix-3.2.7.min.css" rel="stylesheet" />
+    <script src="plugins/notiflix/notiflix-3.2.7.min.js"></script>
+
+    <!-- Report Viewer component style -->
+    <link href="plugins/report/bold.report-viewer.min.css" rel="stylesheet" />
+
+    <!-- MudBlazor and Radzen -->
+    <link href="_content/Radzen.Blazor/css/default.css" rel="stylesheet">
+    <link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
+    <link rel="stylesheet" href="_content/Radzen.Blazor/css/standard-base.css">
+
+    <link rel="stylesheet" href="css/custom.css" />
+    <link rel="stylesheet" href="css/loader.css" />
+    <title>[Admin] PayLite</title>
+    <HeadOutlet @rendermode="InteractiveServer" />
+</head>
+
+<body>
+    <Routes @rendermode="InteractiveServer"></Routes>
+    <script src="_framework/blazor.web.js"></script>
+    @* <script src="js/blazor.web.js"></script> *@
+    <script src="js/custom.js?v=@DateTime.Now.Ticks"></script>
+    <script src="js/magnifier.js"></script>
+    <script src="js/passwordToggle.js"></script>
+    <script src="js/PDFGenerator.js"></script>
+    <script src="theme/assets/js/config.js"></script>
+
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script> *@
+    <script src="js/xlsx.full.min.js"></script>
+    <!--Theme-->
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="theme/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="theme/assets/vendor/libs/popper/popper.js"></script>
+    <script src="theme/assets/vendor/js/bootstrap.js"></script>
+    <script src="theme/assets/vendor/libs/node-waves/node-waves.js"></script>
+    <script src="theme/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="theme/assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="theme/assets/vendor/libs/i18n/i18n.js"></script>
+    <script src="theme/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+    <script src="theme/assets/vendor/js/menu.js"></script>
+
+    <!-- endbuild -->
+    <!-- Vendors JS -->
+    <script src="theme/assets/vendor/libs/bs-stepper/bs-stepper.js"></script>
+    <script src="theme/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
+
+    <!-- Main JS -->
+    <script src="theme/assets/js/main.js"></script>
+    <script src="theme/assets/vendor/libs/jquery-sticky/jquery-sticky.js"></script>
+
+    <!-- MudBlazor and Radzen -->
+    <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
+    <script src="_content/BlazorDownloadFile/BlazorDownloadFileScript.js"></script>
+    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+    <script src="./js/report.js"></script>
+    <script src="js/layoutHelper.js"></script>
+
+
+    <script src="plugins/report/bold.reports.common.min.js"></script>
+    <script src="plugins/report/bold.reports.widgets.min.js"></script>
+    <script src="plugins/report/bold.report-viewer.min.js"></script>
+    <script src="plugins/report/boldreports-interop.js"></script>
+
+    <script>
+        window.enableLoading = function (enable) {
+            $('#spinner').css('display', enable ? 'flex' : 'none');
+        }
+    </script>
+</body>
+
+</html>
