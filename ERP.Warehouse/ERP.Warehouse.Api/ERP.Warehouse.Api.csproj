@@ -23,4 +23,8 @@
     <ProjectReference Include="..\ERP.Warehouse.Models\ERP.Warehouse.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Middleware\" />
+  </ItemGroup>
+
 </Project>
