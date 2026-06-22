@@ -11,7 +11,7 @@ public partial class TblTownship
 
     public string TownshipName { get; set; } = null!;
 
-    public string DistrictCode { get; set; } = null!;
+    public string CityCode { get; set; } = null!;
 
     public string CreatedUserId { get; set; } = null!;
 

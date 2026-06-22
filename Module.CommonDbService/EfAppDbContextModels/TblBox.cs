@@ -13,17 +13,17 @@ public partial class TblBox
 
     public string Size { get; set; } = null!;
 
-    public int TareWeight { get; set; }
+    public string TareWeight { get; set; } = null!;
 
-    public int MaxNetWeight { get; set; }
+    public string MaxNetWeight { get; set; } = null!;
 
     public string CreatedUserId { get; set; } = null!;
 
     public string CreatedDateTime { get; set; } = null!;
 
-    public string ModifiedUserId { get; set; } = null!;
+    public string? ModifiedUserId { get; set; }
 
-    public DateTime ModifiedDateTime { get; set; }
+    public DateTime? ModifiedDateTime { get; set; }
 
     public int DelFlag { get; set; }
 }

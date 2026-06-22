@@ -19,9 +19,9 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<TblBranch> TblBranches { get; set; }
 
-    public virtual DbSet<TblCurrency> TblCurrencies { get; set; }
+    public virtual DbSet<TblCity> TblCities { get; set; }
 
-    public virtual DbSet<TblDistrict> TblDistricts { get; set; }
+    public virtual DbSet<TblCurrency> TblCurrencies { get; set; }
 
     public virtual DbSet<TblPackage> TblPackages { get; set; }
 
@@ -69,12 +69,18 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.CreatedUserId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.MaxNetWeight)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.ModifiedDateTime).HasColumnType("datetime");
             entity.Property(e => e.ModifiedUserId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Size)
                 .HasMaxLength(30)
+                .IsUnicode(false);
+            entity.Property(e => e.TareWeight)
+                .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Type)
                 .HasMaxLength(20)
@@ -107,6 +113,32 @@ public partial class AppDbContext : DbContext
                 .IsUnicode(false);
         });
 
+        modelBuilder.Entity<TblCity>(entity =>
+        {
+            entity.HasKey(e => e.CityId).HasName("PK_Tbl_District");
+
+            entity.ToTable("Tbl_City");
+
+            entity.Property(e => e.CityId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.CityCode)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.CityName).HasMaxLength(100);
+            entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreatedUserId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.ModifiedDateTime).HasColumnType("datetime");
+            entity.Property(e => e.ModifiedUserId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.StateCode)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<TblCurrency>(entity =>
         {
             entity.HasKey(e => e.CurrencyId);
@@ -123,35 +155,11 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.CurrencyCode)
                 .HasMaxLength(20)
                 .IsUnicode(false);
-            entity.Property(e => e.CurrencyDescription).HasMaxLength(50);
+            entity.Property(e => e.CurrencyDescription)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.ModifiedDateTime).HasColumnType("datetime");
             entity.Property(e => e.ModifiedUserId)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<TblDistrict>(entity =>
-        {
-            entity.HasKey(e => e.DistrictId);
-
-            entity.ToTable("Tbl_District");
-
-            entity.Property(e => e.DistrictId)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
-            entity.Property(e => e.CreatedUserId)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.DistrictCode)
-                .HasMaxLength(20)
-                .IsUnicode(false);
-            entity.Property(e => e.DistrictName).HasMaxLength(100);
-            entity.Property(e => e.ModifiedDateTime).HasColumnType("datetime");
-            entity.Property(e => e.ModifiedUserId)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.StateCode)
                 .HasMaxLength(50)
                 .IsUnicode(false);
         });
@@ -481,9 +489,13 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
-            entity.Property(e => e.CreatedUserId).HasMaxLength(50);
+            entity.Property(e => e.CreatedUserId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.ModifiedDateTime).HasColumnType("datetime");
-            entity.Property(e => e.ModifiedUserId).HasMaxLength(50);
+            entity.Property(e => e.ModifiedUserId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.StateCode)
                 .HasMaxLength(20)
                 .IsUnicode(false);
@@ -499,12 +511,12 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.TownshipId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.CityCode)
+                .HasMaxLength(20)
+                .IsUnicode(false);
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
             entity.Property(e => e.CreatedUserId)
                 .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.DistrictCode)
-                .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.ModifiedDateTime).HasColumnType("datetime");
             entity.Property(e => e.ModifiedUserId)

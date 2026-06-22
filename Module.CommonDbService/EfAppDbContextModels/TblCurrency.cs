@@ -9,7 +9,7 @@ public partial class TblCurrency
 
     public string CurrencyCode { get; set; } = null!;
 
-    public byte[] CurrencyDescription { get; set; } = null!;
+    public string CurrencyDescription { get; set; } = null!;
 
     public string CreatedUserId { get; set; } = null!;
 
