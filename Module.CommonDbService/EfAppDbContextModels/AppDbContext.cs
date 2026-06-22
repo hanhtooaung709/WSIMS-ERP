@@ -49,6 +49,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<TblWarehouseUser> TblWarehouseUsers { get; set; }
 
+    public virtual DbSet<TblWarehouseUserSession> TblWarehouseUserSessions { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblBox>(entity =>
@@ -590,6 +592,25 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.UserName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<TblWarehouseUserSession>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("Tbl_WarehouseUserSessions");
+
+            entity.Property(e => e.LoginTime).HasColumnType("datetime");
+            entity.Property(e => e.LogoutTime).HasColumnType("datetime");
+            entity.Property(e => e.SessionId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.SessionToken)
+                .HasMaxLength(10)
+                .IsFixedLength();
+            entity.Property(e => e.UserId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
         });
