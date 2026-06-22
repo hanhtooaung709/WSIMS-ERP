@@ -1,3 +1,4 @@
+using ERP.Warehouse.App;
 using ERP.Warehouse.App.Components;
 using Serilog;
 
@@ -15,6 +16,8 @@ try
             {
                 options.MaximumReceiveMessageSize = 10 * 1024 * 1024; // 10MB
             });
+
+    builder.AddModularService();
 
     var app = builder.Build();
 
