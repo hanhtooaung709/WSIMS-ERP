@@ -4,7 +4,7 @@
 <MudSnackbarProvider />
 <MudPopoverProvider />
 <MudLayout>
-    <MudDrawer @bind-Open="_drawerOpen" Elevation="1" Variant="@DrawerVariant.Responsive">
+    <MudDrawer class="floating-nav" @bind-Open="_drawerOpen" Elevation="1" Variant="@DrawerVariant.Responsive">
         <div class="drawer-header">
             <MudText Typo="Typo.h5" Class="font-weight-bold">WSIMS-ERP</MudText>
         </div>
@@ -15,8 +15,6 @@
             <MudAppBar Fixed="false" Elevation="0" Class="floating-appbar">
                 <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
                 <MudSpacer />
-                <MudIconButton Icon="@Icons.Material.Filled.Search" Color="Color.Inherit" />
-                <MudIconButton Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit" />
                 <MudMenu Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
                     <MudMenuItem>Profile</MudMenuItem>
                     <MudMenuItem>Sign Out</MudMenuItem>
@@ -26,7 +24,7 @@
         <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="my-6">
             @Body
         </MudContainer>
-            </MudMainContent>
+    </MudMainContent>
 </MudLayout>
 
 <style>
@@ -41,7 +39,7 @@
         position: sticky;
         top: 16px;
         z-index: 1100;
-               padding: 0 24px;
+        padding: 0 24px;
     }
     /* Floating Appbar Style (Island Look) */
     .floating-appbar {
@@ -54,6 +52,14 @@
         position: relative !important;
         margin: 0 !important;
     }
+    .floating-nav {
+        border-radius: 16px !important;
+        background-color: rgba(255, 255, 255, 0.9) !important;
+        backdrop-filter: blur(12px) !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;
+        color: #334155 !important;
+        margin: 30px 0px 0px 10px;
+    }
     /* Drawer Header */
     .drawer-header {
         height: 80px;
@@ -64,6 +70,7 @@
         color: #2563EB;
         background-color: #ffffff;
     }
+
 </style>
 @code {
     bool _drawerOpen = true;
