@@ -22,6 +22,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Api\Endpoints\" />
+	  <Folder Include="wwwroot\images\" />
 	</ItemGroup>
 
 	<ItemGroup>
