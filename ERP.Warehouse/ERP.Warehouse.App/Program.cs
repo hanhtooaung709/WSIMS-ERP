@@ -1,7 +1,9 @@
+using BlazorDownloadFile;
 using ERP.Warehouse.App;
 using ERP.Warehouse.App.Components;
 using ERP.Warehouse.App.Services.InjectionService;
 using MudBlazor.Services;
+using Radzen;
 using Serilog;
 
 try
@@ -13,7 +15,10 @@ try
 
     builder.Services.AddHttpContextAccessor();
     builder.Services.AddScoped<IInjectService, InjectService>();
+
     builder.Services.AddMudServices();
+    builder.Services.AddRadzenComponents();
+    builder.Services.AddBlazorDownloadFile();
 
     // Add services to the container.
     builder.Services.AddRazorComponents()

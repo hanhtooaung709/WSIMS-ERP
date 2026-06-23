@@ -1,0 +1,31 @@
+.rz-datatable {
+    background: transparent;
+}
+
+.rz-grid-table thead th {
+    background: transparent;
+}
+
+.rz-grid-table-fixed .rz-frozen-cell-left,
+.rz-grid-table-fixed .rz-frozen-cell-right,
+.rz-grid-table-fixed .rz-frozen-cell-left-inner,
+.rz-grid-table-fixed .rz-frozen-cell-right-inner {
+    background: transparent;
+}
+
+.rz-grid-table-striped tbody > tr:not(.rz-expanded-row-content):nth-child(odd) > td {
+    background: transparent;
+}
+
+.rz-grid-table-striped tbody > tr:not(.rz-expanded-row-content):nth-child(even) > td {
+    background: transparent;
+}
+
+.rz-datatable:not(.table-dark):not(.table-light) thead:not(.table-dark):not(.table-light) tr th {
+    color: #d7d8ed !important;
+    background-color: #3a3e5b;
+}
+
+.rz-datatable thead tr th {
+    border-bottom-color: #3a3e5b;
+}

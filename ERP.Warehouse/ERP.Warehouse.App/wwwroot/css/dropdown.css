@@ -1,0 +1,49 @@
+﻿.dropdown-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+    .dropdown-container select {
+        width: 100%;
+        padding-right: 30px; /* Adjust padding to prevent overlap */
+        appearance: none; /* Remove default arrow */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background: transparent;
+    }
+
+    .dropdown-container::after {
+        content: "▼"; /* Dropdown arrow */
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        pointer-events: none;
+        font-size: 12px;
+        color: #aaa; /* Adjust the color */
+    }
+
+.required-field::after {
+    content: "*"; /* Adds the asterisk */
+    color: red; /* Makes it red */
+    margin-left: 4px; /* Adds spacing */
+}
+
+
+/* Hide the number arrows for WebKit browsers (Chrome, Safari, Edge) */
+.hide-arrows::-webkit-inner-spin-button,
+.hide-arrows::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Hide the number arrows for Firefox */
+.hide-arrows {
+    -moz-appearance: textfield;
+}
+
+/* General fallback for browsers that might not support the above */
+.hide-arrows {
+    appearance: none;
+}

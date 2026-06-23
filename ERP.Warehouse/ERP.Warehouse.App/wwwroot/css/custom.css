@@ -1,0 +1,414 @@
+#template-customizer .bg-card{
+    display: none;
+}
+
+<!-- Menu Scroll -->
+#layout-menu {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full height of the viewport */
+}
+
+.app-brand,
+.menu-search,
+.menu-inner-shadow {
+    flex: 0 0 auto; /* Don't allow these to grow/shrink */
+    z-index: 1;
+    background: inherit;
+}
+
+.menu-inner {
+    flex: 1 1 auto; /* Allow it to take remaining space */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+<!-- Menu Scroll -->
+
+/* Default: Full input group visible */
+.resizable-search {
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+/* Default icon styling */
+.resizable-search .input-group-text {
+    border: 1px solid #d9dee3;
+    border-radius: 0.375rem;
+    background-color: transparent;
+}
+
+/* Collapsed: show only the icon, no borders, remove input group styling */
+html.layout-menu-collapsed .resizable-search {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    border: none;
+}
+
+html.layout-menu-collapsed .resizable-search input {
+    display: none !important;
+}
+
+html.layout-menu-collapsed .resizable-search .input-group-text {
+    border: none;
+    background: none;
+    padding: 0;
+}
+
+/* When menu is collapsed but hovered (auto expand) */
+html.layout-menu-collapsed.layout-menu-hover .resizable-search input {
+    display: inline-block !important;
+}
+
+html.layout-menu-collapsed.layout-menu-hover .resizable-search .input-group-text {
+    border: 1px solid #d9dee3;
+    background-color: transparent;
+    padding: 0.5rem 0.75rem;
+}
+
+/* Wrapper: slightly taller */
+html.layout-menu-collapsed.layout-menu-hover .resizable-search,
+html:not(.layout-menu-collapsed) .resizable-search {
+    display: flex;
+    align-items: center;
+    border: 1px solid #d9dee3;
+    border-radius: 0.5rem; /* more rounded */
+    background-color: #fff;
+    height: 44px; /* was 38px */
+    padding: 0;
+}
+
+/* Input: more padding, larger font */
+html.layout-menu-collapsed.layout-menu-hover .resizable-search input,
+html:not(.layout-menu-collapsed) .resizable-search input {
+    display: inline-block !important;
+    border: none;
+    box-shadow: none;
+    flex: 1;
+    padding: 0.65rem 1rem;
+    font-size: 1.05rem; /* slight bump */
+    line-height: 1.5;
+    background-color: transparent;
+    height: 100%;
+}
+
+/* Icon: match new height and spacing */
+html.layout-menu-collapsed.layout-menu-hover .resizable-search .input-group-text,
+html:not(.layout-menu-collapsed) .resizable-search .input-group-text {
+    border: none;
+    background-color: transparent;
+    padding-left: 1rem;
+    padding-right: 0.5rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 1.15rem; /* enlarge icon */
+}
+
+/* Highlight entire search wrapper on hover or focus */
+html.layout-menu-collapsed.layout-menu-hover .resizable-search:hover,
+html.layout-menu-collapsed.layout-menu-hover .resizable-search:has(input:focus),
+html:not(.layout-menu-collapsed) .resizable-search:hover,
+html:not(.layout-menu-collapsed) .resizable-search:has(input:focus) {
+    border: 2px solid #1877f2;
+}
+
+/*html, body {*/
+/*    height: 100%;*/
+/*    overflow: auto;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    scrollbar-width: thin;              !* Firefox *!*/
+/*    scrollbar-color: #999 transparent;  !* Firefox *!*/
+/*}*/
+
+/*html::-webkit-scrollbar {*/
+/*    width: 6px;*/
+/*    height: 6px;*/
+/*}*/
+
+/*html::-webkit-scrollbar-thumb {*/
+/*    background-color: #999;*/
+/*    border-radius: 4px;*/
+/*}*/
+
+/*html::-webkit-scrollbar-track {*/
+/*    background: transparent;*/
+/*}*/
+
+/*.content {*/
+/*    height: 2000px;*/
+/*    background: linear-gradient(#fff, #ccc);*/
+/*}*/
+
+html, body {
+    height: auto !important;
+    overflow-y: auto !important;
+    background-color: #f0f0f0 !important; /* or your preferred background */
+}
+
+.layout-wrapper, .layout-container {
+    height: auto !important;
+    overflow: visible !important;
+    background-color: inherit !important;
+}
+
+.layout-page {
+    min-height: 130vh !important;
+    background-color: #ffffff !important; /* white page background */
+}
+
+.layout-page.scrolled .bg-label-secondary {
+    background-color: #e8e9ed !important;
+    color: #6d788d !important;
+}
+
+
+.sticky-wrapper.is-sticky .sticky-element {
+    background: #f8f9fa; /* sticky background */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.3s ease;
+}
+
+.sticky-element.scrolling-down {
+    opacity: 1;
+}
+
+.sticky-element.scrolling-up {
+    opacity: 1;
+}
+
+.input-group .form-floating {
+    flex-grow: 1;
+}
+
+.input-group .form-control {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.input-group-text {
+    background: transparent;
+    border-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+h6,.h6,h5,.h5,h4,.h4,h3,.h3,h2,.h2,h1,.h1 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--bs-heading-color)
+}
+
+h4,.h4 {
+    --bs-blue: #26c6f9;
+    --bs-indigo: #666cff;
+    --bs-purple: #6f42c1;
+    --bs-pink: #e83e8c;
+    --bs-red: #ff4d49;
+    --bs-orange: #fdb528;
+    --bs-yellow: #ffd950;
+    --bs-green: #72e128;
+    --bs-teal: #20c997;
+    --bs-cyan: #28c3d7;
+    --bs-black: #262b43;
+    --bs-white: #fff;
+    --bs-gray-dark: rgba(38, 43, 67, 0.8);
+    --bs-gray-25: rgba(38, 43, 67, 0.015);
+    --bs-gray-50: rgba(38, 43, 67, 0.03);
+    --bs-primary: #666cff;
+    --bs-secondary: #6d788d;
+    --bs-success: #72e128;
+    --bs-info: #26c6f9;
+    --bs-warning: #fdb528;
+    --bs-danger: #ff4d49;
+    --bs-light: #dfdfe3;
+    --bs-dark: #4b4b4b;
+    --bs-gray: rgba(38, 43, 67, 0.06);
+    --bs-primary-rgb: 102, 108, 255;
+    --bs-secondary-rgb: 109, 120, 141;
+    --bs-success-rgb: 114, 225, 40;
+    --bs-info-rgb: 38, 198, 249;
+    --bs-warning-rgb: 253, 181, 40;
+    --bs-danger-rgb: 255, 77, 73;
+    --bs-light-rgb: 223, 223, 227;
+    --bs-dark-rgb: 75, 75, 75;
+    --bs-gray-rgb: 38, 43, 67;
+    --bs-primary-text-emphasis: #292b66;
+    --bs-secondary-text-emphasis: #2c3038;
+    --bs-success-text-emphasis: #2e5a10;
+    --bs-info-text-emphasis: #0f4f64;
+    --bs-warning-text-emphasis: #654810;
+    --bs-danger-text-emphasis: #661f1d;
+    --bs-light-text-emphasis: rgba(38, 43, 67, 0.7);
+    --bs-dark-text-emphasis: rgba(38, 43, 67, 0.7);
+    --bs-primary-bg-subtle: #e0e2ff;
+    --bs-secondary-bg-subtle: #e2e4e8;
+    --bs-success-bg-subtle: #e3f9d4;
+    --bs-info-bg-subtle: #d4f4fe;
+    --bs-warning-bg-subtle: #fff0d4;
+    --bs-danger-bg-subtle: #ffdbdb;
+    --bs-light-bg-subtle: rgba(248, 249, 249, 0.53);
+    --bs-dark-bg-subtle: rgba(38, 43, 67, 0.401);
+    --bs-primary-border-subtle: #c2c4ff;
+    --bs-secondary-border-subtle: #c5c9d1;
+    --bs-success-border-subtle: #c7f3a9;
+    --bs-info-border-subtle: #a8e8fd;
+    --bs-warning-border-subtle: #fee1a9;
+    --bs-danger-border-subtle: #ffb8b6;
+    --bs-light-border-subtle: rgba(38, 43, 67, 0.12);
+    --bs-dark-border-subtle: rgba(38, 43, 67, 0.5);
+    --bs-white-rgb: 255, 255, 255;
+    --bs-black-rgb: 38, 43, 67;
+    --bs-font-sans-serif: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    --bs-font-monospace: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+    --bs-root-font-size: 16px;
+    --bs-body-font-family: var(--bs-font-sans-serif);
+    --bs-body-font-size: 0.9375rem;
+    --bs-body-font-weight: 400;
+    --bs-body-line-height: 1.375;
+    --bs-body-color: #676b7b;
+    --bs-body-color-rgb: 103, 107, 123;
+    --bs-body-bg: #f7f7f9;
+    --bs-body-bg-rgb: 247, 247, 249;
+    --bs-emphasis-color: #262b43;
+    --bs-emphasis-color-rgb: 38, 43, 67;
+    --bs-secondary-color: rgba(103, 107, 123, 0.75);
+    --bs-secondary-color-rgb: 103, 107, 123;
+    --bs-secondary-bg: rgba(38, 43, 67, 0.12);
+    --bs-secondary-bg-rgb: 38, 43, 67;
+    --bs-tertiary-color: rgba(103, 107, 123, 0.5);
+    --bs-tertiary-color-rgb: 103, 107, 123;
+    --bs-tertiary-bg: rgba(38, 43, 67, 0.06);
+    --bs-tertiary-bg-rgb: 38, 43, 67;
+    --bs-heading-color: #3b4056;
+    --bs-link-color: #666cff;
+    --bs-link-color-rgb: 102, 108, 255;
+    --bs-link-decoration: none;
+    --bs-link-hover-color: #5c61e6;
+    --bs-link-hover-color-rgb: 92, 97, 230;
+    --bs-code-color: #e83e8c;
+    --bs-highlight-color: #676b7b;
+    --bs-highlight-bg: #fff7dc;
+    --bs-border-width: 1px;
+    --bs-border-style: solid;
+    --bs-border-color: #e5e6e8;
+    --bs-border-color-translucent: rgba(38, 43, 67, 0.175);
+    --bs-border-radius: 0.375rem;
+    --bs-border-radius-sm: 0.25rem;
+    --bs-border-radius-lg: 0.5rem;
+    --bs-border-radius-xl: 0.625rem;
+    --bs-border-radius-xxl: 2rem;
+    --bs-border-radius-2xl: var(--bs-border-radius-xxl);
+    --bs-border-radius-pill: 50rem;
+    --bs-box-shadow: 0 0.25rem 0.875rem 0 rgba(38, 43, 67, 0.16);
+    --bs-box-shadow-sm: 0 0.125rem 0.625rem 0 rgba(38, 43, 67, 0.16);
+    --bs-box-shadow-lg: 0 0.375rem 1.25rem 0 rgba(38, 43, 67, 0.18);
+    --bs-box-shadow-inset: inset 0 1px 2px rgba(38, 43, 67, 0.075);
+    --bs-focus-ring-width: 0.15rem;
+    --bs-focus-ring-opacity: 0.75;
+    --bs-focus-ring-color: rgba(38, 43, 67, 0.75);
+    --bs-form-valid-color: #72e128;
+    --bs-form-valid-border-color: #72e128;
+    --bs-form-invalid-color: #ff4d49;
+    --bs-form-invalid-border-color: #ff4d49;
+    --bs-breakpoint-xs: 0;
+    --bs-breakpoint-sm: 576px;
+    --bs-breakpoint-md: 768px;
+    --bs-breakpoint-lg: 992px;
+    --bs-breakpoint-xl: 1200px;
+    --bs-breakpoint-xxl: 1400px;
+    color-scheme: light;
+    --bs-facebook: #3b5998;
+    --bs-twitter: #1da1f2;
+    --bs-google-plus: #dd4b39;
+    --bs-instagram: #e1306c;
+    --bs-linkedin: #0077b5;
+    --bs-github: #333;
+    --bs-dribbble: #ea4c89;
+    --bs-pinterest: #cb2027;
+    --bs-slack: #4a154b;
+    --bs-reddit: #ff4500;
+    --bs-youtube: #ff0000;
+    --bs-whatsapp: #2cd548;
+    --bs-vimeo: #1ab7ea;
+    font-family: var(--bs-body-font-family);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(38,43,67,0);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    box-sizing: border-box;
+    margin-top: 0;
+    font-weight: 500;
+    color: var(--bs-heading-color);
+    font-size: 1.5rem;
+    line-height: 2.375rem;
+    margin-bottom: .25rem !important;
+}
+
+.mb-1 {
+    margin-bottom: .25rem !important
+}
+
+/*  TREE VIEW DESIGN */
+/* Unchecked state */
+.my-custom-tree .rz-chkbox-box {
+    border: 2px solid #757575; /* Gray border */
+    background-color: white;    /* White background */
+}
+
+/* Checked state - FILL COLOR */
+.my-custom-tree .rz-chkbox-box.rz-state-active {
+    background-color: #4CAF50; /* Green fill */
+    border-color: #4CAF50;    /* Match border to fill */
+}
+
+/* Checkmark */
+.my-custom-tree .rz-chkbox-icon {
+    color: blue !important;   /* White check */
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Indeterminate state */
+.my-custom-tree .rz-chkbox-box.rz-state-indeterminate {
+    background-color: #4CAF50; /* Same green fill */
+    border-color: #4CAF50;
+}
+
+/* Magnifier Image*/
+.magnifier-lens {
+    position: absolute;
+    border: 1px solid #000;
+    border-radius: 50%;
+    cursor: crosshair;
+    box-shadow: 0 0 5px #000;
+    pointer-events: none;
+    visibility: hidden;
+    background-repeat: no-repeat;
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+.rz-button .rz-button-md .rz-variant-filled .rz-success .rz-shade-default{
+    letter-spacing: 0;
+}
+
+/* Hide the password reveal button in Microsoft Edge */ ::-ms-reveal {
+    display: none;
+}
+/*
