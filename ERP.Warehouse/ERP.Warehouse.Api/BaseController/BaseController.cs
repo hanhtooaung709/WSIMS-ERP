@@ -11,10 +11,10 @@ public class BaseController : ControllerBase
     public IActionResult Execute<T>(Result<T> model)
     {
         if (model.RespType == EnumRespType.Success)
-            return StatusCode(201, model);
+            StatusCode(201, model);
 
         if (model.RespType == EnumRespType.Error)
-            return StatusCode(501, model);
+            return Ok(model);
 
         if (model.RespType == EnumRespType.SystemError)
             return BadRequest(model);
