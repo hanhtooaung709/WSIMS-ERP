@@ -1,0 +1,36 @@
+﻿<MudDialog MaxWidth="MaxWidth.Small">
+    <DialogContent>
+        <MudText Typo="Typo.h6" Color="Color.Error" Class="mb-3">
+            <MudIcon Icon="@Icons.Material.Filled.Warning" Class="mr-2" />
+            Validation Errors
+        </MudText>
+
+        <!-- This will preserve line breaks -->
+        <MudText Typo="Typo.body2" Style="white-space: pre-line; text-align: left; background-color: #fff8e1; padding: 15px; border-radius: 5px;">
+            @BuildErrorMessage()
+        </MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Close">OK</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
+    [Parameter] public List<string> Errors { get; set; } = new();
+
+    private string BuildErrorMessage()
+    {
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine("Please fix the following errors:\n");
+
+        foreach (var error in Errors)
+        {
+            sb.AppendLine($"• {error}");
+        }
+
+        return sb.ToString();
+    }
+
+    private void Close() => MudDialog.Close();
+}

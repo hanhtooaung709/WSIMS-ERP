@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\..\WSIMS-ERP.Shared\WSIMS-ERP.Shared.csproj" />
+	</ItemGroup>
+
 </Project>

@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{EBA9D8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ERP.Warehouse.Models", "ERP.Warehouse.Models\ERP.Warehouse.Models.csproj", "{2E9980E3-5C1C-4332-9A33-39FA329F4CF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERP.Warehouse.App", "ERP.Warehouse.App\ERP.Warehouse.App.csproj", "{143694E0-1904-4A89-BB8E-B3470A84B921}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ERP.Warehouse.App", "ERP.Warehouse.App\ERP.Warehouse.App.csproj", "{143694E0-1904-4A89-BB8E-B3470A84B921}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

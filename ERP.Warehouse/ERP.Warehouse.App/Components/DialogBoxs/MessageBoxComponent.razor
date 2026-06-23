@@ -1,0 +1,67 @@
+﻿@using ERP.Warehouse.Models.Models
+@using WSIMS_ERP.Shared.Enums
+@using WSIMS_ERP.Shared
+
+<MudDialog Style="width: 350px">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            @Setting.Title
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>@Setting.Message</MudText>
+    </DialogContent>
+    <DialogActions>
+        @if (Setting.MessageBoxType == EnumMessageBoxType.Ok)
+        {
+            <MudButton Color="@buttonColor" Variant="MudBlazor.Variant.Filled" OnClick="Submit">Ok</MudButton>
+        }
+        else if (Setting.MessageBoxType == EnumMessageBoxType.YesNo)
+        {
+            <MudButton OnClick="Cancel">No</MudButton>
+            <MudButton Color="@buttonColor" Variant="MudBlazor.Variant.Filled" OnClick="Submit">Yes</MudButton>
+        }
+        else if (Setting.MessageBoxType == EnumMessageBoxType.Warning)
+        {
+            <MudButton OnClick="Cancel">No</MudButton>
+            <MudButton Color="@buttonColor" Variant="MudBlazor.Variant.Filled" OnClick="Submit">OK</MudButton>
+        }
+    </DialogActions>
+</MudDialog>
+@code {
+    Color buttonColor;
+
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
+    [Parameter] public MessageBoxModel Setting { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        switch (Setting.MessageType)
+        {
+            case EnumRespType.Success:
+                buttonColor = Color.Success;
+                break;
+            case EnumRespType.Warning:
+                buttonColor = Color.Warning;
+                break;
+            case EnumRespType.Error:
+                buttonColor = Color.Error;
+                break;
+            default:
+                buttonColor = Color.Error;
+                break;
+        }
+    }
+
+    void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    void Submit()
+    {
+        MudDialog.Close(DialogResult.Ok(new { ReqService = "" }));
+        if (!Setting.Url.IsNullOrEmpty())
+            _injectService.Go(Setting.Url, Setting.Reload);
+    }
+}

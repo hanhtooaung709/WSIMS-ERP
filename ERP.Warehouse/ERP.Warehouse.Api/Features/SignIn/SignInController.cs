@@ -2,6 +2,7 @@
 using ERP.Warehouse.Models.Models;
 using ERP.Warehouse.Api.BaseController;
 using ERP.Warehouse.Api.Features.SignIn;
+using ERP.Warehouse.Models.Models.Signin.Signin;
 
 [Route("api/warehouse-user")]
 [ApiController]

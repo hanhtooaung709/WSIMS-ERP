@@ -1,0 +1,43 @@
+﻿@using ERP.Warehouse.Models
+@using WSIMS_ERP.Shared
+
+@inject IInjectService _injectService
+<MudDialog Style="width: 350px;">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            @RejectModel.Title
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Reason :</RadzenText>
+        <RadzenTextArea @bind-value="@RejectModel.RejectReason" Style="width: 100%" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Close">Close</MudButton>
+        <MudButton Color="Color.Error" OnClick="Reject">Reject</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
+    [Parameter] public RejectReasonModel RejectModel { get; set; }
+
+    private void Close()
+    {
+        MudDialog.Cancel();
+    }
+
+    private void Reject()
+    {
+        if (RejectModel.RejectReason.IsNullOrEmpty())
+        {
+            _injectService.WarningDialog("Please fill Reject Reason!");
+            return;
+        }
+
+        //In a real world scenario this bool would probably be a service to delete the item from api/database
+        //Snackbar.Add("Server Deleted", Severity.Success);
+        MudDialog.Close(DialogResult.Ok(RejectModel.RejectReason));
+    }
+
+}

@@ -1,5 +1,7 @@
 ﻿@page "/"
 @using ERP.Warehouse.App.Components.Layout
 @layout LoginLayout
+@inject ILogger<SignIn> _logger
+@inject IHttpContextAccessor HttpContextAccessor
 
 <h2>SignIn</h2>
