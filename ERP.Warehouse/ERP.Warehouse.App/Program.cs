@@ -1,5 +1,7 @@
 using ERP.Warehouse.App;
 using ERP.Warehouse.App.Components;
+using ERP.Warehouse.App.Services.InjectionService;
+using MudBlazor.Services;
 using Serilog;
 
 try
@@ -8,6 +10,10 @@ try
 
     builder.Services.AddControllers();
     builder.Services.AddControllersWithViews();
+
+    builder.Services.AddHttpContextAccessor();
+    builder.Services.AddScoped<IInjectService, InjectService>();
+    builder.Services.AddMudServices();
 
     // Add services to the container.
     builder.Services.AddRazorComponents()

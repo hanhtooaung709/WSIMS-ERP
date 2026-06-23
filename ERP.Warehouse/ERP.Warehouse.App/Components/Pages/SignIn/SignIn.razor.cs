@@ -12,12 +12,20 @@ public partial class SignIn
     {
         try
         {
+            if (firstRender)
+            {
 
+            }
         }
         catch (Exception ex)
         {
             _logger.LogCustomError(ex);
             await _injectService.ErrorDialogMessage(ex.Message);
         }
+    }
+
+    private async Task Login()
+    {
+
     }
 }

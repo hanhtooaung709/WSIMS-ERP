@@ -4,4 +4,182 @@
 @inject ILogger<SignIn> _logger
 @inject IHttpContextAccessor HttpContextAccessor
 
-<h2>SignIn</h2>
+<style>
+    body {
+        font-family: 'Inter', sans-serif; /* Example font */
+        position: relative;
+        overflow: hidden; /* To prevent the wave from causing horizontal scrollbars */
+        background: linear-gradient(135deg, #f0f4f8, #e0e7f0);
+    }
+
+    .login-container {
+        position: relative; /* Ensure the login card is on top of the wave */
+        z-index: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        flex-direction: column;
+        flex-wrap: nowrap;
+    }
+
+    .login-card {
+        /* Crystal Background Styles */
+        background-color: rgba(255, 255, 255, 0.5); /* Translucent white (40% opaque) */
+        backdrop-filter: blur(10px); /* Frosted glass effect */
+        -webkit-backdrop-filter: blur(10px); /* For Safari compatibility */
+
+        border-radius: 15px;
+        /* Updated border and shadow for crystal effect */
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 20px rgba(255, 255, 255, 0.5), /* A translucent white glow */
+        0 4px 8px rgba(0, 0, 0, 0.1); /* A subtle dark shadow for depth */
+
+
+        padding: 40px;
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .app-brand-text {
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+
+    .welcome-text {
+        font-size: 1.5rem;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .welcome-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .subtitle-text {
+        color: #666;
+        margin-bottom: 35px;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        height: 50px;
+    }
+
+    .form-floating-outline label {
+        color: #999;
+    }
+
+    .btn-primary {
+        background-color: #6a40df; /* A richer purple */
+        border-color: #6a40df;
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 12px 0;
+    }
+
+    .alert-danger {
+        border-radius: 8px;
+        background-color: #ffe6e6;
+        color: #e04a4a;
+    }
+
+    .app-brand {
+        background: none;
+    }
+
+    .custom-btn {
+        background-color: #013974 !important;
+        border-color: #013974 !important;
+        color: #fff !important;
+    }
+
+    .form-control {
+        border: 2px solid #013974 !important;
+    }
+
+        .form-control:focus {
+            border-color: #013974 !important;
+            box-shadow: 0 0 0 0.25rem rgba(1, 57, 116, 0.25) !important;
+        }
+
+    .input-group .form-control {
+        border-color: #013974 !important;
+    }
+
+    .input-group .input-group-text {
+        border-color: #013974 !important;
+    }
+
+    .input-group .form-control:focus {
+        border-color: #013974 !important;
+        box-shadow: 0 0 0 0.25rem rgba(1, 57, 116, 0.25) !important;
+    }
+
+    .input-group .input-group-text {
+        background-color: #ffffff; /* optional */
+        color: #013974; /* icon color */
+    }
+
+</style>
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="app-brand justify-content-center mb-1 mt-0">
+            <a href="/" class="app-brand-link gap-0">
+                <span class="app-brand-logo demo">
+                    @* <img src="/images/logo.png" style="width: 110px; height: 110px;" alt="" /> *@
+                    <img src="/images/PayLite-Logo.png" style="width: 80px; height: 80px;" alt="" />
+                </span>
+                <span class="app-brand-text demo text-body fw-bold ms-1">Pay Lite Admin</span>
+            </a>
+        </div>
+        <h5 class="welcome-text">
+            Welcome to Pay Lite!
+            @* <img src="/images/welcome-wave.svg" class="welcome-icon" alt="" aria-hidden="true" /> *@
+        </h5>
+        <p class="subtitle-text">Please sign-in to your account.</p>
+        <EditForm Model="@reqModel" OnValidSubmit="@Login" id="loginForm">
+            <div class="form-floating form-floating-outline mb-5">
+                <InputText id="username" class="form-control clsAlphaNoOnly" @bind-Value="reqModel.UserName" placeholder="Enter username" />
+                <label for="username">Username</label>
+            </div>
+
+            <div class="mb-5">
+                <div class="form-password-toggle">
+                    <div class="input-group input-group-merge">
+                        <div class="form-floating form-floating-outline">
+                            <InputText MaxLength="15" id="password" type="password" class="form-control clsAllowAlphabetNumberandSpecialCharacter" @bind-Value="reqModel.Password" placeholder="Enter Password" />
+                            <label for="password">Password</label>
+                        </div>
+                        <span class="input-group-text cursor-pointer">
+                            <i class="ri-eye-off-line"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" id="loginBtn" class="btn custom-btn d-grid w-100 waves-effect waves-light login-btn">
+                Sign in
+            </button>
+
+        </EditForm>
+    </div>
+</div>
+<script>
+    window.setupEnterKeyLogin = function () {
+        document.addEventListener('keydown', function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                var btn = document.getElementById("loginBtn");
+                if (btn) btn.click();
+            }
+        });
+    };
+</script>

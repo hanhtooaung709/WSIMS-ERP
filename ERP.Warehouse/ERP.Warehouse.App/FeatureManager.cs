@@ -1,6 +1,8 @@
 ﻿using ERP.Warehouse.App.Api;
+using ERP.Warehouse.App.Services.InjectionService;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
+using MudBlazor.Services;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.HttpClients;
 
@@ -35,7 +37,8 @@ public static class FeatureManager
     private static WebApplicationBuilder AddWarehouseBackendApi(this WebApplicationBuilder builder)
     {
         string baseUrl = builder.Configuration["WarehouseApp:WarehouseApiBaseUrl"]!;
-        _ = builder.Services.AddHttpClient(NamedHttpClients.WarehouseApi, client =>
+
+        builder.Services.AddHttpClient<HttpClientService>(client =>
         {
             client.BaseAddress = new Uri(baseUrl);
             client.Timeout = TimeSpan.FromMinutes(5);
@@ -43,8 +46,9 @@ public static class FeatureManager
         {
             ServerCertificateCustomValidationCallback = (_, _, _, _) => true
         });
-        builder.Services.AddScoped<HttpClientService>();
-        builder.Services.AddScoped<WarehouseApiService>();
+
+        builder.Services.AddTransient<WarehouseApiService>();
+
         return builder;
     }
 }

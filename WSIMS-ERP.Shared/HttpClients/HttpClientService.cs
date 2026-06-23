@@ -14,9 +14,8 @@ public class HttpClientService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly HttpClient _httpClient;
-    private readonly System.Text.Json.JsonSerializerOptions _jsonOptions; // အတိအကျ သတ်မှတ်ပေးခြင်း
+    private readonly System.Text.Json.JsonSerializerOptions _jsonOptions;
 
-    // HttpClient ကို တိုက်ရိုက် Inject လုပ်ယူပါသည်
     public HttpClientService(IHttpContextAccessor httpContextAccessor, HttpClient httpClient)
     {
         _httpContextAccessor = httpContextAccessor;
