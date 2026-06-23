@@ -1,5 +1,5 @@
 @inherits LayoutComponentBase
-<MudThemeProvider Theme="_currentTheme" />
+<MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 <MudPopoverProvider />
@@ -28,17 +28,13 @@
         </MudContainer>
             </MudMainContent>
 </MudLayout>
-<div id="blazor-error-ui" class="d-none">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
-</div>
 
 <style>
      /* Background for Main Content to make floating appbar pop */
     .main-content-bg {
-        background-color: #f8fafc;
+        /* background-color: #f8fafc; */
         min-height: 100vh;
+        padding-top: 30px;
     }
     /* Container to handle sticky positioning */
     .floating-appbar-container {
