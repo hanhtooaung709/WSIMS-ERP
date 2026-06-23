@@ -9,7 +9,7 @@ public class SignInController : BaseController
 {
     private readonly SignInService _signInService;
 
-    public SignInController([FromBody] SignInService signInService)
+    public SignInController(SignInService signInService)
     {
         _signInService = signInService;
     }

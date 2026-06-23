@@ -48,12 +48,12 @@ public class SignInService
                 {
                     user.LockFlag = true;
                     _db.Entry(user).State = EntityState.Modified;
-                    _db.SaveChanges();
+                    await _db.SaveChangesAsync();
                     return Result<SigninResModel>.Error("Your account is lock.");
                 }
 
                 _db.Entry(user).State = EntityState.Modified;
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 return Result<SigninResModel>.Error("User Name or Password is wrong.");
             }
 
@@ -63,7 +63,7 @@ public class SignInService
 
             user.LoginFailCount = 0;
             _db.Entry(user).State = EntityState.Modified;
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
 
             #endregion
         }
