@@ -43,6 +43,7 @@ public static class FeatureManager
         {
             ServerCertificateCustomValidationCallback = (_, _, _, _) => true
         });
+        builder.Services.AddScoped<HttpClientService>();
         builder.Services.AddScoped<WarehouseApiService>();
         return builder;
     }

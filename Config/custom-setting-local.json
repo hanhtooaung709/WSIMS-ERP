@@ -7,6 +7,6 @@
   },
 
   "WarehouseApi": {
-    "WarehouseAppBaseUrl": ""
+    "WarehouseAppBaseUrl": "https://localhost:7010"
   }
 }
