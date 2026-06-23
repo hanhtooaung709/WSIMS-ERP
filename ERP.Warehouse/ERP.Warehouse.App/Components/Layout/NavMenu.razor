@@ -1,30 +1,21 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">ERP.Warehouse.App</a>
-    </div>
-</div>
+<MudNavMenu Class="mud-nav-menu-custom">
+    <MudNavLink Href="dashboard" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Dashboard</MudNavLink>
+    <MudNavLink Href="warehouse-user-list" Icon="@Icons.Material.Filled.AddCircle">Warehouse User</MudNavLink>
+</MudNavMenu>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
-</div>
-
+<style>
+    .mud-nav-menu-custom .mud-nav-link {
+        margin: 4px 12px;
+        border-radius: 8px;
+        transition: all 0.2s ease-in-out;
+    }
+    .mud-nav-menu-custom .mud-nav-link:hover {
+        background-color: rgba(37, 99, 235, 0.08);
+        color: #2563EB;
+    }
+    .mud-nav-menu-custom .mud-nav-link.active {
+        background-color: rgba(37, 99, 235, 0.12);
+        color: #2563EB;
+        font-weight: 600;
+    }
+</style>
