@@ -1,13 +1,18 @@
-<MudNavMenu Class="mud-nav-menu-custom">
-    <MudNavLink Href="dashboard" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Dashboard</MudNavLink>
-    <MudNavLink Href="warehouse-user-list" Icon="@Icons.Material.Filled.AddCircle">Warehouse User</MudNavLink>
+<MudNavMenu Class="mud-nav-menu pt-4">
+    <MudNavLink Href="dashboard" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
+    
+    <MudNavGroup Title="Warehouse user" Icon="@Icons.Material.Filled.Group">
+        <MudNavLink Href="/warehouse-user-list" Icon="@Icons.Material.Filled.List">Warehouse user list</MudNavLink>
+    </MudNavGroup>
+
 </MudNavMenu>
 
 <style>
     .mud-nav-menu-custom .mud-nav-link {
-        margin: 4px 12px;
+        margin: 4px 16px;
         border-radius: 8px;
         transition: all 0.2s ease-in-out;
+        color: #475569;
     }
     .mud-nav-menu-custom .mud-nav-link:hover {
         background-color: rgba(37, 99, 235, 0.08);

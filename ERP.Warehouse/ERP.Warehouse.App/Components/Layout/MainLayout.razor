@@ -1,67 +1,95 @@
 @inherits LayoutComponentBase
-
 <MudThemeProvider Theme="_currentTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 <MudPopoverProvider />
-
 <MudLayout>
-    <MudAppBar Elevation="1" Color="Color.Primary" Dense="false">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        <MudText Typo="Typo.h5" Class="ml-3 font-weight-bold">WSIMS ERP</MudText>
-        <MudSpacer />
-        <MudIconButton Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit" />
-        <MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" />
-    </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" Elevation="2" Variant="@DrawerVariant.Responsive" ClipMode="DrawerClipMode.Docked">
-        <MudDrawerHeader Class="d-flex align-center">
-            <MudIcon Icon="@Icons.Material.Filled.Warehouse" Size="Size.Large" Color="Color.Primary" Class="mr-2"/>
-            <MudText Typo="Typo.h6" Color="Color.Primary" Class="font-weight-bold">Warehouse</MudText>
-        </MudDrawerHeader>
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="1" Variant="@DrawerVariant.Responsive">
+        <div class="drawer-header">
+            <MudText Typo="Typo.h5" Class="font-weight-bold">WSIMS-ERP</MudText>
+        </div>
         <NavMenu />
     </MudDrawer>
-    <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="my-6 pt-6">
+    <MudMainContent Class="main-content-bg">
+        <div class="floating-appbar-container">
+            <MudAppBar Fixed="false" Elevation="0" Class="floating-appbar">
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+                <MudSpacer />
+                <MudIconButton Icon="@Icons.Material.Filled.Search" Color="Color.Inherit" />
+                <MudIconButton Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit" />
+                <MudMenu Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
+                    <MudMenuItem>Profile</MudMenuItem>
+                    <MudMenuItem>Sign Out</MudMenuItem>
+                </MudMenu>
+            </MudAppBar>
+        </div>
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="my-6">
             @Body
         </MudContainer>
-    </MudMainContent>
+            </MudMainContent>
 </MudLayout>
-
 <div id="blazor-error-ui" class="d-none">
     An unhandled error has occurred.
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
 
+<style>
+     /* Background for Main Content to make floating appbar pop */
+    .main-content-bg {
+        background-color: #f8fafc;
+        min-height: 100vh;
+    }
+    /* Container to handle sticky positioning */
+    .floating-appbar-container {
+        position: sticky;
+        top: 16px;
+        z-index: 1100;
+               padding: 0 24px;
+    }
+    /* Floating Appbar Style (Island Look) */
+    .floating-appbar {
+        border-radius: 12px !important;
+        background-color: rgba(255, 255, 255, 0.9) !important;
+        backdrop-filter: blur(12px) !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;
+        color: #334155 !important;
+        width: 100% !important;
+        position: relative !important;
+        margin: 0 !important;
+    }
+    /* Drawer Header */
+    .drawer-header {
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        color: #2563EB;
+        background-color: #ffffff;
+    }
+</style>
 @code {
     bool _drawerOpen = true;
-
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
     }
-
     private MudTheme _currentTheme = new MudTheme()
     {
         PaletteLight = new PaletteLight()
         {
-            Primary = "#2563EB", // A nice vibrant blue
-            Secondary = "#10B981", // Emerald green
+            Primary = "#2563EB",
+            Secondary = "#10B981",
             AppbarBackground = "#ffffff",
             AppbarText = "#1e293b",
-            DrawerBackground = "#f8fafc",
+            DrawerBackground = "#ffffff",
             DrawerText = "#334155",
-            Background = "#f1f5f9",
+            Background = "#f8fafc",
             Surface = "#ffffff",
             TextPrimary = "#0f172a",
             TextSecondary = "#475569"
-        },
-        Typography = new Typography()
-        {
-            Default = new DefaultTypography()
-            {
-                FontFamily = new[] { "Inter", "Roboto", "Helvetica", "Arial", "sans-serif" }
-            }
         }
     };
 }
+
