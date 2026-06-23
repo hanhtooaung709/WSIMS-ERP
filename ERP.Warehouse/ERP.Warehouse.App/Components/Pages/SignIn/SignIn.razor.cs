@@ -7,7 +7,7 @@ namespace ERP.Warehouse.App.Components.Pages.SignIn;
 
 public partial class SignIn
 {
-    private SigninReqModel reqModel = new();
+    private SigninReqModel _reqModel = new();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -29,8 +29,13 @@ public partial class SignIn
     {
         try
         {
+            string hashPassword = PasswordHash.SHA256HexHashString(_reqModel.Password, _reqModel.UserName);
             await _injectService.EnableLoading();
-            var result = await _apiService.SignIn(new SigninReqModel { UserName = reqModel.UserName, Password = reqModel.Password });
+            var result = await _apiService.SignIn(new SigninReqModel
+            {
+                UserName = _reqModel.UserName,
+                Password = hashPassword
+            });
             await _injectService.DisableLoading();
 
             if (result.IsError)

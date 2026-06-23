@@ -144,9 +144,9 @@
             Welcome to Warehouse!
         </h5>
         <p class="subtitle-text">Please sign-in to your account.</p>
-        <EditForm Model="@reqModel" OnValidSubmit="@Login" id="loginForm">
+        <EditForm Model="@_reqModel" OnValidSubmit="@Login" id="loginForm">
             <div class="form-floating form-floating-outline mb-5">
-                <InputText id="username" class="form-control clsAlphaNoOnly" @bind-Value="reqModel.UserName" placeholder="Enter username" />
+                <InputText id="username" class="form-control clsAlphaNoOnly" @bind-Value="_reqModel.UserName" placeholder="Enter username" />
                 <label for="username">Username</label>
             </div>
 
@@ -154,7 +154,7 @@
                 <div class="form-password-toggle">
                     <div class="input-group input-group-merge">
                         <div class="form-floating form-floating-outline">
-                            <InputText MaxLength="15" id="password" type="password" class="form-control clsAllowAlphabetNumberandSpecialCharacter" @bind-Value="reqModel.Password" placeholder="Enter Password" />
+                            <InputText MaxLength="15" id="password" type="password" class="form-control clsAllowAlphabetNumberandSpecialCharacter" @bind-Value="_reqModel.Password" placeholder="Enter Password" />
                             <label for="password">Password</label>
                         </div>
                         <span class="input-group-text cursor-pointer">

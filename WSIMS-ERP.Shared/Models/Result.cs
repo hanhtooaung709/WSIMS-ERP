@@ -9,7 +9,7 @@ public class Result<T>
     public T Data { get; set; }
     
 
-    public static Result<T> Success(T data, string respDesp = "Success")
+    public static Result<T> Success(T? data, string respDesp = "Success")
     {
         return new Result<T>
         {
