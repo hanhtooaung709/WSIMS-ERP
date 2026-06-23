@@ -1,13 +1,15 @@
-﻿using ERP.Warehouse.Models.Models;
-using ERP.Warehouse.Models.Models.Signin.Signin;
+﻿using ERP.Warehouse.Models.Models.Signin.Signin;
+using Microsoft.AspNetCore.Components;
 using WSIMS_ERP.Shared;
-using WSIMS_ERP.Shared.Models;
 
 namespace ERP.Warehouse.App.Components.Pages.SignIn;
 
 public partial class SignIn
 {
     private SigninReqModel _reqModel = new();
+
+    [Inject]
+    private NavigationManager _navigationManager { get; set; } = default!;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -43,7 +45,8 @@ public partial class SignIn
                 await _injectService.ShowDialog(result);
                 return;
             }
-            await _injectService.ShowDialog(result);
+
+            _navigationManager.NavigateTo("/dashboard");
         }
         catch (Exception ex)
         {
