@@ -1,6 +1,8 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
 @using ERP.Warehouse.App.Services.InjectionService
+@using ERP.Warehouse.App.Services.Security
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
@@ -23,4 +25,5 @@
 @inject IInjectService _injectService
 @inject NavigationManager _nav
 @inject WarehouseApiService _apiService;
-@inject HttpClientService _httpClientService
+@inject HttpClientService _httpClientService 
+@inject AuthenticationStateProvider _authStateProvider

@@ -13,9 +13,6 @@ public partial class SignIn
     [Inject]
     private NavigationManager _navigationManager { get; set; } = default!;
 
-    [Inject]
-    private AuthenticationStateProvider _authStateProvider { get; set; } = default!;
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         try
@@ -48,6 +45,8 @@ public partial class SignIn
                 return;
             }
 
+            #region Chack Token
+
             if (!string.IsNullOrEmpty(result.Data.AccessToken))
             {
                 await _injectService.SetSessionStorage("AccessToken", result.Data.AccessToken.ToEncrypt());
@@ -64,6 +63,8 @@ public partial class SignIn
             {
                 await _injectService.SetSessionStorage("RefreshToken", result.Data.RefreshToken.ToEncrypt());
             }
+
+            #endregion
 
             _navigationManager.NavigateTo("/dashboard");
         }

@@ -1,4 +1,8 @@
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
+
+@using Microsoft.AspNetCore.Components.Authorization
+@using ERP.Warehouse.App.Services.Security;
+
 <MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
@@ -17,7 +21,7 @@
                 <MudSpacer />
                 <MudMenu Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
                     <MudMenuItem>Profile</MudMenuItem>
-                    <MudMenuItem>Sign Out</MudMenuItem>
+                    <MudMenuItem OnClick="HandleLogout">Sign Out</MudMenuItem>
                 </MudMenu>
             </MudAppBar>
         </div>
@@ -78,21 +82,26 @@
     {
         _drawerOpen = !_drawerOpen;
     }
-    private MudTheme _currentTheme = new MudTheme()
+
+    private async Task HandleLogout()
     {
-        PaletteLight = new PaletteLight()
+        try
         {
-            Primary = "#2563EB",
-            Secondary = "#10B981",
-            AppbarBackground = "#ffffff",
-            AppbarText = "#1e293b",
-            DrawerBackground = "#ffffff",
-            DrawerText = "#334155",
-            Background = "#f8fafc",
-            Surface = "#ffffff",
-            TextPrimary = "#0f172a",
-            TextSecondary = "#475569"
+            await JSRuntime.InvokeVoidAsync("sessionStorage.removeItem", "AccessToken");
+            await JSRuntime.InvokeVoidAsync("sessionStorage.removeItem", "RefreshToken");
+            await JSRuntime.InvokeVoidAsync("sessionStorage.removeItem", "SessionId");
+
+            var customProvider = (CustomAuthStateProvider)_authStateProvider;
+            customProvider.NotifyUserLogout();
+
+            _nav.NavigateTo("/", forceLoad: true);
         }
-    };
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Logout Error: {ex.Message}");
+        }
+    }
+
+    [Inject] private IJSRuntime JSRuntime { get; set; } = default!;
 }
 
