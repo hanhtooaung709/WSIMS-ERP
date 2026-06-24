@@ -11,7 +11,7 @@ public class HttpClientService
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly HttpClient _httpClient;
     private readonly IJSRuntime _js;
-    private readonly System.Text.Json.JsonSerializerOptions _jsonOptions;
+    private readonly JsonSerializerOptions _jsonOptions;
 
     public HttpClientService(IHttpContextAccessor httpContextAccessor,
         HttpClient httpClient,
@@ -20,7 +20,7 @@ public class HttpClientService
         _httpContextAccessor = httpContextAccessor;
         _httpClient = httpClient;
         _js = js;
-        _jsonOptions = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
     }
 
     public async Task<Result<TResponse>> ExecuteAsync<TRequest, TResponse>(string endpoint, TRequest reqModel)
