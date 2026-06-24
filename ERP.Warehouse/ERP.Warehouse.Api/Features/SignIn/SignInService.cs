@@ -3,14 +3,16 @@ using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared;
 using Microsoft.EntityFrameworkCore;
 using ERP.Warehouse.Models.Models.Signin.Signin;
+using ERP.Warehouse.Api.Common;
 
 namespace ERP.Warehouse.Api.Features.SignIn;
 
-public class SignInService
+public class SignInService : AuthorizationService
 {
     private readonly AppDbContext _db;
 
-    public SignInService(AppDbContext db)
+    public SignInService(AppDbContext db,
+        IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
     {
         _db = db;
     }

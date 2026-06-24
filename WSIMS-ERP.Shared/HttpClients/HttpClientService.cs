@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.JSInterop;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using WSIMS_ERP.Shared.Models;
@@ -9,12 +10,16 @@ public class HttpClientService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly HttpClient _httpClient;
+    private readonly IJSRuntime _js; // <-- ဒါအသစ်ထည့်ပါ
     private readonly System.Text.Json.JsonSerializerOptions _jsonOptions;
 
-    public HttpClientService(IHttpContextAccessor httpContextAccessor, HttpClient httpClient)
+    public HttpClientService(IHttpContextAccessor httpContextAccessor,
+        HttpClient httpClient,
+        IJSRuntime js)
     {
         _httpContextAccessor = httpContextAccessor;
         _httpClient = httpClient;
+        _js = js; // <-- သိမ်းထားပါ
         _jsonOptions = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
     }
 
@@ -23,6 +28,20 @@ public class HttpClientService
         try
         {
             var request = new HttpRequestMessage(HttpMethod.Post, endpoint);
+
+            #region get Token
+
+            string encryptedToken = await _js.InvokeAsync<string>("sessionStorage.getItem", "AccessToken");
+
+            if (!string.IsNullOrWhiteSpace(encryptedToken))
+            {
+                string decryptedToken = encryptedToken.ToDecrypt();
+
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", decryptedToken);
+            }
+
+            #endregion
+
             var jsonStr = System.Text.Json.JsonSerializer.Serialize(reqModel);
             var content = new StringContent(jsonStr, Encoding.UTF8, "application/json");
             request.Content = content;
