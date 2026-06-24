@@ -22,13 +22,4 @@ public class SignInController : BaseController
         var result = await _signInService.SignIn(reqModel);
         return Execute(result);
     }
-
-    [HttpPost]
-    [Route("SignOut")]
-    [Authorize] // <================= ဒီကောင် မဖြစ်မနေ ထည့်ပေးရပါမယ်
-    public async Task<IActionResult> SignOut()
-    {
-        var result = await _signInService.SignOut();
-        return Execute(result);
-    }
 }
