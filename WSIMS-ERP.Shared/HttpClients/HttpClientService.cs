@@ -10,7 +10,7 @@ public class HttpClientService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly HttpClient _httpClient;
-    private readonly IJSRuntime _js; // <-- ဒါအသစ်ထည့်ပါ
+    private readonly IJSRuntime _js;
     private readonly System.Text.Json.JsonSerializerOptions _jsonOptions;
 
     public HttpClientService(IHttpContextAccessor httpContextAccessor,
@@ -19,7 +19,7 @@ public class HttpClientService
     {
         _httpContextAccessor = httpContextAccessor;
         _httpClient = httpClient;
-        _js = js; // <-- သိမ်းထားပါ
+        _js = js;
         _jsonOptions = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
     }
 

@@ -1,4 +1,6 @@
 ﻿using ERP.Warehouse.App.Services.Security;
+using ERP.Warehouse.Models.Models.Signin;
+using ERP.Warehouse.Models.Models.Signin.Signin;
 using Microsoft.JSInterop;
 
 namespace ERP.Warehouse.App.Components.Layout;
@@ -6,8 +8,25 @@ namespace ERP.Warehouse.App.Components.Layout;
 public partial class MainLayout
 {
     bool _drawerOpen = true;
+    WarehouseUserInfoListModel _listModel = new();
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var result = await _apiService.GetUserData();
 
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+
+            _listModel = result.Data;
+
+            StateHasChanged();
+        }
+    }
 
     void DrawerToggle()
     {

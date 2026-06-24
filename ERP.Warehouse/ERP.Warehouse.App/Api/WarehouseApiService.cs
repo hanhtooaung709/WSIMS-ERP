@@ -1,4 +1,5 @@
 ﻿using ERP.Warehouse.App.Api.Endpoints.SignIn;
+using ERP.Warehouse.Models.Models.Signin;
 using ERP.Warehouse.Models.Models.Signin.Signin;
 using WSIMS_ERP.Shared.HttpClients;
 using WSIMS_ERP.Shared.Models;
@@ -22,6 +23,10 @@ public class WarehouseApiService
     public async Task<Result<SigninResModel>> SignIn(SigninReqModel reqModel)
         => await _httpClientService.ExecuteAsync<SigninReqModel, SigninResModel>
         (SignInEndpoints.SignIn, reqModel);
+
+    public async Task<Result<WarehouseUserInfoListModel>> GetUserData()
+        => await _httpClientService.ExecuteAsync<object, WarehouseUserInfoListModel>
+        (SignInEndpoints.GetUserData, null!);
 
     #endregion
 }
