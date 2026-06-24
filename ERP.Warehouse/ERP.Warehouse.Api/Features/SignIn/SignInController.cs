@@ -22,4 +22,12 @@ public class SignInController : BaseController
         var result = await _signInService.SignIn(reqModel);
         return Execute(result);
     }
+
+    [HttpPost]
+    [Route("GetUserData")]
+    public async Task<IActionResult> GetUserData()
+    {
+        var result = await _signInService.GetUserData();
+        return Execute(result);
+    }
 }
