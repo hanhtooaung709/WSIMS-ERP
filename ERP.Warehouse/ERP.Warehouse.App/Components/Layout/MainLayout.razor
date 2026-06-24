@@ -90,9 +90,12 @@
             await JSRuntime.InvokeVoidAsync("sessionStorage.removeItem", "AccessToken");
             await JSRuntime.InvokeVoidAsync("sessionStorage.removeItem", "RefreshToken");
             await JSRuntime.InvokeVoidAsync("sessionStorage.removeItem", "SessionId");
+            await JSRuntime.InvokeVoidAsync("sessionStorage.removeItem", "UserId");
 
-            var customProvider = (CustomAuthStateProvider)_authStateProvider;
-            customProvider.NotifyUserLogout();
+            if (_authStateProvider is CustomAuthStateProvider customProvider)
+            {
+                customProvider.NotifyUserLogout();
+            }
 
             _nav.NavigateTo("/", forceLoad: true);
         }
@@ -101,7 +104,5 @@
             Console.WriteLine($"Logout Error: {ex.Message}");
         }
     }
-
-    [Inject] private IJSRuntime JSRuntime { get; set; } = default!;
 }
 
