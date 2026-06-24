@@ -7,12 +7,11 @@ using ERP.Warehouse.Api.Common;
 
 namespace ERP.Warehouse.Api.Features.SignIn;
 
-public class SignInService : AuthorizationService
+public class SignInService
 {
     private readonly AppDbContext _db;
 
-    public SignInService(AppDbContext db,
-        IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+    public SignInService(AppDbContext db)
     {
         _db = db;
     }
