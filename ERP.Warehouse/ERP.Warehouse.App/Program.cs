@@ -1,7 +1,9 @@
-using BlazorDownloadFile;
+﻿using BlazorDownloadFile;
 using ERP.Warehouse.App;
 using ERP.Warehouse.App.Components;
 using ERP.Warehouse.App.Services.InjectionService;
+using ERP.Warehouse.App.Services.Security;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor.Services;
 using Radzen;
 using Serilog;
@@ -9,6 +11,20 @@ using Serilog;
 try
 {
     var builder = WebApplication.CreateBuilder(args);
+
+    builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = "JwtAuth";
+        options.DefaultChallengeScheme = "JwtAuth";
+    })
+    .AddCookie("JwtAuth", options =>
+    {
+        options.LoginPath = "/";
+    });
+    builder.Services.AddAuthorizationCore();
+    builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+    builder.Services.AddScoped<CustomAuthStateProvider>(provider =>
+        (CustomAuthStateProvider)provider.GetRequiredService<AuthenticationStateProvider>());
 
     builder.Services.AddControllers();
     builder.Services.AddControllersWithViews();

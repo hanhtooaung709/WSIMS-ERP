@@ -1,6 +1,8 @@
 ﻿using ERP.Warehouse.Models.Models.Signin.Signin;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using WSIMS_ERP.Shared;
+using ERP.Warehouse.App.Services.Security;
 
 namespace ERP.Warehouse.App.Components.Pages.SignIn;
 
@@ -11,14 +13,14 @@ public partial class SignIn
     [Inject]
     private NavigationManager _navigationManager { get; set; } = default!;
 
+    [Inject]
+    private AuthenticationStateProvider _authStateProvider { get; set; } = default!;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         try
         {
-            if (firstRender)
-            {
-
-            }
+            if (firstRender) { }
         }
         catch (Exception ex)
         {
@@ -44,6 +46,23 @@ public partial class SignIn
             {
                 await _injectService.ShowDialog(result);
                 return;
+            }
+
+            if (!string.IsNullOrEmpty(result.Data.AccessToken))
+            {
+                await _injectService.SetSessionStorage("AccessToken", result.Data.AccessToken.ToEncrypt());
+
+                var customProvider = (CustomAuthStateProvider)_authStateProvider;
+                customProvider.NotifyUserLogin(result.Data.AccessToken);
+            }
+            else
+            {
+                _logger.LogError("The AccessToken provided by the API is null!");
+            }
+
+            if (!string.IsNullOrEmpty(result.Data.RefreshToken))
+            {
+                await _injectService.SetSessionStorage("RefreshToken", result.Data.RefreshToken.ToEncrypt());
             }
 
             _navigationManager.NavigateTo("/dashboard");
