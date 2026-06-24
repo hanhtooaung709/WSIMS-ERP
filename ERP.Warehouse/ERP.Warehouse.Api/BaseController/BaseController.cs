@@ -9,11 +9,6 @@ namespace ERP.Warehouse.Api.BaseController;
 [ApiController]
 public class BaseController : ControllerBase
 {
-    // API Controller တိုင်းကနေ လှမ်းသုံးလို့ရအောင် Shortcut ဆောက်ထားခြင်း
-    protected string CurrentUserId => User.FindFirst("UserId")?.Value
-                                      ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                                      ?? string.Empty;
-
     public IActionResult Execute<T>(Result<T> model)
     {
         if (model.RespType == EnumRespType.Success)
