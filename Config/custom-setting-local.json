@@ -8,5 +8,10 @@
 
   "WarehouseApi": {
     "WarehouseAppBaseUrl": "https://localhost:7010"
+  },
+
+  "Jwt": {
+    "Key": "W3b_3rmp_W4r3h0us3_S3cur3_Jwwt_K3y_St0r4g3_2026_ERP_SYSTEM",
+    "Subject": "WarehouseERP"
   }
 }
