@@ -36,6 +36,7 @@ public static class FeatureManager
     {
         builder.Services.AddScoped<SignInService>();
         builder.Services.AddScoped<AuthorizationService>();
+        builder.Services.AddScoped<JwtTokenHelper>();
         return builder;
     }
 }

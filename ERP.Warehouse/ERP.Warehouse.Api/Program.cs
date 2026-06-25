@@ -1,3 +1,6 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using ERP.Warehouse.Api;
 using WSIMS_ERP.Shared.Services;
 
@@ -13,6 +16,36 @@ try
 
     builder.AddModularService();
 
+    #region Get Jwt
+
+    var jwtKey = builder.Configuration.GetSection("Jwt")["Key"] ?? "";
+    if (string.IsNullOrEmpty(jwtKey))
+    {
+        throw new InvalidOperationException("JWT Key is not configured in Jwt:Key.");
+    }
+
+    var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey));
+
+    builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = signingKey,
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+    #endregion
+
     var app = builder.Build();
 
     if (app.Environment.IsDevelopment())
@@ -22,6 +55,7 @@ try
     }
 
     app.UseHttpsRedirection();
+    app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
 

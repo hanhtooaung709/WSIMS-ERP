@@ -11,11 +11,15 @@ namespace ERP.Warehouse.Api.Features.SignIn;
 public class SignInService : AuthorizationService
 {
     private readonly AppDbContext _db;
+    private readonly JwtTokenHelper _jwtTokenHelper;
 
-    public SignInService(IHttpContextAccessor httpContextAccessor, 
-        AppDbContext db) : base(httpContextAccessor)
+    public SignInService(IHttpContextAccessor httpContextAccessor,
+        AppDbContext db,
+        JwtTokenHelper jwtTokenHelper,
+        ILogger<AuthorizationService> logger) : base(httpContextAccessor, logger)
     {
         _db = db;
+        _jwtTokenHelper = jwtTokenHelper;
     }
 
     public async Task<Result<SigninResModel>> SignIn(SigninReqModel reqModel)
@@ -67,6 +71,28 @@ public class SignInService : AuthorizationService
             user.LoginFailCount = 0;
             _db.Entry(user).State = EntityState.Modified;
             await _db.SaveChangesAsync();
+
+            #endregion
+
+            #region Generate Token & Create Session
+
+            var accessToken = _jwtTokenHelper.GenerateToken(user.WarehouseUserId, user.UserName);
+
+            var session = new TblWarehouseUserSession
+            {
+                SessionId = Ulid.NewUlid().ToString(),
+                UserId = user.WarehouseUserId,
+                SessionToken = accessToken,
+                IsActive = true,
+                LoginTime = DevCode.GetServerDateTime(),
+                LogoutTime = new DateTime(1753, 1, 1)
+            };
+            _db.TblWarehouseUserSessions.Add(session);
+            await _db.SaveChangesAsync();
+
+            model.UserId = user.WarehouseUserId;
+            model.SessionId = session.SessionId;
+            model.AccessToken = accessToken;
 
             #endregion
         }

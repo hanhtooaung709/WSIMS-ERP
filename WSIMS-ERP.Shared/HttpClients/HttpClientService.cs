@@ -75,7 +75,13 @@ public class HttpClientService
                         return Result<TResponse>.Error(respDesp);
                     }
 
-                    var data = System.Text.Json.JsonSerializer.Deserialize<TResponse>(responseString, _jsonOptions);
+                    if (!root.TryGetProperty("data", out JsonElement dataElement) &&
+                        !root.TryGetProperty("Data", out dataElement))
+                    {
+                        return Result<TResponse>.Error("Response missing 'data' property");
+                    }
+
+                    var data = System.Text.Json.JsonSerializer.Deserialize<TResponse>(dataElement.GetRawText(), _jsonOptions);
                     return Result<TResponse>.Success(data, respDesp);
                 }
             }

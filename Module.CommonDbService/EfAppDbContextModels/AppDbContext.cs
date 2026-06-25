@@ -598,18 +598,18 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<TblWarehouseUserSession>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("Tbl_WarehouseUserSessions");
+            entity.HasKey(e => e.SessionId);
 
-            entity.Property(e => e.LoginTime).HasColumnType("datetime");
-            entity.Property(e => e.LogoutTime).HasColumnType("datetime");
+            entity.ToTable("Tbl_WarehouseUserSession");
+
             entity.Property(e => e.SessionId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.LoginTime).HasColumnType("datetime");
+            entity.Property(e => e.LogoutTime).HasColumnType("datetime");
             entity.Property(e => e.SessionToken)
-                .HasMaxLength(10)
-                .IsFixedLength();
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.UserId)
                 .HasMaxLength(50)
                 .IsUnicode(false);

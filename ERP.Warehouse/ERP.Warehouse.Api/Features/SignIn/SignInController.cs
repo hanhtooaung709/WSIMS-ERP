@@ -24,6 +24,7 @@ public class SignInController : BaseController
     }
 
     [HttpPost]
+    [Authorize]
     [Route("GetUserData")]
     public async Task<IActionResult> GetUserData()
     {

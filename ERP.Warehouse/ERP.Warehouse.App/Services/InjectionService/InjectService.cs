@@ -1486,7 +1486,7 @@ public class InjectService : IInjectService
     {
         try
         {
-            await _protectedSessionStorage.SetAsync(key, value);
+            await _jSRuntime.InvokeVoidAsync("sessionStorage.setItem", key, value?.ToString());
         }
         catch (JSDisconnectedException)
         {
