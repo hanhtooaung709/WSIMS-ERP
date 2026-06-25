@@ -64,6 +64,11 @@ public partial class SignIn
                 await _injectService.SetSessionStorage("RefreshToken", result.Data.RefreshToken.ToEncrypt());
             }
 
+            if (!string.IsNullOrEmpty(result.Data.SessionId))
+            {
+                await _injectService.SetSessionStorage("SessionId", result.Data.SessionId);
+            }
+
             #endregion
 
             _navigationManager.NavigateTo("/dashboard");

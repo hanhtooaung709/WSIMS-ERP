@@ -28,5 +28,9 @@ public class WarehouseApiService
         => await _httpClientService.ExecuteAsync<object, WarehouseUserInfoListModel>
         (SignInEndpoints.GetUserData, null!);
 
+    public async Task<Result<bool>> Logout(LogoutReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<LogoutReqModel, bool>
+        (SignInEndpoints.Logout, reqModel);
+
     #endregion
 }

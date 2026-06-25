@@ -2,6 +2,7 @@
 using ERP.Warehouse.Api.BaseController;
 using ERP.Warehouse.Api.Features.SignIn;
 using ERP.Warehouse.Models.Models.Signin.Signin;
+using ERP.Warehouse.Models.Models.Signin;
 using Microsoft.AspNetCore.Authorization;
 
 [Route("api/warehouse-user")]
@@ -29,6 +30,15 @@ public class SignInController : BaseController
     public async Task<IActionResult> GetUserData()
     {
         var result = await _signInService.GetUserData();
+        return Execute(result);
+    }
+
+    [HttpPost]
+    [Authorize]
+    [Route("Logout")]
+    public async Task<IActionResult> Logout(LogoutReqModel reqModel)
+    {
+        var result = await _signInService.Logout(reqModel);
         return Execute(result);
     }
 }

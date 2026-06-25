@@ -74,13 +74,15 @@ public class SignInService : AuthorizationService
 
             #endregion
 
+            var sessionId = DevCode.GenerateUlid();
+
             #region Generate Token & Create Session
 
             var accessToken = _jwtTokenHelper.GenerateToken(user.WarehouseUserId, user.UserName);
 
             var session = new TblWarehouseUserSession
             {
-                SessionId = Ulid.NewUlid().ToString(),
+                SessionId = sessionId,
                 UserId = user.WarehouseUserId,
                 SessionToken = accessToken,
                 IsActive = true,
@@ -102,6 +104,33 @@ public class SignInService : AuthorizationService
         }
 
         return Result<SigninResModel>.Success(model);
+    }
+
+    public async Task<Result<bool>> Logout(LogoutReqModel reqModel)
+    {
+        try
+        {
+            var session = await _db.TblWarehouseUserSessions
+                .FirstOrDefaultAsync(x =>
+                    x.SessionId == reqModel.SessionId &&
+                    x.IsActive);
+
+            if (session is null)
+            {
+                return Result<bool>.Success(true, "Session already inactive or not found.");
+            }
+
+            session.IsActive = false;
+            session.LogoutTime = DevCode.GetServerDateTime();
+            _db.Entry(session).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+
+            return Result<bool>.Success(true, "Logged out successfully.");
+        }
+        catch (Exception ex)
+        {
+            return Result<bool>.Error(ex);
+        }
     }
 
     public async Task<Result<WarehouseUserInfoListModel>> GetUserData()

@@ -2,6 +2,7 @@
 using ERP.Warehouse.Models.Models.Signin;
 using ERP.Warehouse.Models.Models.Signin.Signin;
 using Microsoft.JSInterop;
+using WSIMS_ERP.Shared.Models;
 
 namespace ERP.Warehouse.App.Components.Layout;
 
@@ -37,6 +38,12 @@ public partial class MainLayout
     {
         try
         {
+            var sessionId = await JSRuntime.InvokeAsync<string>("sessionStorage.getItem", "SessionId");
+            if (!string.IsNullOrWhiteSpace(sessionId))
+            {
+                await _apiService.Logout(new LogoutReqModel { SessionId = sessionId });
+            }
+
             await JSRuntime.InvokeVoidAsync("sessionStorage.removeItem", "AccessToken");
             await JSRuntime.InvokeVoidAsync("sessionStorage.removeItem", "RefreshToken");
             await JSRuntime.InvokeVoidAsync("sessionStorage.removeItem", "SessionId");
