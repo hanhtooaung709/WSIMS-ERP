@@ -19,37 +19,37 @@
                 <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
                 <MudSpacer />
                 <MudMenu Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" Class="profile-menu">
-                    <MudStack Row="false" Spacing="1" Class="pa-3" Style="min-width: 240px;">
-                        <MudStack Row="true" Spacing="2">
-                            <MudAvatar Color="Color.Primary" Size="Size.Medium">
+                    <MudStack Row="false" Spacing="1" Class="pa-4" Style="min-width: 250px;">
+                        <MudStack Row="true" AlignItems="MudBlazor.AlignItems.Center" Spacing="3">
+                            <MudAvatar Color="Color.Primary" Size="Size.Medium" Class="mud-avatar-soft-primary">
                                 @_user.FullName?.Substring(0, Math.Min(2, _user.FullName.Length)).ToUpper()
                             </MudAvatar>
                             <MudStack Row="false" Spacing="0">
-                                <MudText Typo="Typo.subtitle1" Class="font-weight-bold">@_user.FullName</MudText>
-                                <MudText Typo="Typo.body2" Color="Color.Secondary">@_user.RoleName</MudText>
+                                <MudText Typo="Typo.subtitle1" Class="argon-name">@_user.FullName</MudText>
+                                <MudText Typo="Typo.body2" Class="argon-role">@_user.RoleName</MudText>
                             </MudStack>
                         </MudStack>
-                        <MudDivider Class="my-1" />
-                        <MudStack Row="true" Spacing="1">
-                            <MudIcon Icon="@Icons.Material.Filled.Fingerprint" Size="Size.Small" />
-                            <MudText Typo="Typo.body2">@_user.StaffId</MudText>
+                        <MudDivider Class="my-2 argon-divider" />
+                        <MudStack Row="true" AlignItems="MudBlazor.AlignItems.Center" Spacing="2" Class="argon-info-row">
+                            <MudIcon Icon="@Icons.Material.Filled.Badge" Size="Size.Small" Class="argon-icon" />
+                            <MudText Typo="Typo.body2" Class="argon-info-text">@_user.StaffId</MudText>
                         </MudStack>
-                        <MudStack Row="true" Spacing="1">
-                            <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" />
-                            <MudText Typo="Typo.body2">@_user.Address</MudText>
+                        <MudStack Row="true" AlignItems="MudBlazor.AlignItems.Center" Spacing="2" Class="argon-info-row">
+                            <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" Class="argon-icon" />
+                            <MudText Typo="Typo.body2" Class="argon-info-text">@_user.Address</MudText>
                         </MudStack>
-                        <MudDivider Class="my-1" />
-                        <MudMenuItem Style="padding: 8px 0px 8px 0px; border-radius: 8px;">
-                            <MudStack Row="true" Spacing="1" Style="width: 100%;">
-                                <MudIcon Icon="@Icons.Material.Filled.Settings" Size="Size.Small" Color="Color.Secondary" />
-                                <MudText Typo="Typo.body1" Class="font-weight-bold">Change Password</MudText>
+                        <MudDivider Class="my-2 argon-divider" />
+                        <MudMenuItem Style="padding: 10px 12px; border-radius: 8px;" Class="argon-menu-item">
+                            <MudStack Row="true" AlignItems="MudBlazor.AlignItems.Center" Spacing="2" Justify="@MudBlazor.Justify.Center" Style="width: 100%;">
+                                <MudIcon Icon="@Icons.Material.Filled.Settings" Size="Size.Small" Class="argon-settings-icon" />
+                                <MudText Typo="Typo.body1" Class="font-weight-bold argon-settings-text">Change Password</MudText>
                             </MudStack>
                         </MudMenuItem>
-                        <MudDivider Class="my-1" />
-                        <MudMenuItem OnClick="HandleLogout" Class="mud-menu-item-signout" Style="padding: 8px 12px; border-radius: 8px;">
-                            <MudStack Row="true"Spacing="1">
-                                <MudIcon Icon="@Icons.Material.Filled.Logout" Size="Size.Small" Color="Color.Error" />
-                                <MudText Color="Color.Error">Sign Out</MudText>
+                        <MudDivider Class="my-2 argon-divider" />
+                        <MudMenuItem OnClick="HandleLogout" Style="padding: 10px 12px; border-radius: 8px;" Class="argon-menu-item-signout">
+                            <MudStack Row="true" AlignItems="MudBlazor.AlignItems.Center" Spacing="2">
+                                <MudIcon Icon="@Icons.Material.Filled.Logout" Size="Size.Small" Class="argon-signout-icon" />
+                                <MudText Typo="Typo.body2" Class="argon-signout-text">Sign Out</MudText>
                             </MudStack>
                         </MudMenuItem>
                     </MudStack>
@@ -63,51 +63,93 @@
 </MudLayout>
 
 <style>
-     /* Background for Main Content to make floating appbar pop */
     .main-content-bg {
-        /* background-color: #f8fafc; */
         min-height: 100vh;
         padding-top: 30px;
     }
-    /* Container to handle sticky positioning */
     .floating-appbar-container {
         position: sticky;
         top: 16px;
         z-index: 1100;
         padding: 0 24px;
     }
-    /* Floating Appbar Style (Island Look) */
     .floating-appbar {
         border-radius: 12px !important;
         background-color: rgba(255, 255, 255, 0.9) !important;
         backdrop-filter: blur(12px) !important;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06) !important;
         color: #334155 !important;
         width: 100% !important;
         position: relative !important;
         margin: 0 !important;
     }
-    .mud-menu-item-signout:hover {
-        background-color: rgba(239, 68, 68, 0.08);
-        border-radius: 8px;
-    }
     .floating-nav {
         border-radius: 16px !important;
         background-color: rgba(255, 255, 255, 0.9) !important;
         backdrop-filter: blur(12px) !important;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06) !important;
         color: #334155 !important;
         margin: 30px 0px 0px 10px;
     }
-    /* Drawer Header */
     .drawer-header {
         height: 80px;
         display: flex;
         align-items: center;
         justify-content: center;
         border-bottom: 1px solid rgba(0,0,0,0.05);
-        color: #2563EB;
+        color: #5e72e4;
         background-color: #ffffff;
+    }
+
+    /* Argon Profile Dropdown Styles */
+    .profile-menu .mud-menu-item {
+        padding: 0 !important;
+    }
+    .argon-name {
+        font-weight: 600 !important;
+        color: #32325d !important;
+        font-size: 0.95rem !important;
+    }
+    .argon-role {
+        color: #8898aa !important;
+        font-size: 0.8rem !important;
+    }
+    .argon-divider {
+        opacity: 0.6;
+    }
+    .argon-info-row {
+        padding: 4px 4px !important;
+    }
+    .argon-icon {
+        color: #8898aa !important;
+        font-size: 18px !important;
+    }
+    .argon-info-text {
+        color: #525f7f !important;
+        font-size: 0.85rem !important;
+    }
+    .argon-menu-item:hover {
+        background-color: #f6f9fc !important;
+        border-radius: 8px !important;
+    }
+    .argon-settings-icon {
+        color: #5e72e4 !important;
+    }
+    .argon-settings-text {
+        color: #5e72e4 !important;
+        font-size: 0.9rem !important;
+    }
+    .argon-menu-item-signout:hover {
+        background-color: rgba(245, 54, 92, 0.05) !important;
+        border-radius: 8px !important;
+    }
+    .argon-signout-icon {
+        color: #f5365c !important;
+    }
+    .argon-signout-text {
+        color: #f5365c !important;
+        font-weight: 600 !important;
+        font-size: 0.85rem !important;
     }
 
 </style>
