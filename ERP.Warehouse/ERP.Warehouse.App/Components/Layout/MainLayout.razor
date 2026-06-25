@@ -18,11 +18,41 @@
             <MudAppBar Fixed="false" Elevation="0" Class="floating-appbar">
                 <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
                 <MudSpacer />
-                <MudMenu Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
-                    <MudMenuItem Label="Name">@_user.FullName</MudMenuItem>
-                    <MudMenuItem Label="StaffId">@_user.StaffId</MudMenuItem>
-                    <MudMenuItem  Label="Branch">@_user.Address</MudMenuItem>
-                    <MudMenuItem OnClick="HandleLogout">Sign Out</MudMenuItem>
+                <MudMenu Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" Class="profile-menu">
+                    <MudStack Row="false" Spacing="1" Class="pa-3" Style="min-width: 240px;">
+                        <MudStack Row="true" Spacing="2">
+                            <MudAvatar Color="Color.Primary" Size="Size.Medium">
+                                @_user.FullName?.Substring(0, Math.Min(2, _user.FullName.Length)).ToUpper()
+                            </MudAvatar>
+                            <MudStack Row="false" Spacing="0">
+                                <MudText Typo="Typo.subtitle1" Class="font-weight-bold">@_user.FullName</MudText>
+                                <MudText Typo="Typo.body2" Color="Color.Secondary">@_user.RoleName</MudText>
+                            </MudStack>
+                        </MudStack>
+                        <MudDivider Class="my-1" />
+                        <MudStack Row="true" Spacing="1">
+                            <MudIcon Icon="@Icons.Material.Filled.Fingerprint" Size="Size.Small" />
+                            <MudText Typo="Typo.body2">@_user.StaffId</MudText>
+                        </MudStack>
+                        <MudStack Row="true" Spacing="1">
+                            <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" />
+                            <MudText Typo="Typo.body2">@_user.Address</MudText>
+                        </MudStack>
+                        <MudDivider Class="my-1" />
+                        <MudMenuItem Style="padding: 8px 0px 8px 0px; border-radius: 8px;">
+                            <MudStack Row="true" Spacing="1" Style="width: 100%;">
+                                <MudIcon Icon="@Icons.Material.Filled.Settings" Size="Size.Small" Color="Color.Secondary" />
+                                <MudText Typo="Typo.body1" Class="font-weight-bold">Change Password</MudText>
+                            </MudStack>
+                        </MudMenuItem>
+                        <MudDivider Class="my-1" />
+                        <MudMenuItem OnClick="HandleLogout" Class="mud-menu-item-signout" Style="padding: 8px 12px; border-radius: 8px;">
+                            <MudStack Row="true"Spacing="1">
+                                <MudIcon Icon="@Icons.Material.Filled.Logout" Size="Size.Small" Color="Color.Error" />
+                                <MudText Color="Color.Error">Sign Out</MudText>
+                            </MudStack>
+                        </MudMenuItem>
+                    </MudStack>
                 </MudMenu>
             </MudAppBar>
         </div>
@@ -56,6 +86,10 @@
         width: 100% !important;
         position: relative !important;
         margin: 0 !important;
+    }
+    .mud-menu-item-signout:hover {
+        background-color: rgba(239, 68, 68, 0.08);
+        border-radius: 8px;
     }
     .floating-nav {
         border-radius: 16px !important;
