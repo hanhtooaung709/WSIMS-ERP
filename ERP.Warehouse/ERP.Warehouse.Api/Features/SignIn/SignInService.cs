@@ -6,7 +6,9 @@ using ERP.Warehouse.Models.Models.Signin.Signin;
 using ERP.Warehouse.Api.Common;
 using ERP.Warehouse.Models.Models.Signin;
 using WSIMS_ERP.Shared.Queries;
-using WalletEbmb.Shared.Services;
+using System.Data;
+using WSIMS_ERP.Shared.Enums;
+using WSIMS_ERP.Shared.Services;
 
 namespace ERP.Warehouse.Api.Features.SignIn;
 
@@ -152,6 +154,15 @@ public class SignInService : AuthorizationService
             {
                 return Result<WarehouseUserInfoModel>.Error("User does't exist!");
             }
+
+            var lst = await _dapperService.GetDetailAsync<WarehouseUserInfoModel>(
+            SqlQueries.Sp_GetWarehouseUserInfoList,
+                new { UserId = AuthorizedUserId},CommandType.StoredProcedure);
+
+            model.FullName = lst.FullName;
+            model.StaffId = lst.StaffId;
+            model.Address = lst.Address;
+            model.RoleName = lst.RoleName;
 
             return Result<WarehouseUserInfoModel>.Success(model);
         }

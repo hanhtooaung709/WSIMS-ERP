@@ -9,7 +9,7 @@ namespace ERP.Warehouse.App.Components.Layout;
 public partial class MainLayout
 {
     bool _drawerOpen = true;
-    WarehouseUserInfoModel _listModel = new();
+    WarehouseUserInfoModel _user = new();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -23,7 +23,7 @@ public partial class MainLayout
                 return;
             }
 
-            _listModel = result.Data;
+            _user = result.Data;
 
             StateHasChanged();
         }

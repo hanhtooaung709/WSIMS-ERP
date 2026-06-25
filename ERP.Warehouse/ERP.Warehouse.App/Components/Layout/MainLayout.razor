@@ -19,7 +19,9 @@
                 <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
                 <MudSpacer />
                 <MudMenu Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
-                    <MudMenuItem>Profile</MudMenuItem>
+                    <MudMenuItem Label="Name">@_user.FullName</MudMenuItem>
+                    <MudMenuItem Label="StaffId">@_user.StaffId</MudMenuItem>
+                    <MudMenuItem  Label="Branch">@_user.Address</MudMenuItem>
                     <MudMenuItem OnClick="HandleLogout">Sign Out</MudMenuItem>
                 </MudMenu>
             </MudAppBar>

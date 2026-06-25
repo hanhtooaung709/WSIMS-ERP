@@ -1,7 +1,7 @@
 ﻿using System.Data.SqlClient;
 using WSIMS_ERP.Shared;
 
-namespace WalletEbmb.Shared.Services;
+namespace WSIMS_ERP.Shared.Services;
 
 public class DapperService
 {

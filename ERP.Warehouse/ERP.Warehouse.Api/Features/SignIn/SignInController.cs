@@ -26,19 +26,19 @@ public class SignInController : BaseController
 
     [HttpPost]
     [Authorize]
-    [Route("GetUserData")]
-    public async Task<IActionResult> GetUserData()
+    [Route("Logout")]
+    public async Task<IActionResult> Logout(LogoutReqModel reqModel)
     {
-        var result = await _signInService.GetUserData();
+        var result = await _signInService.Logout(reqModel);
         return Execute(result);
     }
 
     [HttpPost]
     [Authorize]
-    [Route("Logout")]
-    public async Task<IActionResult> Logout(LogoutReqModel reqModel)
+    [Route("GetUserData")]
+    public async Task<IActionResult> GetUserData()
     {
-        var result = await _signInService.Logout(reqModel);
+        var result = await _signInService.GetUserData();
         return Execute(result);
     }
 }
