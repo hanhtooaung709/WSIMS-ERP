@@ -1,5 +1,5 @@
-﻿using ERP.Warehouse.Api.Features.SignIn;
-using ERP.Warehouse.Api.Services;
+﻿using ERP.Warehouse.Api.Common;
+using ERP.Warehouse.Api.Features.SignIn;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
 using WSIMS_ERP.Shared;
@@ -35,7 +35,7 @@ public static class FeatureManager
     private static WebApplicationBuilder AddWarehouseServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<SignInService>();
-        builder.Services.AddScoped<JwtTokenService>();
+        builder.Services.AddScoped<AuthorizationService>();
         return builder;
     }
 }
