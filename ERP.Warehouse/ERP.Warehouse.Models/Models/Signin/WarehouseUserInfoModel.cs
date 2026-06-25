@@ -7,8 +7,3 @@ public class WarehouseUserInfoModel
     public string BranchCode { get; set; } = null!;
     public string RoleCode { get; set; } = null!;
 }
-
-public class WarehouseUserInfoListModel
-{
-    public List<WarehouseUserInfoModel> lstData { get; set; }
-}

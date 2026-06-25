@@ -24,8 +24,8 @@ public class WarehouseApiService
         => await _httpClientService.ExecuteAsync<SigninReqModel, SigninResModel>
         (SignInEndpoints.SignIn, reqModel);
 
-    public async Task<Result<WarehouseUserInfoListModel>> GetUserData()
-        => await _httpClientService.ExecuteAsync<object, WarehouseUserInfoListModel>
+    public async Task<Result<WarehouseUserInfoModel>> GetUserData()
+        => await _httpClientService.ExecuteAsync<object, WarehouseUserInfoModel>
         (SignInEndpoints.GetUserData, null!);
 
     public async Task<Result<bool>> Logout(LogoutReqModel reqModel)

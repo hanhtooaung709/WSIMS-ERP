@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using ERP.Warehouse.Models.Models.Signin.Signin;
 using ERP.Warehouse.Api.Common;
 using ERP.Warehouse.Models.Models.Signin;
+using WSIMS_ERP.Shared.Queries;
+using WalletEbmb.Shared.Services;
 
 namespace ERP.Warehouse.Api.Features.SignIn;
 
@@ -12,14 +14,17 @@ public class SignInService : AuthorizationService
 {
     private readonly AppDbContext _db;
     private readonly JwtTokenHelper _jwtTokenHelper;
+    private readonly DapperService _dapperService;
 
     public SignInService(IHttpContextAccessor httpContextAccessor,
         AppDbContext db,
         JwtTokenHelper jwtTokenHelper,
+         DapperService dapperService,
         ILogger<AuthorizationService> logger) : base(httpContextAccessor, logger)
     {
         _db = db;
         _jwtTokenHelper = jwtTokenHelper;
+        _dapperService = dapperService;
     }
 
     public async Task<Result<SigninResModel>> SignIn(SigninReqModel reqModel)
@@ -133,9 +138,9 @@ public class SignInService : AuthorizationService
         }
     }
 
-    public async Task<Result<WarehouseUserInfoListModel>> GetUserData()
+    public async Task<Result<WarehouseUserInfoModel>> GetUserData()
     {
-        WarehouseUserInfoListModel model = new();
+        WarehouseUserInfoModel model = new();
         try
         {
             IQueryable<TblWarehouseUser> user = _db.TblWarehouseUsers
@@ -145,26 +150,14 @@ public class SignInService : AuthorizationService
                     x.WarehouseUserId == AuthorizedUserId);
             if (user is null)
             {
-                return Result<WarehouseUserInfoListModel>.Error("User does't exist!");
+                return Result<WarehouseUserInfoModel>.Error("User does't exist!");
             }
 
-            var result = await user
-                .AsNoTracking()
-                .Select(x => new WarehouseUserInfoModel
-                {
-                    FullName = x.FullName,
-                    StaffId = x.StaffId,
-                    BranchCode = x.BranchCode,
-                    RoleCode = x.RoleCode
-                })
-                .ToListAsync();
-
-            model.lstData = result;
-            return Result<WarehouseUserInfoListModel>.Success(model);
+            return Result<WarehouseUserInfoModel>.Success(model);
         }
         catch (Exception ex)
         {
-            return Result<WarehouseUserInfoListModel>.Error(ex);
+            return Result<WarehouseUserInfoModel>.Error(ex);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace ERP.Warehouse.App.Components.Layout;
 public partial class MainLayout
 {
     bool _drawerOpen = true;
-    WarehouseUserInfoListModel _listModel = new();
+    WarehouseUserInfoModel _listModel = new();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
