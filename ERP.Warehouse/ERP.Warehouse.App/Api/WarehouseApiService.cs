@@ -1,6 +1,7 @@
 ﻿using ERP.Warehouse.App.Api.Endpoints;
 using ERP.Warehouse.Models.Models.Signin;
 using ERP.Warehouse.Models.Models.Signin.Signin;
+using ERP.Warehouse.Models.Models.WarehouseUserList;
 using WSIMS_ERP.Shared.HttpClients;
 using WSIMS_ERP.Shared.Models;
 
@@ -31,6 +32,14 @@ public class WarehouseApiService
     public async Task<Result<bool>> Logout(LogoutReqModel reqModel)
         => await _httpClientService.ExecuteAsync<LogoutReqModel, bool>
         (SignInEndpoints.Logout, reqModel);
+
+    #endregion
+
+    #region WarehouseUserList
+
+    public async Task<Result<WarehouseUserRepModel>> Get(WarehouseUserReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<WarehouseUserReqModel, WarehouseUserRepModel>
+        (WarehouseUserListEndpoints.Get, reqModel);
 
     #endregion
 }

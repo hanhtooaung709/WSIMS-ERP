@@ -1,0 +1,26 @@
+﻿@page "/warehouse-user-list"
+@using ERP.Warehouse.Models.Models.WarehouseUserList
+@using Microsoft.AspNetCore.Authorization
+@inject ILogger<WarehouseUserList> _logger
+@attribute [Authorize]
+@using System.Net.Http.Json
+@inject HttpClient httpClient
+
+<MudDataGrid T="WarehouseUserModel" Items="@_model" Hover="@hover">
+    <Columns>
+        <TemplateColumn Title="No" Sortable="false" Filterable="false">
+            <CellTemplate>
+                @(_model.ToList().IndexOf(context.Item) + 1)
+            </CellTemplate>
+        </TemplateColumn>
+        <PropertyColumn Property="x => x.FullName" Title="Name"/>
+        <PropertyColumn Property="x => x.StaffId" Title="StaffId" />
+        <PropertyColumn Property="x => x.PhoneNo" Title="PhoneNo" />
+        <PropertyColumn Property="x => x.Email" Title="Email" />
+        <PropertyColumn Property="x => x.RoleName" Title="RoleName" />
+        <PropertyColumn Property="x => x.BranchName" Title="BranchName" />
+    </Columns>
+    <PagerContent>
+        <MudDataGridPager T="WarehouseUserModel" />
+    </PagerContent>
+</MudDataGrid>

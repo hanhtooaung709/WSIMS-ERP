@@ -3,7 +3,6 @@
 public class WarehouseUserRepModel
 {
     public List<WarehouseUserModel> list { get; set; }
-    public int TotalRowCount { get; set; }
 }
 
 public class WarehouseUserModel

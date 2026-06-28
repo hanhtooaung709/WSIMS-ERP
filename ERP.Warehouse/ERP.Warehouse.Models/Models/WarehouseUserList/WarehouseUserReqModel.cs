@@ -10,5 +10,4 @@ public class WarehouseUserReqModel
     public string? Email { get; set; }
     public string? RoleName { get; set; }
     public string? BranchName { get; set; }
-    public PageSettingModel? PageSetting { get; set; }
 }

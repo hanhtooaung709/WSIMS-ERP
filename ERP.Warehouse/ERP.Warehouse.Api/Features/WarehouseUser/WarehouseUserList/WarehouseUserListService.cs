@@ -36,14 +36,11 @@ public class WarehouseUserListService : AuthorizationService
                 PhoneNo = reqModel.PhoneNo,
                 Email = reqModel.Email,
                 RoleName = reqModel.RoleName,
-                BranchName = reqModel.BranchName,
-                PageNo = reqModel.PageSetting?.PageNo,
-                PageSize = reqModel.PageSetting?.PageSize
+                BranchName = reqModel.BranchName
             };
-            var result = await _dapperService.GetMultipleListAsync<int, WarehouseUserModel>
+            var result = await _dapperService.QueryStoredProcedureAsync<WarehouseUserModel>
                 (SqlQueries.Sp_GetWarehouseUserList, parameters);
-            model.TotalRowCount = result.Item1;
-            model.list = result.Item2;
+            model.list = result;
             return Result<WarehouseUserRepModel>.Success(model);
         }
         catch(Exception ex)
