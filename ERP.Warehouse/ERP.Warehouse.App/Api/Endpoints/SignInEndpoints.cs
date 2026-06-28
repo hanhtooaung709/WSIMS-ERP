@@ -1,4 +1,4 @@
-﻿namespace ERP.Warehouse.App.Api.Endpoints.SignIn;
+﻿namespace ERP.Warehouse.App.Api.Endpoints;
 
 public class SignInEndpoints
 {

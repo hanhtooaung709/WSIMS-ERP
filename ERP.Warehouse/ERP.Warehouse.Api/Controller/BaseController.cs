@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared.Models;
 
-namespace ERP.Warehouse.Api.BaseController;
+namespace ERP.Warehouse.Api.Controller;
 
 [Route("api/[controller]")]
 [ApiController]

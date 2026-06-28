@@ -7,7 +7,6 @@ using ERP.Warehouse.Api.Common;
 using ERP.Warehouse.Models.Models.Signin;
 using WSIMS_ERP.Shared.Queries;
 using System.Data;
-using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared.Services;
 
 namespace ERP.Warehouse.Api.Features.SignIn;
