@@ -30,4 +30,12 @@ public class WarehouseUserListController : BaseController
         var result = await _warehouseUserListService.Edit(reqModel);
         return Execute(result);
     }
+
+    [HttpPost]
+    [Route("Delete")]
+    public async Task<IActionResult> Delete(WarehouseUserEditModel reqModel)
+    {
+        var result = await _warehouseUserListService.Delete(reqModel);
+        return Execute(result);
+    }
 }

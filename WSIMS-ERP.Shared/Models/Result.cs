@@ -7,8 +7,9 @@ public class Result<T>
     public EnumRespType RespType { get; set; }
     public string RespDesp { get; set; }
     public T Data { get; set; }
-    
 
+
+    #region Success
     public static Result<T> Success(T? data, string respDesp = "Success")
     {
         return new Result<T>
@@ -19,6 +20,17 @@ public class Result<T>
         };
     }
 
+    public static Result<T> Success(string respDesp)
+    {
+        return new Result<T>
+        {
+            RespDesp = respDesp,
+            RespType = EnumRespType.Success
+        };
+    }
+    #endregion
+
+    #region Error
     public static Result<T> Error(T? data = default, string respDesp = "Error")
     {
         return new Result<T>
@@ -46,4 +58,5 @@ public class Result<T>
             RespType = EnumRespType.Error
         };
     }
+    #endregion
 }

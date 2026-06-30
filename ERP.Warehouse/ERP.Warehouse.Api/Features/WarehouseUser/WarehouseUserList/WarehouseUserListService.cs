@@ -1,9 +1,8 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using ERP.Warehouse.Api.Common;
-using ERP.Warehouse.Models.Models.Signin;
+﻿using ERP.Warehouse.Api.Common;
 using ERP.Warehouse.Models.Models.WarehouseUserList;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
+using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
@@ -100,6 +99,33 @@ public class WarehouseUserListService : AuthorizationService
             model = Result<WarehouseUserModel>.Success(response);
         }
         catch(Exception ex)
+        {
+            return Result<WarehouseUserModel>.Error(ex);
+        }
+        return model;
+    }
+
+    public async Task<Result<WarehouseUserModel>> Delete(WarehouseUserEditModel reqModel)
+    {
+        var model = new Result<WarehouseUserModel>();
+        try
+        {
+            var user = await _db.TblWarehouseUsers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.WarehouseUserId == reqModel.UserId && x.DelFlag == 0);
+            if (user is null)
+            {
+                model = Result<WarehouseUserModel>.Error("User does not exist.");
+                return model;
+            }
+            user!.DelFlag = 1;
+            user.ModifiedUserId = AuthorizedUserId;
+            user.ModifiedDateTime = DevCode.GetServerDateTime();
+            _db.TblWarehouseUsers.Update(user);
+            await _db.SaveChangesAsync();
+            model = Result<WarehouseUserModel>.Success("User Successfully Deleted");
+        }
+        catch (Exception ex)
         {
             return Result<WarehouseUserModel>.Error(ex);
         }

@@ -105,7 +105,35 @@ public partial class WarehouseUserList
 
     private async Task Delete(WarehouseUserModel reqModel)
     {
+        try
+        {
+            bool confirm = await _injectService.Confirm();
+            if (!confirm)
+            {
+                return;
+            }
 
+            _edit.UserId = reqModel.WarehouseUserId!;
+
+            await _injectService.EnableLoading();
+            var result = await _apiService.Delete(_edit);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            await _injectService.ShowDialog(result);
+
+            await List();
+            _formType = EnumFormType.List;
+            StateHasChanged();
+        }
+        catch( Exception ex )
+        {
+            _logger.LogCustomError(ex);
+        }
     }
 
     private async Task Save(WarehouseUserModel reqModel)
