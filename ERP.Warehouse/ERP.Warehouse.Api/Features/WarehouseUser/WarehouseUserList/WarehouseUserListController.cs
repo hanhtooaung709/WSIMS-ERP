@@ -22,4 +22,12 @@ public class WarehouseUserListController : BaseController
         var result = await _warehouseUserListService.Get(reqModel);
         return Execute(result);
     }
+
+    [HttpPost]
+    [Route("Edit")]
+    public async Task<IActionResult> Edit(string Id)
+    {
+        var result = await _warehouseUserListService.Edit(Id);
+        return Execute(result);
+    }
 }

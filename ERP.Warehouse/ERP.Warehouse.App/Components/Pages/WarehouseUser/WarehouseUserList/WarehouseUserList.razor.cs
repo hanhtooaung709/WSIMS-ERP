@@ -56,16 +56,40 @@ public partial class WarehouseUserList
         }
     }
 
-    private void Edit(WarehouseUserModel item)
+    private async Task Edit(WarehouseUserModel reqModel)
+    {
+        try
+        {
+            await _injectService.EnableLoading();
+            var result = await _apiService.Edit(reqModel.WarehouseUserId!.ToString());
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+
+            _reqModel.FullName = result.Data.FullName;
+            _reqModel.StaffId = result.Data.StaffId;
+            _reqModel.PhoneNo = result.Data.PhoneNo;
+            _reqModel.Email = result.Data.Email;
+            _reqModel.RoleName = result.Data.RoleName;
+            _reqModel.BranchName = result.Data.BranchName;
+        }
+        catch(Exception ex )
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private void Cancel()
     {
 
     }
-
-    private void Cancel(WarehouseUserModel item)
-    {
-
-    }
-    private async Task Save(WarehouseUserModel item)
+    private async Task Save(WarehouseUserModel reqModel)
     {
 
     }

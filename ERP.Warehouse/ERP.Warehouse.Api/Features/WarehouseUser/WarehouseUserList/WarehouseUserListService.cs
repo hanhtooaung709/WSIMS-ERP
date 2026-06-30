@@ -48,4 +48,61 @@ public class WarehouseUserListService : AuthorizationService
             return Result<WarehouseUserRepModel>.Error(ex);
         }
     }
+
+    public async Task<Result<WarehouseUserModel>> Edit(string Id)
+    {
+        var model = new Result<WarehouseUserModel>();
+        try
+        {
+            #region Check User
+            var user = await _db.TblWarehouseUsers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.WarehouseUserId == Id && x.DelFlag == 0);
+            if (user is null)
+            {
+                model = Result<WarehouseUserModel>.Error("User does not exist.");
+                return model;
+            }
+            #endregion
+
+            #region Check Role
+            var role = await _db.TblWarehouseRoles
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.RoleCode == user.RoleCode && x.DelFlag == 0);
+            if (role is null)
+            {
+                model = Result<WarehouseUserModel>.Error("User Role does not exist.");
+                return model;
+            }
+            #endregion
+
+            #region Check Branch
+            var branch = await _db.TblBranches
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.BranchCode == user.BranchCode && x.DelFlag == 0);
+            if (branch is null)
+            {
+                model = Result<WarehouseUserModel>.Error("Branch does not exist.");
+                return model;
+            }
+            #endregion
+
+            var response = new WarehouseUserModel
+            {
+                WarehouseUserId = user.WarehouseUserId,
+                FullName = user.FullName,
+                StaffId = user.StaffId,
+                PhoneNo = user.Phone,
+                Email = user.Email,
+                RoleName = role.RoleName,
+                BranchName = branch.Address
+            };
+            model = Result<WarehouseUserModel>.Success(response);
+        }
+        catch(Exception ex)
+        {
+            return Result<WarehouseUserModel>.Error(ex);
+        }
+        return model;
+    }
 }
