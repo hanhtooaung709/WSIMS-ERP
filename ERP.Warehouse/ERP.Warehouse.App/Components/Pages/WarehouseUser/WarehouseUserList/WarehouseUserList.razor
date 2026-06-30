@@ -14,27 +14,81 @@
              CanceledEditingItem="@Cancel"
              CommittedItemChanges="@Save">
     <Columns>
-
         <TemplateColumn Title="No" Sortable="false" Filterable="false">
             <CellTemplate>
                 @(_model.ToList().IndexOf(context.Item) + 1)
             </CellTemplate>
         </TemplateColumn>
-        <PropertyColumn Property="x => x.FullName" Title="Name" />
-        <PropertyColumn Property="x => x.StaffId" Title="Staff Id" Editable="false" />
-        <PropertyColumn Property="x => x.PhoneNo" Title="Phone Number"/>
-        <PropertyColumn Property="x => x.Email" Title="Email" />
-        <PropertyColumn Property="x => x.RoleName" Title="Role"/>
-        <PropertyColumn Property="x => x.BranchName" Title="Branch"/>
+        
+        <PropertyColumn Property="x => x.FullName" Title="Name">
+            <EditTemplate>
+                <MudTextField @bind-Value="_reqModel.FullName"
+                              Label="Name"
+                              Margin="Margin.Dense"
+                              Style="width: 100%; min-width: 500px;"
+                              Variant="MudBlazor.Variant.Outlined" />
+            </EditTemplate>
+        </PropertyColumn>
+
+        <PropertyColumn Property="x => x.StaffId" Title="StaffId">
+            <EditTemplate>
+                <MudTextField @bind-Value="_reqModel.StaffId"
+                              Label="StaffId"
+                              Margin="Margin.Dense"
+                              Style="width: 100%; min-width: 500px;"
+                              Variant="MudBlazor.Variant.Outlined"
+                              Disabled="true" />
+            </EditTemplate>
+        </PropertyColumn>
+
+        <PropertyColumn Property="x => x.PhoneNo" Title="PhoneNo">
+            <EditTemplate>
+                <MudTextField @bind-Value="_reqModel.PhoneNo"
+                              Label="Phone Number"
+                              Margin="Margin.Dense"
+                              Style="width: 100%; min-width: 500px;"
+                              Variant="MudBlazor.Variant.Outlined" />
+            </EditTemplate>
+        </PropertyColumn>
+
+        <PropertyColumn Property="x => x.Email" Title="Email">
+            <EditTemplate>
+                <MudTextField @bind-Value="_reqModel.Email"
+                              Label="Email"
+                              Margin="Margin.Dense"
+                              InputType="InputType.Email"
+                              Style="width: 100%; min-width: 500px;"
+                              Variant="MudBlazor.Variant.Outlined" />
+            </EditTemplate>
+        </PropertyColumn>
+
+        <PropertyColumn Property="x => x.RoleName" Title="Role">
+            <EditTemplate>
+                <MudTextField @bind-Value="_reqModel.RoleName"
+                              Label="Role"
+                              Margin="Margin.Dense"
+                              Style="width: 100%; min-width: 500px;"
+                              Variant="MudBlazor.Variant.Outlined" />
+            </EditTemplate>
+        </PropertyColumn>
+
+        <PropertyColumn Property="x => x.BranchName" Title="BranchName">
+            <EditTemplate>
+                <MudTextField @bind-Value="_reqModel.BranchName"
+                              Label="Branch"
+                              Margin="Margin.Dense"
+                              Style="width: 100%; min-width: 500px;"
+                              Variant="MudBlazor.Variant.Outlined" />
+            </EditTemplate>
+        </PropertyColumn>
 
         <TemplateColumn Hidden="@_readOnly">
             <CellTemplate>
                 <MudFab Size="@Size.Small"
-                              StartIcon="@Icons.Material.Filled.Edit"
-                              Color="Color.Warning"
-                              OnClick="@context.Actions.StartEditingItemAsync" />
+                        StartIcon="@Icons.Material.Filled.Edit"
+                        Color="Color.Primary"
+                        OnClick="@context.Actions.StartEditingItemAsync" />
             </CellTemplate>
         </TemplateColumn>
-
     </Columns>
 </MudDataGrid>
