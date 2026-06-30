@@ -460,9 +460,6 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.FullName).HasMaxLength(100);
-            entity.Property(e => e.LoginPassword)
-                .HasMaxLength(50)
-                .IsUnicode(false);
             entity.Property(e => e.Phone)
                 .HasMaxLength(30)
                 .IsUnicode(false);
@@ -607,9 +604,7 @@ public partial class AppDbContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.LoginTime).HasColumnType("datetime");
             entity.Property(e => e.LogoutTime).HasColumnType("datetime");
-            entity.Property(e => e.SessionToken)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.SessionToken).IsUnicode(false);
             entity.Property(e => e.UserId)
                 .HasMaxLength(50)
                 .IsUnicode(false);

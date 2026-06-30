@@ -3,6 +3,7 @@ using ERP.Warehouse.Models.Models.WarehouseUserList;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
 using WSIMS_ERP.Shared;
+using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
@@ -110,6 +111,8 @@ public class WarehouseUserListService : AuthorizationService
         var model = new Result<WarehouseUserModel>();
         try
         {
+            #region Check User
+
             var user = await _db.TblWarehouseUsers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.WarehouseUserId == reqModel.UserId && x.DelFlag == 0);
@@ -118,12 +121,43 @@ public class WarehouseUserListService : AuthorizationService
                 model = Result<WarehouseUserModel>.Error("User does not exist.");
                 return model;
             }
-            user!.DelFlag = 1;
-            user.ModifiedUserId = AuthorizedUserId;
-            user.ModifiedDateTime = DevCode.GetServerDateTime();
-            _db.TblWarehouseUsers.Update(user);
+
+            #endregion
+
+            #region Check Duplicate
+
+            bool reqUser = await _db.TblReqWarehouseUserChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.WarehouseUserId == reqModel.UserId);
+            if (reqUser)
+            {
+                model = Result<WarehouseUserModel>.Error("User is already Requesed!");
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            TblReqWarehouseUserChange item = new TblReqWarehouseUserChange
+            {
+                ReqWarehouseUserChangesId = DevCode.GenerateUlid(),
+                WarehouseUserId = user.WarehouseUserId,
+                FullName = user.FullName,
+                Phone = user.Phone,
+                Email = user.Email,
+                RoleCode = user.RoleCode,
+                BranchCode = user.BranchCode,
+                ChangesType = EnumRequestedType.Delete.ToString(),
+                Status = EnumRequestedUserStatus.Pending.ToString(),
+                ReqUserId = AuthorizedUserId,
+                ReqDateTime = DevCode.GetServerDateTime()
+            };
+            await _db.TblReqWarehouseUserChanges.AddAsync(item);
             await _db.SaveChangesAsync();
-            model = Result<WarehouseUserModel>.Success("User Successfully Deleted");
+            model = Result<WarehouseUserModel>.Success("Your request is pending for approval!");
+
+            #endregion
         }
         catch (Exception ex)
         {

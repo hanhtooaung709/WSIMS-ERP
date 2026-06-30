@@ -103,6 +103,12 @@ public partial class WarehouseUserList
         }
     }
 
+
+    private async Task Save(WarehouseUserModel reqModel)
+    {
+
+    }
+
     private async Task Delete(WarehouseUserModel reqModel)
     {
         try
@@ -134,10 +140,5 @@ public partial class WarehouseUserList
         {
             _logger.LogCustomError(ex);
         }
-    }
-
-    private async Task Save(WarehouseUserModel reqModel)
-    {
-
     }
 }

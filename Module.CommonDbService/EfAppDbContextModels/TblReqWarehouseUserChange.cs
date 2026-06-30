@@ -19,8 +19,6 @@ public partial class TblReqWarehouseUserChange
 
     public string BranchCode { get; set; } = null!;
 
-    public string LoginPassword { get; set; } = null!;
-
     public string ChangesType { get; set; } = null!;
 
     public string Status { get; set; } = null!;
