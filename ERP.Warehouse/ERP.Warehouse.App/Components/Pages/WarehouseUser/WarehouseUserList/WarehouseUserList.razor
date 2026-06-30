@@ -13,6 +13,7 @@
              StartedEditingItem="@Edit"
              CanceledEditingItem="@Cancel"
              CommittedItemChanges="@Save">
+
     <Columns>
         <TemplateColumn Title="No" Sortable="false" Filterable="false">
             <CellTemplate>
@@ -22,6 +23,9 @@
         
         <PropertyColumn Property="x => x.FullName" Title="Name">
             <EditTemplate>
+                <MudText Typo="Typo.h6" Style="padding: 16px 16px 0 16px; font-weight: bold;">
+                    @_formType.ToString() Warehouse User
+                </MudText>
                 <MudTextField @bind-Value="_reqModel.FullName"
                               Label="Name"
                               Margin="Margin.Dense"
@@ -86,7 +90,7 @@
             <CellTemplate>
                 <MudFab Size="@Size.Small"
                         StartIcon="@Icons.Material.Filled.Edit"
-                        Color="Color.Primary"
+                        Color="Color.Warning"
                         OnClick="@context.Actions.StartEditingItemAsync" />
             </CellTemplate>
         </TemplateColumn>

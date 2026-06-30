@@ -2,9 +2,7 @@
 using Microsoft.JSInterop;
 using MudBlazor;
 using WSIMS_ERP.Shared;
-using WSIMS_ERP.Shared.Models;
-using WSIMS_ERP.Shared.Models.PageSetting;
-using static MudBlazor.CategoryTypes;
+using WSIMS_ERP.Shared.Enums;
 
 namespace ERP.Warehouse.App.Components.Pages.WarehouseUser.WarehouseUserList;
 
@@ -13,6 +11,8 @@ public partial class WarehouseUserList
     private WarehouseUserReqModel _reqModel = new();
     private IEnumerable<WarehouseUserModel> _model = new List<WarehouseUserModel>();
     private WarehouseUserEditModel _edit = new();
+
+    private EnumFormType _formType = EnumFormType.List;
     private bool hover = true;
     private bool _readOnly;
 
@@ -79,6 +79,8 @@ public partial class WarehouseUserList
             _reqModel.Email = result.Data.Email;
             _reqModel.RoleName = result.Data.RoleName;
             _reqModel.BranchName = result.Data.BranchName;
+
+            _formType = EnumFormType.Edit;
         }
         catch(Exception ex )
         {
