@@ -6,21 +6,35 @@
 @using System.Net.Http.Json
 @inject HttpClient httpClient
 
-<MudDataGrid T="WarehouseUserModel" Items="@_model" Hover="@hover">
+<MudDataGrid T="WarehouseUserModel"
+             Items="@_model"
+             Hover="@hover" ReadOnly="@_readOnly"
+             EditMode="MudBlazor.DataGridEditMode.Form"
+             StartedEditingItem="@Edit"
+             CanceledEditingItem="@Cancel"
+             CommittedItemChanges="@Save">
     <Columns>
+
         <TemplateColumn Title="No" Sortable="false" Filterable="false">
             <CellTemplate>
                 @(_model.ToList().IndexOf(context.Item) + 1)
             </CellTemplate>
         </TemplateColumn>
-        <PropertyColumn Property="x => x.FullName" Title="Name"/>
-        <PropertyColumn Property="x => x.StaffId" Title="StaffId" />
-        <PropertyColumn Property="x => x.PhoneNo" Title="PhoneNo" />
+        <PropertyColumn Property="x => x.FullName" Title="Name" />
+        <PropertyColumn Property="x => x.StaffId" Title="Staff Id" Editable="false" />
+        <PropertyColumn Property="x => x.PhoneNo" Title="Phone Number"/>
         <PropertyColumn Property="x => x.Email" Title="Email" />
-        <PropertyColumn Property="x => x.RoleName" Title="RoleName" />
-        <PropertyColumn Property="x => x.BranchName" Title="BranchName" />
+        <PropertyColumn Property="x => x.RoleName" Title="Role"/>
+        <PropertyColumn Property="x => x.BranchName" Title="Branch"/>
+
+        <TemplateColumn Hidden="@_readOnly">
+            <CellTemplate>
+                <MudFab Size="@Size.Small"
+                              StartIcon="@Icons.Material.Filled.Edit"
+                              Color="Color.Warning"
+                              OnClick="@context.Actions.StartEditingItemAsync" />
+            </CellTemplate>
+        </TemplateColumn>
+
     </Columns>
-    <PagerContent>
-        <MudDataGridPager T="WarehouseUserModel" />
-    </PagerContent>
 </MudDataGrid>
