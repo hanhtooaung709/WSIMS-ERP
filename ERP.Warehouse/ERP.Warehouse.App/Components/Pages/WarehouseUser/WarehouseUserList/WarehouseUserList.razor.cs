@@ -73,12 +73,13 @@ public partial class WarehouseUserList
                 return;
             }
 
+            _reqModel.UserId = result.Data.WarehouseUserId;
             _reqModel.FullName = result.Data.FullName;
             _reqModel.StaffId = result.Data.StaffId;
             _reqModel.PhoneNo = result.Data.PhoneNo;
             _reqModel.Email = result.Data.Email;
-            _reqModel.RoleName = result.Data.RoleName;
-            _reqModel.BranchName = result.Data.BranchName;
+            _reqModel.RoleCode = result.Data.RoleCode;
+            _reqModel.BranchCode = result.Data.BranchCode;
 
             _formType = EnumFormType.Edit;
         }
@@ -103,10 +104,30 @@ public partial class WarehouseUserList
         }
     }
 
-
     private async Task Save(WarehouseUserModel reqModel)
     {
+        if(reqModel.WarehouseUserId != _reqModel.UserId)
+        {
+            await _injectService.ErrorDialogMessage("Unvalid UserId");
+            return;
+        }
 
+        if (!_reqModel.UserId.IsNullOrEmpty())
+        {
+            bool confirm = await _injectService.ShowUpdateDialog();
+            if (!confirm) return;
+
+            await _injectService.EnableLoading();
+            var result = await _apiService.Update(_reqModel);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            await _injectService.ShowDialog(result);
+        }
     }
 
     private async Task Delete(WarehouseUserModel reqModel)

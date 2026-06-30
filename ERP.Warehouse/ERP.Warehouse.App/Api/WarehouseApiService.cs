@@ -45,6 +45,10 @@ public class WarehouseApiService
        => await _httpClientService.ExecuteAsync<WarehouseUserEditModel, WarehouseUserModel>
        (WarehouseUserListEndpoints.Edit, reqModel);
 
+    public async Task<Result<WarehouseUserModel>> Update(WarehouseUserReqModel reqModel)
+       => await _httpClientService.ExecuteAsync<WarehouseUserReqModel, WarehouseUserModel>
+       (WarehouseUserListEndpoints.Update, reqModel);
+
     public async Task<Result<WarehouseUserModel>> Delete(WarehouseUserEditModel reqModel)
        => await _httpClientService.ExecuteAsync<WarehouseUserEditModel, WarehouseUserModel>
        (WarehouseUserListEndpoints.Delete, reqModel);

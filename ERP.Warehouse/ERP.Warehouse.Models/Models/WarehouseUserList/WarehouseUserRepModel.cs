@@ -12,6 +12,6 @@ public class WarehouseUserModel
     public string? StaffId { get; set; }
     public string? PhoneNo { get; set; }
     public string? Email { get; set; }
-    public string? RoleName { get; set; }
-    public string? BranchName { get; set; }
+    public string? RoleCode { get; set; }
+    public string? BranchCode { get; set; }
 }

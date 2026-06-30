@@ -35,8 +35,8 @@ public class WarehouseUserListService : AuthorizationService
                 StaffId = reqModel.StaffId,
                 PhoneNo = reqModel.PhoneNo,
                 Email = reqModel.Email,
-                RoleName = reqModel.RoleName,
-                BranchName = reqModel.BranchName
+                RoleName = reqModel.RoleCode,
+                BranchName = reqModel.BranchCode
             };
             var result = await _dapperService.QueryStoredProcedureAsync<WarehouseUserModel>
                 (SqlQueries.Sp_GetWarehouseUserList, parameters);
@@ -87,6 +87,8 @@ public class WarehouseUserListService : AuthorizationService
             }
             #endregion
 
+            #region Prepare Data
+
             var response = new WarehouseUserModel
             {
                 WarehouseUserId = user.WarehouseUserId,
@@ -94,12 +96,74 @@ public class WarehouseUserListService : AuthorizationService
                 StaffId = user.StaffId,
                 PhoneNo = user.Phone,
                 Email = user.Email,
-                RoleName = role.RoleName,
-                BranchName = branch.Address
+                RoleCode = user.RoleCode,
+                BranchCode = user.BranchCode
             };
             model = Result<WarehouseUserModel>.Success(response);
+
+            #endregion
         }
-        catch(Exception ex)
+        catch (Exception ex)
+        {
+            return Result<WarehouseUserModel>.Error(ex);
+        }
+        return model;
+    }
+
+    public async Task<Result<WarehouseUserModel>> Update(WarehouseUserReqModel reqModel)
+    {
+        var model = new Result<WarehouseUserModel>();
+        try
+        {
+            #region Check User
+
+            var user = await _db.TblWarehouseUsers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.WarehouseUserId == reqModel.UserId && x.DelFlag == 0);
+            if (user is null)
+            {
+                model = Result<WarehouseUserModel>.Error("User does not exist.");
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate
+
+            bool reqUser = await _db.TblReqWarehouseUserChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.WarehouseUserId == reqModel.UserId);
+            if (reqUser)
+            {
+                model = Result<WarehouseUserModel>.Error("User is already Requesed!");
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            TblReqWarehouseUserChange item = new TblReqWarehouseUserChange
+            {
+                ReqWarehouseUserChangesId = DevCode.GenerateUlid(),
+                WarehouseUserId = reqModel.UserId,
+                FullName = reqModel.FullName!,
+                Phone = reqModel.PhoneNo!,
+                Email = reqModel.Email!,
+                RoleCode = reqModel.RoleCode!,
+                BranchCode = reqModel.BranchCode!,
+                ChangesType = EnumRequestedType.Update.ToString(),
+                Status = EnumRequestedUserStatus.Pending.ToString(),
+                ReqUserId = AuthorizedUserId,
+                ReqDateTime = DevCode.GetServerDateTime()
+            };
+            await _db.TblReqWarehouseUserChanges.AddAsync(item);
+            await _db.SaveChangesAsync();
+            model = Result<WarehouseUserModel>.Success("Your request is pending for approval!");
+
+            #endregion
+        }
+        catch (Exception ex)
         {
             return Result<WarehouseUserModel>.Error(ex);
         }
