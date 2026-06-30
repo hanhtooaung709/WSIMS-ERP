@@ -103,6 +103,11 @@ public partial class WarehouseUserList
         }
     }
 
+    private async Task Delete(WarehouseUserModel reqModel)
+    {
+
+    }
+
     private async Task Save(WarehouseUserModel reqModel)
     {
 

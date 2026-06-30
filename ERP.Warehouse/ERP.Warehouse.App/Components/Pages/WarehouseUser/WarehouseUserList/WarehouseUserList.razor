@@ -86,12 +86,17 @@
             </EditTemplate>
         </PropertyColumn>
 
-        <TemplateColumn Hidden="@_readOnly">
+        <TemplateColumn Hidden="@_readOnly" CellClass="d-flex justify-between">
             <CellTemplate>
                 <MudFab Size="@Size.Small"
                         StartIcon="@Icons.Material.Filled.Edit"
                         Color="Color.Warning"
                         OnClick="@context.Actions.StartEditingItemAsync" />
+
+                <MudFab Size="@Size.Small"
+                        StartIcon="@Icons.Material.Outlined.Delete"
+                        Color="Color.Error"
+                        OnClick="@(() => Delete(context.Item))" />
             </CellTemplate>
         </TemplateColumn>
     </Columns>
