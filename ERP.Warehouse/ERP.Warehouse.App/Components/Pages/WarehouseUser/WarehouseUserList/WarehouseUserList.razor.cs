@@ -90,8 +90,17 @@ public partial class WarehouseUserList
 
     private void Cancel()
     {
-
+        try
+        {
+            _reqModel = new();
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCustomError(ex);
+        }
     }
+
     private async Task Save(WarehouseUserModel reqModel)
     {
 
