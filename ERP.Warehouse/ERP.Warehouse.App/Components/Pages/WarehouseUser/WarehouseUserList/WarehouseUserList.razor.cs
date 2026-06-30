@@ -3,6 +3,7 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
+using static MudBlazor.CategoryTypes;
 
 namespace ERP.Warehouse.App.Components.Pages.WarehouseUser.WarehouseUserList;
 
@@ -12,6 +13,7 @@ public partial class WarehouseUserList
     private IEnumerable<WarehouseUserModel> _model = new List<WarehouseUserModel>();
     private WarehouseUserEditModel _edit = new();
 
+    private MudDataGrid<WarehouseUserModel> _elementGrid = default!;
     private EnumFormType _formType = EnumFormType.List;
     private bool hover = true;
     private bool _readOnly;
@@ -57,10 +59,22 @@ public partial class WarehouseUserList
         }
     }
 
+    private async Task Create()
+    {
+        var modle = new WarehouseUserModel();
+        await _elementGrid.SetEditingItemAsync(modle);
+    }
+
     private async Task Edit(WarehouseUserModel reqModel)
     {
         try
         {
+            if (reqModel is null || string.IsNullOrEmpty(reqModel.WarehouseUserId))
+            {
+                _formType = EnumFormType.Create;
+                return;
+            }
+
             _edit.UserId = reqModel.WarehouseUserId!;
 
             await _injectService.EnableLoading();
