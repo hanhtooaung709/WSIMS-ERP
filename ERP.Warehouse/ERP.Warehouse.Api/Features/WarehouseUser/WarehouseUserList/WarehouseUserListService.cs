@@ -49,7 +49,7 @@ public class WarehouseUserListService : AuthorizationService
         }
     }
 
-    public async Task<Result<WarehouseUserModel>> Edit(string Id)
+    public async Task<Result<WarehouseUserModel>> Edit(WarehouseUserEditModel reqModel)
     {
         var model = new Result<WarehouseUserModel>();
         try
@@ -57,7 +57,7 @@ public class WarehouseUserListService : AuthorizationService
             #region Check User
             var user = await _db.TblWarehouseUsers
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.WarehouseUserId == Id && x.DelFlag == 0);
+                .FirstOrDefaultAsync(x => x.WarehouseUserId == reqModel.UserId && x.DelFlag == 0);
             if (user is null)
             {
                 model = Result<WarehouseUserModel>.Error("User does not exist.");

@@ -12,6 +12,7 @@ public partial class WarehouseUserList
 {
     private WarehouseUserReqModel _reqModel = new();
     private IEnumerable<WarehouseUserModel> _model = new List<WarehouseUserModel>();
+    private WarehouseUserEditModel _edit = new();
     private bool hover = true;
     private bool _readOnly;
 
@@ -60,8 +61,10 @@ public partial class WarehouseUserList
     {
         try
         {
+            _edit.UserId = reqModel.WarehouseUserId!;
+
             await _injectService.EnableLoading();
-            var result = await _apiService.Edit(reqModel.WarehouseUserId!.ToString());
+            var result = await _apiService.Edit(_edit);
             await _injectService.DisableLoading();
 
             if (result.IsError)

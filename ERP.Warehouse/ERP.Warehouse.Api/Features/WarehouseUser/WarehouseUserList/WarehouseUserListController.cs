@@ -25,9 +25,9 @@ public class WarehouseUserListController : BaseController
 
     [HttpPost]
     [Route("Edit")]
-    public async Task<IActionResult> Edit(string Id)
+    public async Task<IActionResult> Edit(WarehouseUserEditModel reqModel)
     {
-        var result = await _warehouseUserListService.Edit(Id);
+        var result = await _warehouseUserListService.Edit(reqModel);
         return Execute(result);
     }
 }
