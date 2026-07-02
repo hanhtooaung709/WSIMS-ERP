@@ -9,124 +9,130 @@
 
 @if (_formType is EnumFormType.List or EnumFormType.Edit or EnumFormType.Create)
 {
-    <MudDataGrid @ref="_elementGrid"
-                 T="WarehouseUserModel"
-                 Items="@_model"
-                 Hover="@hover" ReadOnly="@_readOnly"
-                 EditMode="MudBlazor.DataGridEditMode.Form"
-                 StartedEditingItem="@Edit"
-                 CanceledEditingItem="@Cancel"
-                 CommittedItemChanges="@Save">
+    <div style="width: 100%; overflow-x: auto;">
+        <MudDataGrid @ref="_elementGrid"
+                     T="WarehouseUserModel"
+                     Items="@_model"
+                     Hover="@hover"
+                     ReadOnly="@_readOnly"
+                     Breakpoint="Breakpoint.None"
+                     EditMode="MudBlazor.DataGridEditMode.Form"
+                     StartedEditingItem="@Edit"
+                     CanceledEditingItem="@Cancel"
+                     CommittedItemChanges="@Save">
 
-        <ToolBarContent>
-            <MudFab Size="@Size.Small"
-                    Class="mr-3"
-                    StartIcon="@Icons.Material.Outlined.Add"
-                    Color="Color.Tertiary"
-                    OnClick="@Create"/>
-            <MudText Typo="Typo.h6">Add New</MudText>
-        </ToolBarContent>
+            <ToolBarContent>
+                <MudFab Size="@Size.Small"
+                        Class="mr-3"
+                        StartIcon="@Icons.Material.Outlined.Add"
+                        Color="Color.Tertiary"
+                        OnClick="@Create" />
+                <MudText Typo="Typo.h6">Add New</MudText>
+            </ToolBarContent>
 
-        <Columns>
-            <TemplateColumn Title="No" Sortable="false" Filterable="false">
-                <CellTemplate>
-                    @(_model.ToList().IndexOf(context.Item) + 1)
-                </CellTemplate>
-            </TemplateColumn>
+            <Columns>
+                <TemplateColumn Title="No" Sortable="false" Filterable="false" HeaderStyle="width: 70px;" Style="width: 70px;">
+                    <CellTemplate>
+                        @(_model.ToList().IndexOf(context.Item) + 1)
+                    </CellTemplate>
+                </TemplateColumn>
 
-            <PropertyColumn Property="x => x.UserName" Title="User Name">
-                <EditTemplate>
-                    <MudText Typo="Typo.h6" Style="padding: 16px 16px 0 16px; font-weight: bold;">
-                        @_formType.ToString() Warehouse User
-                    </MudText>
-                    <MudTextField @bind-Value="_reqModel.UserName"
-                                  Label="User Name"
-                                  Margin="Margin.Dense"
-                                  Style="width: 100%; min-width: 500px;"
-                                  Variant="MudBlazor.Variant.Outlined" />
-                </EditTemplate>
-            </PropertyColumn>
+                <PropertyColumn Property="x => x.UserName" Title="User Name" HeaderStyle="min-width: 180px;">
+                    <EditTemplate>
+                        <MudText Typo="Typo.h6" Style="padding: 16px 16px 0 16px; font-weight: bold;">
+                            @_formType.ToString() Warehouse User
+                        </MudText>
+                        <MudTextField @bind-Value="_reqModel.UserName"
+                                      Label="User Name"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Disabled="@(_formType == EnumFormType.Edit)" />
+                    </EditTemplate>
+                </PropertyColumn>
 
-            <PropertyColumn Property="x => x.FullName" Title="Full Name">
-                <EditTemplate>
-                    <MudTextField @bind-Value="_reqModel.FullName"
-                                  Label="Full Name"
-                                  Margin="Margin.Dense"
-                                  Style="width: 100%; min-width: 500px;"
-                                  Variant="MudBlazor.Variant.Outlined" />
-                </EditTemplate>
-            </PropertyColumn>
+                <PropertyColumn Property="x => x.FullName" Title="Full Name" HeaderStyle="min-width: 180px;">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.FullName"
+                                      Label="Full Name"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined" />
+                    </EditTemplate>
+                </PropertyColumn>
 
-            <PropertyColumn Property="x => x.StaffId" Title="StaffId">
-                <EditTemplate>
-                    <MudTextField @bind-Value="_reqModel.StaffId"
-                                  Label="StaffId"
-                                  Margin="Margin.Dense"
-                                  Style="width: 100%; min-width: 500px;"
-                                  Variant="MudBlazor.Variant.Outlined"
-                                  Disabled="@(_formType == EnumFormType.Edit)" />
-                </EditTemplate>
-            </PropertyColumn>
+                <PropertyColumn Property="x => x.StaffId" Title="StaffId" HeaderStyle="min-width: 120px;">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.StaffId"
+                                      Label="StaffId"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Disabled="@(_formType == EnumFormType.Edit)" />
+                    </EditTemplate>
+                </PropertyColumn>
 
-            <PropertyColumn Property="x => x.PhoneNo" Title="PhoneNo">
-                <EditTemplate>
-                    <MudTextField @bind-Value="_reqModel.PhoneNo"
-                                  Label="Phone Number"
-                                  Margin="Margin.Dense"
-                                  Style="width: 100%; min-width: 500px;"
-                                  Variant="MudBlazor.Variant.Outlined" />
-                </EditTemplate>
-            </PropertyColumn>
+                <PropertyColumn Property="x => x.PhoneNo" Title="PhoneNo" HeaderStyle="min-width: 140px;">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.PhoneNo"
+                                      Label="Phone Number"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined" />
+                    </EditTemplate>
+                </PropertyColumn>
 
-            <PropertyColumn Property="x => x.Email" Title="Email">
-                <EditTemplate>
-                    <MudTextField @bind-Value="_reqModel.Email"
-                                  Label="Email"
-                                  Margin="Margin.Dense"
-                                  InputType="InputType.Email"
-                                  Style="width: 100%; min-width: 500px;"
-                                  Variant="MudBlazor.Variant.Outlined" />
-                </EditTemplate>
-            </PropertyColumn>
+                <PropertyColumn Property="x => x.Email" Title="Email" HeaderStyle="min-width: 280px;">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.Email"
+                                      Label="Email"
+                                      Margin="Margin.Dense"
+                                      InputType="InputType.Email"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined" />
+                    </EditTemplate>
+                </PropertyColumn>
 
-            <PropertyColumn Property="x => x.RoleCode" Title="Role">
-                <EditTemplate>
-                    <MudTextField @bind-Value="_reqModel.RoleCode"
-                                  Label="Role"
-                                  Margin="Margin.Dense"
-                                  Style="width: 100%; min-width: 500px;"
-                                  Variant="MudBlazor.Variant.Outlined" />
-                </EditTemplate>
-            </PropertyColumn>
+                <PropertyColumn Property="x => x.RoleCode" Title="Role" HeaderStyle="min-width: 120px;">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.RoleCode"
+                                      Label="Role"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined" />
+                    </EditTemplate>
+                </PropertyColumn>
 
-            <PropertyColumn Property="x => x.BranchCode" Title="Branch">
-                <EditTemplate>
-                    <MudTextField @bind-Value="_reqModel.BranchCode"
-                                  Label="Branch"
-                                  Margin="Margin.Dense"
-                                  Style="width: 100%; min-width: 500px;"
-                                  Variant="MudBlazor.Variant.Outlined" />
-                </EditTemplate>
-            </PropertyColumn>
+                <PropertyColumn Property="x => x.BranchCode" Title="Branch" HeaderStyle="min-width: 300px;">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.BranchCode"
+                                      Label="Branch"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined" />
+                    </EditTemplate>
+                </PropertyColumn>
 
-            <TemplateColumn Hidden="@_readOnly" CellClass="justify-between">
-                <CellTemplate>
-                    <MudFab Size="@Size.Small"
-                            Class="mr-3"
-                            StartIcon="@Icons.Material.Filled.Edit"
-                            Color="Color.Warning"
-                            OnClick="@context.Actions.StartEditingItemAsync" />
+                <TemplateColumn Hidden="@_readOnly" Title="Actions" HeaderStyle="width: 140px; min-width: 140px;" Style="width: 140px; min-width: 140px; white-space: nowrap;">
+                    <CellTemplate>
+                        <div style="display: inline-block; white-space: nowrap;">
+                            <MudFab Size="@Size.Small"
+                                    Class="mr-2"
+                                    StartIcon="@Icons.Material.Filled.Edit"
+                                    Color="Color.Warning"
+                                    OnClick="@context.Actions.StartEditingItemAsync" />
 
-                    <MudFab Size="@Size.Small"
-                            Class="mr-3"
-                            StartIcon="@Icons.Material.Outlined.Delete"
-                            Color="Color.Error"
-                            OnClick="@(() => Delete(context.Item))" />
-                </CellTemplate>
-            </TemplateColumn>
-        </Columns>
-        <PagerContent>
-            <MudDataGridPager T="WarehouseUserModel" />
-        </PagerContent>
-    </MudDataGrid>
+                            <MudFab Size="@Size.Small"
+                                    StartIcon="@Icons.Material.Outlined.Delete"
+                                    Color="Color.Error"
+                                    OnClick="@(() => Delete(context.Item))" />
+                        </div>
+                    </CellTemplate>
+                </TemplateColumn>
+            </Columns>
+            <PagerContent>
+                <MudDataGridPager T="WarehouseUserModel" />
+            </PagerContent>
+        </MudDataGrid>
+    </div>
 }
