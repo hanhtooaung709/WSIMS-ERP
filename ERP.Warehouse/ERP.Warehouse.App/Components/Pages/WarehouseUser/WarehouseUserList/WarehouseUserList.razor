@@ -34,13 +34,23 @@
                 </CellTemplate>
             </TemplateColumn>
 
-            <PropertyColumn Property="x => x.FullName" Title="Name">
+            <PropertyColumn Property="x => x.UserName" Title="User Name">
                 <EditTemplate>
                     <MudText Typo="Typo.h6" Style="padding: 16px 16px 0 16px; font-weight: bold;">
                         @_formType.ToString() Warehouse User
                     </MudText>
+                    <MudTextField @bind-Value="_reqModel.UserName"
+                                  Label="User Name"
+                                  Margin="Margin.Dense"
+                                  Style="width: 100%; min-width: 500px;"
+                                  Variant="MudBlazor.Variant.Outlined" />
+                </EditTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.FullName" Title="Full Name">
+                <EditTemplate>
                     <MudTextField @bind-Value="_reqModel.FullName"
-                                  Label="Name"
+                                  Label="Full Name"
                                   Margin="Margin.Dense"
                                   Style="width: 100%; min-width: 500px;"
                                   Variant="MudBlazor.Variant.Outlined" />
@@ -99,7 +109,7 @@
                 </EditTemplate>
             </PropertyColumn>
 
-            <TemplateColumn Hidden="@_readOnly" CellClass="d-flex justify-between">
+            <TemplateColumn Hidden="@_readOnly" CellClass="justify-between">
                 <CellTemplate>
                     <MudFab Size="@Size.Small"
                             Class="mr-3"

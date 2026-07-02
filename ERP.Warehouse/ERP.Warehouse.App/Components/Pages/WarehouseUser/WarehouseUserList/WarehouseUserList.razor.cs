@@ -88,6 +88,7 @@ public partial class WarehouseUserList
             }
 
             _reqModel.UserId = result.Data.WarehouseUserId;
+            _reqModel.UserName = result.Data.UserName;
             _reqModel.FullName = result.Data.FullName;
             _reqModel.StaffId = result.Data.StaffId;
             _reqModel.PhoneNo = result.Data.PhoneNo;
@@ -120,13 +121,12 @@ public partial class WarehouseUserList
 
     private async Task Save(WarehouseUserModel reqModel)
     {
-        if(reqModel.WarehouseUserId != _reqModel.UserId)
+        if (_reqModel.UserId.IsNullOrEmpty())
         {
-            await _injectService.ErrorDialogMessage("Unvalid UserId");
-            return;
+            bool confirm = await _injectService.ShowCreateDialog();
+            if (!confirm) return;
         }
-
-        if (!_reqModel.UserId.IsNullOrEmpty())
+        else
         {
             bool confirm = await _injectService.ShowUpdateDialog();
             if (!confirm) return;

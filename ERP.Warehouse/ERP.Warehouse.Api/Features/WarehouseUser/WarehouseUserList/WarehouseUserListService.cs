@@ -49,6 +49,20 @@ public class WarehouseUserListService : AuthorizationService
         }
     }
 
+    public async Task<Result<WarehouseUserModel>> Create(WarehouseUserReqModel reqModel)
+    {
+        var model = new Result<WarehouseUserModel>();
+        try
+        {
+            
+        }
+        catch (Exception ex)
+        {
+            return Result<WarehouseUserModel>.Error(ex);
+        }
+        return model;
+    }
+
     public async Task<Result<WarehouseUserModel>> Edit(WarehouseUserEditModel reqModel)
     {
         var model = new Result<WarehouseUserModel>();
@@ -92,6 +106,7 @@ public class WarehouseUserListService : AuthorizationService
             var response = new WarehouseUserModel
             {
                 WarehouseUserId = user.WarehouseUserId,
+                UserName = user.UserName,
                 FullName = user.FullName,
                 StaffId = user.StaffId,
                 PhoneNo = user.Phone,

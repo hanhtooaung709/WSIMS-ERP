@@ -5,6 +5,7 @@ namespace ERP.Warehouse.Models.Models.WarehouseUserList;
 public class WarehouseUserReqModel
 {
     public string? UserId { get; set; }
+    public string? UserName { get; set; }
     public string? FullName { get; set; }
     public string? StaffId { get; set; }
     public string? PhoneNo { get; set; }
