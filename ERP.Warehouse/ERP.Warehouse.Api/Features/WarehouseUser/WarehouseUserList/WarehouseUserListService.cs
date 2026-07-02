@@ -454,5 +454,27 @@ public class WarehouseUserListService : AuthorizationService
         }
     }
 
+    public async Task<Result<List<BranchResponseModel>>> GetBranch()
+    {
+        try
+        {
+            var result = await _db.TblBranches
+                .AsNoTracking()
+                .Where(x => x.DelFlag == 0)
+                .Select(x => new BranchResponseModel
+                {
+                    Address = x.Address,
+                    BranchCode = x.BranchCode
+                })
+                .ToListAsync();
+
+            return Result<List<BranchResponseModel>>.Success(result);
+        }
+        catch (Exception ex)
+        {
+            return Result<List<BranchResponseModel>>.Error(ex);
+        }
+    }
+
     #endregion
 }

@@ -114,11 +114,20 @@
 
                 <PropertyColumn Property="x => x.BranchCode" Title="Branch" HeaderStyle="min-width: 300px;">
                     <EditTemplate>
-                        <MudTextField @bind-Value="_reqModel.BranchCode"
-                                      Label="Branch"
-                                      Margin="Margin.Dense"
-                                      Style="width: 100%; min-width: 500px;"
-                                      Variant="MudBlazor.Variant.Outlined" />
+                        <MudSelect @bind-Value="_reqModel.BranchCode"
+                                   Label="Role"
+                                   Margin="Margin.Dense"
+                                   Style="width: 100%; min-width: 500px;"
+                                   Variant="MudBlazor.Variant.Outlined"
+                                   AnchorOrigin="Origin.BottomCenter">
+                            @if (_banchList != null)
+                            {
+                                @foreach (var role in _banchList)
+                                {
+                                    <MudSelectItem Value="@role.BranchCode">@role.Address</MudSelectItem>
+                                }
+                            }
+                        </MudSelect>
                     </EditTemplate>
                 </PropertyColumn>
 

@@ -8,4 +8,5 @@ public class WarehouseUserListEndpoints
     public static string Update { get; set; } = "api/warehouse-user-list/Update";
     public static string Delete { get; set; } = "api/warehouse-user-list/Delete";
     public static string GetRole { get; set; } = "api/warehouse-user-list/GetRole";
+    public static string GetBranch { get; set; } = "api/warehouse-user-list/GetBranch";
 }

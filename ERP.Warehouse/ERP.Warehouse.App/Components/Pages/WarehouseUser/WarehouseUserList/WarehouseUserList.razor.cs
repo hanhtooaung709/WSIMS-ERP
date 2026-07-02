@@ -12,6 +12,7 @@ public partial class WarehouseUserList
     private WarehouseUserEditModel _edit = new();
 
     private List<RoleResponseModel> _roleList = new();
+    private List<BranchResponseModel> _banchList = new();
 
     private MudDataGrid<WarehouseUserModel> _elementGrid = default!;
     private EnumFormType _formType = EnumFormType.List;
@@ -64,6 +65,7 @@ public partial class WarehouseUserList
         var modle = new WarehouseUserModel();
         _roleList = new List<RoleResponseModel>();
         await GetRole();
+        await GetBranch();
         await _elementGrid.SetEditingItemAsync(modle);
     }
 
@@ -123,6 +125,7 @@ public partial class WarehouseUserList
             }
 
             await GetRole();
+            await GetBranch();
 
             _edit.UserId = reqModel.WarehouseUserId!;
 
@@ -217,6 +220,29 @@ public partial class WarehouseUserList
                 return;
             }
             _roleList = result.Data;
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private async Task GetBranch()
+    {
+        try
+        {
+            await _injectService.EnableLoading();
+            var result = await _apiService.GetBranch();
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            _banchList = result.Data;
         }
         catch (Exception ex)
         {

@@ -65,5 +65,13 @@ public class WarehouseUserListController : BaseController
         return Execute(result);
     }
 
+    [HttpPost]
+    [Route("GetBranch")]
+    public async Task<IActionResult> GetBranch()
+    {
+        var result = await _warehouseUserListService.GetBranch();
+        return Execute(result);
+    }
+
     #endregion
 }

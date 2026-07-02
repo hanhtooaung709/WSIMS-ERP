@@ -61,5 +61,9 @@ public class WarehouseApiService
        => await _httpClientService.ExecuteAsync<object, List<RoleResponseModel>>
        (WarehouseUserListEndpoints.GetRole, null!);
 
+    public async Task<Result<List<BranchResponseModel>>> GetBranch()
+       => await _httpClientService.ExecuteAsync<object, List<BranchResponseModel>>
+       (WarehouseUserListEndpoints.GetBranch, null!);
+
     #endregion
 }
