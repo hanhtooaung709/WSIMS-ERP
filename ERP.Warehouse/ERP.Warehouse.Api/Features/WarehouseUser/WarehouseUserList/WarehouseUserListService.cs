@@ -1,4 +1,5 @@
-﻿using ERP.Warehouse.Api.Common;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using ERP.Warehouse.Api.Common;
 using ERP.Warehouse.Models.Models.WarehouseUserList;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
@@ -58,7 +59,7 @@ public class WarehouseUserListService : AuthorizationService
 
             bool reqUser = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.UserName == reqModel.UserName &&
+                .AnyAsync(x => x.UserName.Trim().ToLower() == reqModel.UserName!.Trim().ToLower() &&
                                x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (reqUser)
             {
@@ -81,7 +82,7 @@ public class WarehouseUserListService : AuthorizationService
 
             bool staffId = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.StaffId == reqModel.StaffId &&
+                .AnyAsync(x => x.StaffId.Trim().ToLower() == reqModel.StaffId.Trim().ToLower() &&
                                x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (staffId)
             {
@@ -104,7 +105,7 @@ public class WarehouseUserListService : AuthorizationService
 
             bool phoneNo = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Phone == reqModel.PhoneNo &&
+                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.PhoneNo.Trim().ToLower() &&
                                x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (phoneNo)
             {
@@ -127,7 +128,7 @@ public class WarehouseUserListService : AuthorizationService
                                x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (phoneNo)
             {
-                model = Result<WarehouseUserModel>.Error("Phone Number is already Requesed!");
+                model = Result<WarehouseUserModel>.Error("Phone Number is already Change Requesed!");
                 return model;
             }
 
@@ -137,11 +138,11 @@ public class WarehouseUserListService : AuthorizationService
 
             bool email = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Email == reqModel.Email &&
+                .AnyAsync(x => x.Email.Trim().ToLower() == reqModel.Email.Trim().ToLower() &&
                                x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (email)
             {
-                model = Result<WarehouseUserModel>.Error("Email Number is already Requesed!");
+                model = Result<WarehouseUserModel>.Error("Email is already Requesed!");
                 return model;
             }
 
@@ -150,7 +151,7 @@ public class WarehouseUserListService : AuthorizationService
                 .AnyAsync(x => x.Email == reqModel.Email);
             if (email)
             {
-                model = Result<WarehouseUserModel>.Error("Email Number is already exist!");
+                model = Result<WarehouseUserModel>.Error("Email is already exist!");
                 return model;
             }
 
@@ -160,7 +161,7 @@ public class WarehouseUserListService : AuthorizationService
                                x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (email)
             {
-                model = Result<WarehouseUserModel>.Error("Email Number is already Requesed!");
+                model = Result<WarehouseUserModel>.Error("Email is already Change Requesed!");
                 return model;
             }
 
@@ -294,7 +295,7 @@ public class WarehouseUserListService : AuthorizationService
 
             bool phoneNo = await _db.TblReqWarehouseUserChanges
                 .AsNoTracking()
-                .AnyAsync(x => x.Phone == reqModel.PhoneNo &&
+                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.PhoneNo.Trim().ToLower() &&
                                x.WarehouseUserId != reqModel.UserId &&
                                x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (phoneNo)
@@ -305,7 +306,7 @@ public class WarehouseUserListService : AuthorizationService
 
             phoneNo = await _db.TblWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Phone == reqModel.PhoneNo &&
+                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.PhoneNo!.Trim().ToLower() &&
                                x.WarehouseUserId != reqModel.UserId);
             if (phoneNo)
             {
@@ -330,7 +331,7 @@ public class WarehouseUserListService : AuthorizationService
 
             email = await _db.TblWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Email == reqModel.Email &&
+                .AnyAsync(x => x.Email.Trim().ToLower() == reqModel.Email!.Trim().ToLower() &&
                                x.WarehouseUserId != reqModel.UserId);
             if (email)
             {
@@ -428,4 +429,30 @@ public class WarehouseUserListService : AuthorizationService
         }
         return model;
     }
+
+    #region DropDown
+
+    public async Task<Result<List<RoleResponseModel>>> GetRole()
+    {
+        try
+        {
+            var result = await _db.TblWarehouseRoles
+                .AsNoTracking()
+                .Where(x => x.DelFlag == 0)
+                .Select(x => new RoleResponseModel
+                {
+                    RoleName = x.RoleName,
+                    RoleCode = x.RoleCode
+                })
+                .ToListAsync();
+
+            return Result<List<RoleResponseModel>>.Success(result);
+        }
+        catch (Exception ex)
+        {
+            return Result<List<RoleResponseModel>>.Error(ex);
+        }
+    }
+
+    #endregion
 }

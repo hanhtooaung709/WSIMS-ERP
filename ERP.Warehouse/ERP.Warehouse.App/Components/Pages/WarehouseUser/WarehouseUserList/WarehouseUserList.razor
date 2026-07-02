@@ -95,11 +95,20 @@
 
                 <PropertyColumn Property="x => x.RoleCode" Title="Role" HeaderStyle="min-width: 120px;">
                     <EditTemplate>
-                        <MudTextField @bind-Value="_reqModel.RoleCode"
-                                      Label="Role"
-                                      Margin="Margin.Dense"
-                                      Style="width: 100%; min-width: 500px;"
-                                      Variant="MudBlazor.Variant.Outlined" />
+                        <MudSelect @bind-Value="_reqModel.RoleCode"
+                                   Label="Role"
+                                   Margin="Margin.Dense"
+                                   Style="width: 100%; min-width: 500px;"
+                                   Variant="MudBlazor.Variant.Outlined"
+                                   AnchorOrigin="Origin.BottomCenter">
+                            @if (_roleList != null)
+                            {
+                                @foreach (var role in _roleList)
+                                {
+                                    <MudSelectItem Value="@role.RoleCode">@role.RoleName</MudSelectItem>
+                                }
+                            }
+                        </MudSelect>
                     </EditTemplate>
                 </PropertyColumn>
 

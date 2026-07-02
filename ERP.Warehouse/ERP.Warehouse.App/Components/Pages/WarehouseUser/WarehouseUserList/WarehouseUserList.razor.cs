@@ -1,9 +1,7 @@
 ﻿using ERP.Warehouse.Models.Models.WarehouseUserList;
-using Microsoft.JSInterop;
 using MudBlazor;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
-using static MudBlazor.CategoryTypes;
 
 namespace ERP.Warehouse.App.Components.Pages.WarehouseUser.WarehouseUserList;
 
@@ -12,6 +10,8 @@ public partial class WarehouseUserList
     private WarehouseUserReqModel _reqModel = new();
     private IEnumerable<WarehouseUserModel> _model = new List<WarehouseUserModel>();
     private WarehouseUserEditModel _edit = new();
+
+    private List<RoleResponseModel> _roleList = new();
 
     private MudDataGrid<WarehouseUserModel> _elementGrid = default!;
     private EnumFormType _formType = EnumFormType.List;
@@ -62,6 +62,8 @@ public partial class WarehouseUserList
     private async Task Create()
     {
         var modle = new WarehouseUserModel();
+        _roleList = new List<RoleResponseModel>();
+        await GetRole();
         await _elementGrid.SetEditingItemAsync(modle);
     }
 
@@ -119,6 +121,8 @@ public partial class WarehouseUserList
                 _formType = EnumFormType.Create;
                 return;
             }
+
+            await GetRole();
 
             _edit.UserId = reqModel.WarehouseUserId!;
 
@@ -196,4 +200,31 @@ public partial class WarehouseUserList
             _logger.LogCustomError(ex);
         }
     }
+
+    #region DropDown
+
+    private async Task GetRole()
+    {
+        try
+        {
+            await _injectService.EnableLoading();
+            var result = await _apiService.GetRole();
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            _roleList = result.Data;
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    #endregion
 }

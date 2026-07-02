@@ -54,4 +54,16 @@ public class WarehouseUserListController : BaseController
         var result = await _warehouseUserListService.Delete(reqModel);
         return Execute(result);
     }
+
+    #region DropDown
+
+    [HttpPost]
+    [Route("GetRole")]
+    public async Task<IActionResult> GetRole()
+    {
+        var result = await _warehouseUserListService.GetRole();
+        return Execute(result);
+    }
+
+    #endregion
 }
