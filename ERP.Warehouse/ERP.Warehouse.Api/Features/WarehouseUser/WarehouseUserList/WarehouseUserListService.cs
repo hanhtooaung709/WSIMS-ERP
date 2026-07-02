@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using ERP.Warehouse.Api.Common;
+﻿using ERP.Warehouse.Api.Common;
 using ERP.Warehouse.Models.Models.WarehouseUserList;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
@@ -59,7 +58,8 @@ public class WarehouseUserListService : AuthorizationService
 
             bool reqUser = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.UserName == reqModel.UserName);
+                .AnyAsync(x => x.UserName == reqModel.UserName &&
+                               x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (reqUser)
             {
                 model = Result<WarehouseUserModel>.Error("UserName is already Requesed!");
@@ -81,7 +81,8 @@ public class WarehouseUserListService : AuthorizationService
 
             bool staffId = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.StaffId == reqModel.StaffId);
+                .AnyAsync(x => x.StaffId == reqModel.StaffId &&
+                               x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (staffId)
             {
                 model = Result<WarehouseUserModel>.Error("StaffId is already Requesed!");
@@ -103,7 +104,8 @@ public class WarehouseUserListService : AuthorizationService
 
             bool phoneNo = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Phone == reqModel.PhoneNo);
+                .AnyAsync(x => x.Phone == reqModel.PhoneNo &&
+                               x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (phoneNo)
             {
                 model = Result<WarehouseUserModel>.Error("Phone Number is already Requesed!");
@@ -119,13 +121,24 @@ public class WarehouseUserListService : AuthorizationService
                 return model;
             }
 
+            phoneNo = await _db.TblReqWarehouseUserChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.Phone == reqModel.PhoneNo &&
+                               x.Status == EnumRequestedUserStatus.Pending.ToString());
+            if (phoneNo)
+            {
+                model = Result<WarehouseUserModel>.Error("Phone Number is already Requesed!");
+                return model;
+            }
+
             #endregion
 
             #region Check Duplicate Email
 
             bool email = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Email == reqModel.Email);
+                .AnyAsync(x => x.Email == reqModel.Email &&
+                               x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (email)
             {
                 model = Result<WarehouseUserModel>.Error("Email Number is already Requesed!");
@@ -141,47 +154,13 @@ public class WarehouseUserListService : AuthorizationService
                 return model;
             }
 
-            #endregion
-
-            #region Check Duplicate RoleCode
-
-            bool roleCode = await _db.TblReqWarehouseUsers
+            email = await _db.TblReqWarehouseUserChanges
                 .AsNoTracking()
-                .AnyAsync(x => x.RoleCode == reqModel.RoleCode);
-            if (roleCode)
+                .AnyAsync(x => x.Email == reqModel.Email &&
+                               x.Status == EnumRequestedUserStatus.Pending.ToString());
+            if (email)
             {
-                model = Result<WarehouseUserModel>.Error("RoleCode Number is already Requesed!");
-                return model;
-            }
-
-            roleCode = await _db.TblWarehouseUsers
-                .AsNoTracking()
-                .AnyAsync(x => x.RoleCode == reqModel.RoleCode);
-            if (roleCode)
-            {
-                model = Result<WarehouseUserModel>.Error("RoleCode Number is already exist!");
-                return model;
-            }
-
-            #endregion
-
-            #region Check Duplicate BranchCode
-
-            bool branchCode = await _db.TblReqWarehouseUsers
-                .AsNoTracking()
-                .AnyAsync(x => x.BranchCode == reqModel.BranchCode);
-            if (branchCode)
-            {
-                model = Result<WarehouseUserModel>.Error("BranchCode Number is already Requesed!");
-                return model;
-            }
-
-            branchCode = await _db.TblWarehouseUsers
-                .AsNoTracking()
-                .AnyAsync(x => x.BranchCode == reqModel.BranchCode);
-            if (branchCode)
-            {
-                model = Result<WarehouseUserModel>.Error("BranchCode Number is already exist!");
+                model = Result<WarehouseUserModel>.Error("Email Number is already Requesed!");
                 return model;
             }
 
@@ -301,7 +280,8 @@ public class WarehouseUserListService : AuthorizationService
 
             bool reqUser = await _db.TblReqWarehouseUserChanges
                 .AsNoTracking()
-                .AnyAsync(x => x.WarehouseUserId == reqModel.UserId);
+                .AnyAsync(x => x.WarehouseUserId == reqModel.UserId &&
+                               x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (reqUser)
             {
                 model = Result<WarehouseUserModel>.Error("User is already Requesed!");
@@ -310,36 +290,13 @@ public class WarehouseUserListService : AuthorizationService
 
             #endregion
 
-            #region Check Duplicate User Name
-
-            bool userName = await _db.TblReqWarehouseUsers
-                .AsNoTracking()
-                .AnyAsync(x => x.UserName == reqModel.UserName
-                          && x.WarehouseUserId != reqModel.UserId);
-            if (userName)
-            {
-                model = Result<WarehouseUserModel>.Error("UserName is already Requesed!");
-                return model;
-            }
-
-            userName = await _db.TblWarehouseUsers
-                .AsNoTracking()
-                .AnyAsync(x => x.UserName == reqModel.UserName
-                          && x.WarehouseUserId != reqModel.UserId);
-            if (userName)
-            {
-                model = Result<WarehouseUserModel>.Error("UserName is already exist!");
-                return model;
-            }
-
-            #endregion
-
             #region Check Duplicate PhoneNo
 
-            bool phoneNo = await _db.TblReqWarehouseUsers
+            bool phoneNo = await _db.TblReqWarehouseUserChanges
                 .AsNoTracking()
-                .AnyAsync(x => x.Phone == reqModel.PhoneNo
-                          && x.WarehouseUserId != reqModel.UserId);
+                .AnyAsync(x => x.Phone == reqModel.PhoneNo &&
+                               x.WarehouseUserId != reqModel.UserId &&
+                               x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (phoneNo)
             {
                 model = Result<WarehouseUserModel>.Error("Phone Number is already Requesed!");
@@ -348,8 +305,8 @@ public class WarehouseUserListService : AuthorizationService
 
             phoneNo = await _db.TblWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Phone == reqModel.PhoneNo
-                          && x.WarehouseUserId != reqModel.UserId);
+                .AnyAsync(x => x.Phone == reqModel.PhoneNo &&
+                               x.WarehouseUserId != reqModel.UserId);
             if (phoneNo)
             {
                 model = Result<WarehouseUserModel>.Error("Phone Number is already exist!");
@@ -362,8 +319,9 @@ public class WarehouseUserListService : AuthorizationService
 
             bool email = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Email == reqModel.Email
-                          && x.WarehouseUserId != reqModel.UserId);
+                .AnyAsync(x => x.Email == reqModel.Email &&
+                               x.WarehouseUserId != reqModel.UserId &&
+                               x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (email)
             {
                 model = Result<WarehouseUserModel>.Error("Email Number is already Requesed!");
@@ -372,59 +330,11 @@ public class WarehouseUserListService : AuthorizationService
 
             email = await _db.TblWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Email == reqModel.Email
-                          && x.WarehouseUserId != reqModel.UserId);
+                .AnyAsync(x => x.Email == reqModel.Email &&
+                               x.WarehouseUserId != reqModel.UserId);
             if (email)
             {
                 model = Result<WarehouseUserModel>.Error("Email Number is already exist!");
-                return model;
-            }
-
-            #endregion
-
-            #region Check Duplicate RoleCode
-
-            bool roleCode = await _db.TblReqWarehouseUsers
-                .AsNoTracking()
-                .AnyAsync(x => x.RoleCode == reqModel.RoleCode
-                          && x.WarehouseUserId != reqModel.UserId);
-            if (roleCode)
-            {
-                model = Result<WarehouseUserModel>.Error("RoleCode Number is already Requesed!");
-                return model;
-            }
-
-            roleCode = await _db.TblWarehouseUsers
-                .AsNoTracking()
-                .AnyAsync(x => x.RoleCode == reqModel.RoleCode
-                          && x.WarehouseUserId != reqModel.UserId);
-            if (roleCode)
-            {
-                model = Result<WarehouseUserModel>.Error("RoleCode Number is already exist!");
-                return model;
-            }
-
-            #endregion
-
-            #region Check Duplicate BranchCode
-
-            bool branchCode = await _db.TblReqWarehouseUsers
-                .AsNoTracking()
-                .AnyAsync(x => x.BranchCode == reqModel.BranchCode
-                          && x.WarehouseUserId != reqModel.UserId);
-            if (branchCode)
-            {
-                model = Result<WarehouseUserModel>.Error("BranchCode Number is already Requesed!");
-                return model;
-            }
-
-            branchCode = await _db.TblWarehouseUsers
-                .AsNoTracking()
-                .AnyAsync(x => x.BranchCode == reqModel.BranchCode
-                          && x.WarehouseUserId != reqModel.UserId);
-            if (branchCode)
-            {
-                model = Result<WarehouseUserModel>.Error("BranchCode Number is already exist!");
                 return model;
             }
 
