@@ -65,6 +65,51 @@ public partial class WarehouseUserList
         await _elementGrid.SetEditingItemAsync(modle);
     }
 
+    private async Task Save(WarehouseUserModel reqModel)
+    {
+        #region Create
+
+        if (_reqModel.UserId.IsNullOrEmpty())
+        {
+            bool confirm = await _injectService.ShowCreateDialog();
+            if (!confirm) return;
+
+            await _injectService.EnableLoading();
+            var result = await _apiService.Create(_reqModel);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            await _injectService.ShowDialog(result);
+        }
+
+        #endregion
+
+        #region Update
+
+        else
+        {
+            bool confirm = await _injectService.ShowUpdateDialog();
+            if (!confirm) return;
+
+            await _injectService.EnableLoading();
+            var result = await _apiService.Update(_reqModel);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            await _injectService.ShowDialog(result);
+        }
+
+        #endregion
+    }
+
     private async Task Edit(WarehouseUserModel reqModel)
     {
         try
@@ -116,31 +161,6 @@ public partial class WarehouseUserList
         catch (Exception ex)
         {
             _logger.LogCustomError(ex);
-        }
-    }
-
-    private async Task Save(WarehouseUserModel reqModel)
-    {
-        if (_reqModel.UserId.IsNullOrEmpty())
-        {
-            bool confirm = await _injectService.ShowCreateDialog();
-            if (!confirm) return;
-        }
-        else
-        {
-            bool confirm = await _injectService.ShowUpdateDialog();
-            if (!confirm) return;
-
-            await _injectService.EnableLoading();
-            var result = await _apiService.Update(_reqModel);
-            await _injectService.DisableLoading();
-
-            if (result.IsError)
-            {
-                await _injectService.ShowDialog(result);
-                return;
-            }
-            await _injectService.ShowDialog(result);
         }
     }
 

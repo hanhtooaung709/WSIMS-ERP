@@ -24,6 +24,14 @@ public class WarehouseUserListController : BaseController
     }
 
     [HttpPost]
+    [Route("Create")]
+    public async Task<IActionResult> Create(WarehouseUserReqModel reqModel)
+    {
+        var result = await _warehouseUserListService.Create(reqModel);
+        return Execute(result);
+    }
+
+    [HttpPost]
     [Route("Edit")]
     public async Task<IActionResult> Edit(WarehouseUserEditModel reqModel)
     {

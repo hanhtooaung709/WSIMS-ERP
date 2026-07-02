@@ -51,6 +51,10 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<TblWarehouseUserSession> TblWarehouseUserSessions { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=.;Database=WSIMS-ERP;User Id=sa;Password=sasa@123;TrustServerCertificate=True;MultipleActiveResultSets=True;Connection Timeout=30");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblBox>(entity =>
@@ -408,6 +412,9 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.ApprovedDateTime).HasColumnType("datetime");
             entity.Property(e => e.ApprovedUserId)
                 .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.BranchCode)
+                .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.Email)
                 .HasMaxLength(50)

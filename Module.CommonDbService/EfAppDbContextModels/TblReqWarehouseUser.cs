@@ -19,6 +19,8 @@ public partial class TblReqWarehouseUser
 
     public string RoleCode { get; set; } = null!;
 
+    public string BranchCode { get; set; } = null!;
+
     public string Status { get; set; } = null!;
 
     public string? WarehouseUserId { get; set; }

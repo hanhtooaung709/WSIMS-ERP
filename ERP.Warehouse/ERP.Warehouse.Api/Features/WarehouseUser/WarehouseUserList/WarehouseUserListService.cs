@@ -1,4 +1,5 @@
-﻿using ERP.Warehouse.Api.Common;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using ERP.Warehouse.Api.Common;
 using ERP.Warehouse.Models.Models.WarehouseUserList;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
@@ -54,7 +55,106 @@ public class WarehouseUserListService : AuthorizationService
         var model = new Result<WarehouseUserModel>();
         try
         {
-            
+            #region Check Duplicate User Name
+
+            bool reqUser = await _db.TblReqWarehouseUsers
+                .AsNoTracking()
+                .AnyAsync(x => x.UserName == reqModel.UserName);
+            if (reqUser)
+            {
+                model = Result<WarehouseUserModel>.Error("UserName is already Requesed!");
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate StaffId
+
+            bool staffId = await _db.TblReqWarehouseUsers
+                .AsNoTracking()
+                .AnyAsync(x => x.StaffId == reqModel.StaffId);
+            if (staffId)
+            {
+                model = Result<WarehouseUserModel>.Error("StaffId is already Requesed!");
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate PhoneNo
+
+            bool phoneNo = await _db.TblReqWarehouseUsers
+                .AsNoTracking()
+                .AnyAsync(x => x.Phone == reqModel.PhoneNo);
+            if (staffId)
+            {
+                model = Result<WarehouseUserModel>.Error("Phone Number is already Requesed!");
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate Email
+
+            bool email = await _db.TblReqWarehouseUsers
+                .AsNoTracking()
+                .AnyAsync(x => x.Email == reqModel.Email);
+            if (email)
+            {
+                model = Result<WarehouseUserModel>.Error("Email Number is already Requesed!");
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate RoleCode
+
+            bool roleCode = await _db.TblReqWarehouseUsers
+                .AsNoTracking()
+                .AnyAsync(x => x.RoleCode == reqModel.RoleCode);
+            if (roleCode)
+            {
+                model = Result<WarehouseUserModel>.Error("RoleCode Number is already Requesed!");
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate BranchCode
+
+            bool branchCode = await _db.TblReqWarehouseUsers
+                .AsNoTracking()
+                .AnyAsync(x => x.BranchCode == reqModel.BranchCode);
+            if (branchCode)
+            {
+                model = Result<WarehouseUserModel>.Error("BranchCode Number is already Requesed!");
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            TblReqWarehouseUser item = new TblReqWarehouseUser
+            {
+                ReqWarehouseUserId = DevCode.GenerateUlid(),
+                UserName = reqModel.UserName!,
+                FullName = reqModel.FullName!,
+                StaffId = reqModel.StaffId!,
+                Phone = reqModel.PhoneNo!,
+                Email = reqModel.Email!,
+                RoleCode = reqModel.RoleCode!,
+                BranchCode = reqModel.BranchCode!,
+                Status = EnumRequestedUserStatus.Pending.ToString(),
+                ReqUserId = AuthorizedUserId,
+                ReqDateTime = DevCode.GetServerDateTime()
+            };
+            await _db.TblReqWarehouseUsers.AddAsync(item);
+            await _db.SaveChangesAsync();
+
+            model = Result<WarehouseUserModel>.Success("Your request is pending for approval!");
+
+            #endregion
         }
         catch (Exception ex)
         {
