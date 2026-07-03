@@ -1,7 +1,4 @@
-﻿using System.Data.SqlClient;
-using WSIMS_ERP.Shared;
-
-namespace WSIMS_ERP.Shared.Services;
+﻿namespace WSIMS_ERP.Shared.Services;
 
 public class DapperService
 {

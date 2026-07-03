@@ -55,6 +55,14 @@ public class WarehouseUserListController : BaseController
         return Execute(result);
     }
 
+    [HttpPost]
+    [Route("Details")]
+    public async Task<IActionResult> Details(WarehouseUserEditModel reqModel)
+    {
+        var result = await _warehouseUserListService.Details(reqModel);
+        return Execute(result);
+    }
+
     #region DropDown
 
     [HttpPost]

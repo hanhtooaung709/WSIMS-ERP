@@ -144,9 +144,15 @@
                                     OnClick="@context.Actions.StartEditingItemAsync" />
 
                             <MudFab Size="@Size.Small"
+                                    Class="mr-2"
                                     StartIcon="@Icons.Material.Outlined.Delete"
                                     Color="Color.Error"
                                     OnClick="@(() => Delete(context.Item))" />
+
+                            <MudFab Size="@Size.Small"
+                                    StartIcon="@Icons.Material.Outlined.Details"
+                                    Color="Color.Primary"
+                                    OnClick="@(() => Detail(context.Item))" />
                         </div>
                     </CellTemplate>
                 </TemplateColumn>
@@ -156,4 +162,9 @@
             </PagerContent>
         </MudDataGrid>
     </div>
+}
+
+@if (_formType is EnumFormType.Detail)
+{
+    
 }

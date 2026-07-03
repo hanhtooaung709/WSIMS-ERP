@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.JSInterop;
-using System.Net.Http.Headers;
-using System.Text.Json;
-using WSIMS_ERP.Shared.Models;
-
-namespace WSIMS_ERP.Shared.HttpClients;
+﻿namespace WSIMS_ERP.Shared.HttpClients;
 
 public class HttpClientService
 {

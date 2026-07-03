@@ -1,13 +1,15 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using ERP.Warehouse.Api.Common;
+﻿using ERP.Warehouse.Api.Common;
+using ERP.Warehouse.Models;
 using ERP.Warehouse.Models.Models.WarehouseUserList;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
+using System.Data;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
+using WSIMS_ERP.Shared.Models.DynamicModel;
 
 namespace ERP.Warehouse.Api.Features.WarehouseUser.WarehouseUserList;
 
@@ -450,6 +452,43 @@ public class WarehouseUserListService : AuthorizationService
             return Result<WarehouseUserModel>.Error(ex);
         }
         return model;
+    }
+
+    public async Task<Result<WarehouseUserDetailsModel>> Details(WarehouseUserEditModel reqModel)
+    {
+        WarehouseUserDetailsModel model = new WarehouseUserDetailsModel();
+        try
+        {
+            var detail = await _dapperService.GetDetailAsync<WarehouseUserDetailsInfoModel>(
+                SqlQueries.Sp_GetWarehouseUserDetail, new
+                {
+                    UserId = reqModel.UserId
+                }, CommandType.StoredProcedure);
+
+            List<DynamicReportModel> userInfo = new List<DynamicReportModel>();
+            userInfo.Add("User Name", detail.UserName!);
+            userInfo.Add("Full Name", detail.FullName!);
+            userInfo.Add("Staff Id", detail.StaffId!);
+            userInfo.Add("Role ", detail.RoleName!);
+            userInfo.Add("Branch ", detail.BranchName!);
+            userInfo.Add("Phone", detail.PhoneNo!);
+            userInfo.Add("Email", detail.Email!);
+            userInfo.Add("Lock", detail.LockFlag!);
+            model.UserInfo = userInfo;
+
+            List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();
+            makerChecker.Add("CreatedUser", detail.CreatedUser!);
+            makerChecker.Add("CreatedDateTime", detail.CreatedDateTime!);
+            makerChecker.Add("Modified User", detail.ModifiedUser!.ToDashFromNull());
+            makerChecker.Add("ModifiedDateTime ", detail.ModifiedDateTime!.ToDashFromNull());
+            model.MakerChecker = makerChecker;
+
+            return Result<WarehouseUserDetailsModel>.Success(model);
+        }
+        catch(Exception ex)
+        {
+            return Result<WarehouseUserDetailsModel>.Error(ex);
+        }
     }
 
     #region DropDown

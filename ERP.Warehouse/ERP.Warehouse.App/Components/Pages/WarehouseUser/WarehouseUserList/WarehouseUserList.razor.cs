@@ -207,6 +207,11 @@ public partial class WarehouseUserList
         }
     }
 
+    private async Task Details(WarehouseUserModel reqModel)
+    {
+
+    }
+
     #region DropDown
 
     private async Task GetRole()

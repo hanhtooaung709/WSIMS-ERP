@@ -28,3 +28,11 @@ global using System.Xml.Serialization;
 global using System.Xml;
 global using WSIMS_ERP.Shared.ConstantFormats;
 global using Encryption = Effortless.Net.Encryption.Strings;
+global using ERP.Warehouse.Models;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.JSInterop;
+global using System.Net.Http.Headers;
+global using System.Text.Json;
+global using WSIMS_ERP.Shared.Models;
+
+
