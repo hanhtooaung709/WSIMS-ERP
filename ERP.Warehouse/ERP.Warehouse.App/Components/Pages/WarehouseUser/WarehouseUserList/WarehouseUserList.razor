@@ -56,6 +56,12 @@
 
                 <PropertyColumn Property="x => x.FullName" Title="Full Name" HeaderStyle="min-width: 180px;">
                     <EditTemplate>
+                        @if (_formType == EnumFormType.Edit)
+                        {
+                            <MudText Typo="Typo.h6" Style="padding: 16px 16px 0 16px; font-weight: bold;">
+                                @_formType.ToString() Warehouse User
+                            </MudText>
+                        }
                         <MudTextField @bind-Value="_reqModel.FullName"
                                       Label="Full Name"
                                       Margin="Margin.Dense"
