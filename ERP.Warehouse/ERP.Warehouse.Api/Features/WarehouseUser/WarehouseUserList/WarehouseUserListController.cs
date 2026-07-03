@@ -15,6 +15,8 @@ public class WarehouseUserListController : BaseController
         _warehouseUserListService = warehouseUserListService;
     }
 
+    #region Get/Create/Edit/Update/Delete/Details
+
     [HttpPost]
     [Route("Get")]
     public async Task<IActionResult> Get(WarehouseUserReqModel reqModel)
@@ -62,6 +64,8 @@ public class WarehouseUserListController : BaseController
         var result = await _warehouseUserListService.Details(reqModel);
         return Execute(result);
     }
+
+    #endregion
 
     #region DropDown
 

@@ -10,6 +10,7 @@ public partial class WarehouseUserList
     private WarehouseUserReqModel _reqModel = new();
     private IEnumerable<WarehouseUserModel> _model = new List<WarehouseUserModel>();
     private WarehouseUserEditModel _edit = new();
+    private WarehouseUserDetailsModel _details = new();
 
     private List<RoleResponseModel> _roleList = new();
     private List<BranchResponseModel> _banchList = new();
@@ -35,7 +36,9 @@ public partial class WarehouseUserList
         }
     }
 
-    async Task List()
+    #region Get/Create/Edit/Update/Delete/Details
+
+    private async Task List()
     {
         try
         {
@@ -150,6 +153,7 @@ public partial class WarehouseUserList
             _reqModel.BranchCode = result.Data.BranchCode;
 
             _formType = EnumFormType.Edit;
+            StateHasChanged();
         }
         catch(Exception ex )
         {
@@ -209,8 +213,33 @@ public partial class WarehouseUserList
 
     private async Task Details(WarehouseUserModel reqModel)
     {
+        try
+        {
+            _edit.UserId = reqModel.WarehouseUserId!;
 
+            await _injectService.EnableLoading();
+            var result = await _apiService.Details(_edit);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+
+            _details = result.Data!;
+            _formType = EnumFormType.Detail;
+            StateHasChanged();
+        }
+        catch(Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
     }
+
+    #endregion
 
     #region DropDown
 
@@ -228,6 +257,7 @@ public partial class WarehouseUserList
                 return;
             }
             _roleList = result.Data;
+            StateHasChanged();
         }
         catch (Exception ex)
         {
@@ -251,6 +281,7 @@ public partial class WarehouseUserList
                 return;
             }
             _banchList = result.Data;
+            StateHasChanged();
         }
         catch (Exception ex)
         {

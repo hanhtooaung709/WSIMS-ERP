@@ -57,6 +57,10 @@ public class WarehouseApiService
        => await _httpClientService.ExecuteAsync<WarehouseUserEditModel, WarehouseUserModel>
        (WarehouseUserListEndpoints.Delete, reqModel);
 
+    public async Task<Result<WarehouseUserDetailsModel>> Details(WarehouseUserEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<WarehouseUserEditModel, WarehouseUserDetailsModel>
+       (WarehouseUserListEndpoints.Details, reqModel);
+
     public async Task<Result<List<RoleResponseModel>>> GetRole()
        => await _httpClientService.ExecuteAsync<object, List<RoleResponseModel>>
        (WarehouseUserListEndpoints.GetRole, null!);

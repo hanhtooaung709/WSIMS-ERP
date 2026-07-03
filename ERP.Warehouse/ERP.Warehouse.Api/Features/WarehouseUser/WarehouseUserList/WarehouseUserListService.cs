@@ -27,6 +27,8 @@ public class WarehouseUserListService : AuthorizationService
         _dapperService = dapperService;
     }
 
+    #region Get/Create/Edit/Update/Delete/Details
+
     public async Task<Result<WarehouseUserRepModel>> Get(WarehouseUserReqModel reqModel)
     {
         WarehouseUserRepModel model = new();
@@ -490,6 +492,8 @@ public class WarehouseUserListService : AuthorizationService
             return Result<WarehouseUserDetailsModel>.Error(ex);
         }
     }
+
+    #endregion
 
     #region DropDown
 
