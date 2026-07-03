@@ -109,7 +109,7 @@ public class WarehouseUserListService : AuthorizationService
 
             bool phoneNo = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.PhoneNo.Trim().ToLower() &&
+                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.PhoneNo!.Trim().ToLower() &&
                                x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (phoneNo)
             {
@@ -299,18 +299,18 @@ public class WarehouseUserListService : AuthorizationService
 
             bool phoneNo = await _db.TblReqWarehouseUserChanges
                 .AsNoTracking()
-                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.PhoneNo.Trim().ToLower() &&
+                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.PhoneNo!.Trim().ToLower() &&
                                x.WarehouseUserId != reqModel.UserId &&
                                x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (phoneNo)
             {
-                model = Result<WarehouseUserModel>.Error("Phone Number is already Requesed!");
+                model = Result<WarehouseUserModel>.Error("Phone Number is already Change Requesed!");
                 return model;
             }
 
             phoneNo = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.PhoneNo.Trim().ToLower() &&
+                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.PhoneNo!.Trim().ToLower() &&
                                x.WarehouseUserId != reqModel.UserId &&
                                x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (phoneNo)
@@ -340,7 +340,7 @@ public class WarehouseUserListService : AuthorizationService
                                x.Status == EnumRequestedUserStatus.Pending.ToString());
             if (email)
             {
-                model = Result<WarehouseUserModel>.Error("Email Number is already Requesed!");
+                model = Result<WarehouseUserModel>.Error("Email Number is already Change Requesed!");
                 return model;
             }
 
