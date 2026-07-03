@@ -113,9 +113,6 @@ public partial class WarehouseUserList
         }
 
         #endregion
-
-        await List();
-        _formType = EnumFormType.List;
     }
 
     private async Task Edit(WarehouseUserModel reqModel)

@@ -304,6 +304,17 @@ public class WarehouseUserListService : AuthorizationService
                 return model;
             }
 
+            phoneNo = await _db.TblReqWarehouseUsers
+                .AsNoTracking()
+                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.PhoneNo.Trim().ToLower() &&
+                               x.WarehouseUserId != reqModel.UserId &&
+                               x.Status == EnumRequestedUserStatus.Pending.ToString());
+            if (phoneNo)
+            {
+                model = Result<WarehouseUserModel>.Error("Phone Number is already Requesed!");
+                return model;
+            }
+
             phoneNo = await _db.TblWarehouseUsers
                 .AsNoTracking()
                 .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.PhoneNo!.Trim().ToLower() &&
@@ -318,7 +329,18 @@ public class WarehouseUserListService : AuthorizationService
 
             #region Check Duplicate Email
 
-            bool email = await _db.TblReqWarehouseUsers
+            bool email = await _db.TblReqWarehouseUserChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.Email == reqModel.Email &&
+                               x.WarehouseUserId != reqModel.UserId &&
+                               x.Status == EnumRequestedUserStatus.Pending.ToString());
+            if (email)
+            {
+                model = Result<WarehouseUserModel>.Error("Email Number is already Requesed!");
+                return model;
+            }
+
+            email = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
                 .AnyAsync(x => x.Email == reqModel.Email &&
                                x.WarehouseUserId != reqModel.UserId &&
