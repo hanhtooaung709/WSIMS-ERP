@@ -67,6 +67,7 @@ public partial class WarehouseUserList
         await GetRole();
         await GetBranch();
         await _elementGrid.SetEditingItemAsync(modle);
+        _formType = EnumFormType.Create;
     }
 
     private async Task Save(WarehouseUserModel reqModel)
@@ -112,6 +113,9 @@ public partial class WarehouseUserList
         }
 
         #endregion
+
+        await List();
+        _formType = EnumFormType.List;
     }
 
     private async Task Edit(WarehouseUserModel reqModel)
@@ -164,6 +168,8 @@ public partial class WarehouseUserList
         {
             _reqModel = new();
             StateHasChanged();
+            List();
+            _formType = EnumFormType.List;
         }
         catch (Exception ex)
         {

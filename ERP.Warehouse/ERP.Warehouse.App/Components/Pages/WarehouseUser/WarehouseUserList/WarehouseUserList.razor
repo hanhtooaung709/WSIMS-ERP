@@ -37,17 +37,20 @@
                     </CellTemplate>
                 </TemplateColumn>
 
-                <PropertyColumn Property="x => x.UserName" Title="User Name" HeaderStyle="min-width: 180px;">
+                <PropertyColumn Property="x => x.UserName" Title="User Name" HeaderStyle="min-width: 180px;" Hidden="true">
                     <EditTemplate>
-                        <MudText Typo="Typo.h6" Style="padding: 16px 16px 0 16px; font-weight: bold;">
-                            @_formType.ToString() Warehouse User
-                        </MudText>
-                        <MudTextField @bind-Value="_reqModel.UserName"
-                                      Label="User Name"
-                                      Margin="Margin.Dense"
-                                      Style="width: 100%; min-width: 500px;"
-                                      Variant="MudBlazor.Variant.Outlined"
-                                      Disabled="@(_formType == EnumFormType.Edit)" />
+                        @if (_formType == EnumFormType.Create)
+                        {
+                            <MudText Typo="Typo.h6" Style="padding: 16px 16px 0 16px; font-weight: bold;">
+                                @_formType.ToString() Warehouse User
+                            </MudText>
+                            <MudTextField @bind-Value="_reqModel.UserName"
+                                          Label="User Name"
+                                          Margin="Margin.Dense"
+                                          Style="width: 100%; min-width: 500px;"
+                                          Variant="MudBlazor.Variant.Outlined"
+                                          Disabled="@(_formType == EnumFormType.Edit)" />
+                        }
                     </EditTemplate>
                 </PropertyColumn>
 
@@ -115,7 +118,7 @@
                 <PropertyColumn Property="x => x.BranchCode" Title="Branch" HeaderStyle="min-width: 300px;">
                     <EditTemplate>
                         <MudSelect @bind-Value="_reqModel.BranchCode"
-                                   Label="Role"
+                                   Label="Branch"
                                    Margin="Margin.Dense"
                                    Style="width: 100%; min-width: 500px;"
                                    Variant="MudBlazor.Variant.Outlined"
