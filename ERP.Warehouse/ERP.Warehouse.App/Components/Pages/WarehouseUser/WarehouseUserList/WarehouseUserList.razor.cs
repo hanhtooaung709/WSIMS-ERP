@@ -43,6 +43,8 @@ public partial class WarehouseUserList
         try
         {
             await _injectService.EnableLoading();
+            await GetRole();
+            await GetBranch();
             var result = await _apiService.Get(_reqModel);
             await _injectService.DisableLoading();
 

@@ -10,29 +10,45 @@
 @if (_formType is EnumFormType.List or EnumFormType.Edit or EnumFormType.Create)
 {
     <MudPaper Class="pa-4 mb-4">
-        <MudText Typo="Typo.subtitle1" Style="font-weight: 600; color: #333; margin-bottom: 12px;">Warehouse User List</MudText>
+        <MudText Typo="Typo.h6" Style="font-weight: 600; color: #333; margin-bottom: 12px;">Warehouse User List</MudText>
         <MudGrid>
             <MudItem xs="12" sm="6" md="4" lg="3">
-                <MudTextField @bind-Value="_reqModel.FullName" Label="Full Name" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" />
+                <MudTextField @bind-Value="_reqModel.FullName" Label="Full Name" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable />
             </MudItem>
             <MudItem xs="12" sm="6" md="4" lg="3">
-                <MudTextField @bind-Value="_reqModel.StaffId" Label="StaffId" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" />
+                <MudTextField @bind-Value="_reqModel.StaffId" Label="StaffId" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable />
             </MudItem>
             <MudItem xs="12" sm="6" md="4" lg="3">
-                <MudTextField @bind-Value="_reqModel.PhoneNo" Label="Phone Number" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" />
+                <MudTextField @bind-Value="_reqModel.PhoneNo" Label="Phone Number" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable />
             </MudItem>
             <MudItem xs="12" sm="6" md="4" lg="3">
-                <MudTextField @bind-Value="_reqModel.Email" Label="Email" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" />
+                <MudTextField @bind-Value="_reqModel.Email" Label="Email" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable />
             </MudItem>
             <MudItem xs="12" sm="6" md="4" lg="3">
-                <MudTextField @bind-Value="_reqModel.RoleCode" Label="Role" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" />
+                <MudSelect @bind-Value="_reqModel.RoleCode" Label="Role" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable>
+                    @if (_roleList != null)
+                    {
+                        @foreach (var role in _roleList)
+                        {
+                            <MudSelectItem Value="@role.RoleCode">@role.RoleName</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
             </MudItem>
             <MudItem xs="12" sm="6" md="4" lg="3">
-                <MudTextField @bind-Value="_reqModel.BranchCode" Label="Branch" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" />
+                <MudSelect @bind-Value="_reqModel.BranchCode" Label="Branch" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable>
+                    @if (_banchList != null)
+                    {
+                        @foreach (var role in _banchList)
+                        {
+                            <MudSelectItem Value="@role.BranchCode">@role.Address</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
             </MudItem>
             <MudItem xs="12" Style="display: flex; align-items: flex-end; justify-content: flex-end; gap: 8px;">
-                <MudButton ButtonType="MudBlazor.ButtonType.Button" Variant="MudBlazor.Variant.Outlined" Color="Color.Default" OnClick="@Cancel">Cancel</MudButton>
-                <MudButton ButtonType="MudBlazor.ButtonType.Button" Variant="MudBlazor.Variant.Filled" Color="Color.Primary" OnClick="@List">Search</MudButton>
+                <MudButton ButtonType="MudBlazor.ButtonType.Button" Variant="MudBlazor.Variant.Outlined" Color="Color.Default" StartIcon="@Icons.Material.Filled.Close" OnClick="@Cancel">Cancel</MudButton>
+                <MudButton ButtonType="MudBlazor.ButtonType.Button" Variant="MudBlazor.Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Search" OnClick="@List">Search</MudButton>
             </MudItem>
         </MudGrid>
     </MudPaper>
