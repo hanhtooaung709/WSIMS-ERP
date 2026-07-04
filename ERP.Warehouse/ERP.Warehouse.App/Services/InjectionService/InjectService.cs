@@ -1429,17 +1429,17 @@ public class InjectService : IInjectService
         }
     }
 
-    public string GetBadgeClass(EnumRequestedUserStatus status)
+    public string GetBadgeClass(EnumRequestedStatus status)
     {
         try
         {
             return status switch
             {
-                EnumRequestedUserStatus.Approved => "badge rounded-pill bg-label-success me-1",
-                EnumRequestedUserStatus.Pending => "badge rounded-pill bg-label-warning me-1",
-                EnumRequestedUserStatus.Rejected => "badge rounded-pill bg-label-danger me-1",
-                EnumRequestedUserStatus.Active => "badge rounded-pill bg-label-success me-1",
-                EnumRequestedUserStatus.InActive => "badge rounded-pill bg-label-danger me-1",
+                EnumRequestedStatus.Approved => "badge rounded-pill bg-label-success me-1",
+                EnumRequestedStatus.Pending => "badge rounded-pill bg-label-warning me-1",
+                EnumRequestedStatus.Rejected => "badge rounded-pill bg-label-danger me-1",
+                EnumRequestedStatus.Active => "badge rounded-pill bg-label-success me-1",
+                EnumRequestedStatus.InActive => "badge rounded-pill bg-label-danger me-1",
                 _ => "badge rounded-pill bg-label-secondary me-1"
             };
         }

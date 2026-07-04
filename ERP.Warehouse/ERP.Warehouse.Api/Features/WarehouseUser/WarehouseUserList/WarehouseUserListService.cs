@@ -64,10 +64,10 @@ public class WarehouseUserListService : AuthorizationService
             bool reqUser = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
                 .AnyAsync(x => x.UserName.Trim().ToLower() == reqModel.UserName!.Trim().ToLower() &&
-                               x.Status == EnumRequestedUserStatus.Pending.ToString());
+                               x.Status == EnumRequestedStatus.Pending.ToString());
             if (reqUser)
             {
-                model = Result<WarehouseUserModel>.Error("UserName is already Requesed!");
+                model = Result<WarehouseUserModel>.Error("UserName is already Requested!");
                 return model;
             }
 
@@ -87,10 +87,10 @@ public class WarehouseUserListService : AuthorizationService
             bool staffId = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
                 .AnyAsync(x => x.StaffId.Trim().ToLower() == reqModel.StaffId.Trim().ToLower() &&
-                               x.Status == EnumRequestedUserStatus.Pending.ToString());
+                               x.Status == EnumRequestedStatus.Pending.ToString());
             if (staffId)
             {
-                model = Result<WarehouseUserModel>.Error("StaffId is already Requesed!");
+                model = Result<WarehouseUserModel>.Error("StaffId is already Requested!");
                 return model;
             }
 
@@ -110,10 +110,10 @@ public class WarehouseUserListService : AuthorizationService
             bool phoneNo = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
                 .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.PhoneNo!.Trim().ToLower() &&
-                               x.Status == EnumRequestedUserStatus.Pending.ToString());
+                               x.Status == EnumRequestedStatus.Pending.ToString());
             if (phoneNo)
             {
-                model = Result<WarehouseUserModel>.Error("Phone Number is already Requesed!");
+                model = Result<WarehouseUserModel>.Error("Phone Number is already Requested!");
                 return model;
             }
 
@@ -129,10 +129,10 @@ public class WarehouseUserListService : AuthorizationService
             phoneNo = await _db.TblReqWarehouseUserChanges
                 .AsNoTracking()
                 .AnyAsync(x => x.Phone == reqModel.PhoneNo &&
-                               x.Status == EnumRequestedUserStatus.Pending.ToString());
+                               x.Status == EnumRequestedStatus.Pending.ToString());
             if (phoneNo)
             {
-                model = Result<WarehouseUserModel>.Error("Phone Number is already Change Requesed!");
+                model = Result<WarehouseUserModel>.Error("Phone Number is already Change Requested!");
                 return model;
             }
 
@@ -142,17 +142,17 @@ public class WarehouseUserListService : AuthorizationService
 
             bool email = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Email.Trim().ToLower() == reqModel.Email.Trim().ToLower() &&
-                               x.Status == EnumRequestedUserStatus.Pending.ToString());
+                .AnyAsync(x => x.Email.Trim().ToLower() == reqModel.Email!.Trim().ToLower() &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
             if (email)
             {
-                model = Result<WarehouseUserModel>.Error("Email is already Requesed!");
+                model = Result<WarehouseUserModel>.Error("Email is already Requested!");
                 return model;
             }
 
             email = await _db.TblWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Email == reqModel.Email);
+                .AnyAsync(x => x.Email.Trim().ToLower() == reqModel.Email!.Trim().ToLower());
             if (email)
             {
                 model = Result<WarehouseUserModel>.Error("Email is already exist!");
@@ -161,11 +161,11 @@ public class WarehouseUserListService : AuthorizationService
 
             email = await _db.TblReqWarehouseUserChanges
                 .AsNoTracking()
-                .AnyAsync(x => x.Email == reqModel.Email &&
-                               x.Status == EnumRequestedUserStatus.Pending.ToString());
+                .AnyAsync(x => x.Email.Trim().ToLower() == reqModel.Email!.Trim().ToLower() &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
             if (email)
             {
-                model = Result<WarehouseUserModel>.Error("Email is already Change Requesed!");
+                model = Result<WarehouseUserModel>.Error("Email is already Change Requested!");
                 return model;
             }
 
@@ -183,7 +183,7 @@ public class WarehouseUserListService : AuthorizationService
                 Email = reqModel.Email!,
                 RoleCode = reqModel.RoleCode!,
                 BranchCode = reqModel.BranchCode!,
-                Status = EnumRequestedUserStatus.Pending.ToString(),
+                Status = EnumRequestedStatus.Pending.ToString(),
                 ReqUserId = AuthorizedUserId,
                 ReqDateTime = DevCode.GetServerDateTime()
             };
@@ -286,10 +286,10 @@ public class WarehouseUserListService : AuthorizationService
             bool reqUser = await _db.TblReqWarehouseUserChanges
                 .AsNoTracking()
                 .AnyAsync(x => x.WarehouseUserId == reqModel.UserId &&
-                               x.Status == EnumRequestedUserStatus.Pending.ToString());
+                               x.Status == EnumRequestedStatus.Pending.ToString());
             if (reqUser)
             {
-                model = Result<WarehouseUserModel>.Error("User is already Requesed!");
+                model = Result<WarehouseUserModel>.Error("User is already Requested!");
                 return model;
             }
 
@@ -301,10 +301,10 @@ public class WarehouseUserListService : AuthorizationService
                 .AsNoTracking()
                 .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.PhoneNo!.Trim().ToLower() &&
                                x.WarehouseUserId != reqModel.UserId &&
-                               x.Status == EnumRequestedUserStatus.Pending.ToString());
+                               x.Status == EnumRequestedStatus.Pending.ToString());
             if (phoneNo)
             {
-                model = Result<WarehouseUserModel>.Error("Phone Number is already Change Requesed!");
+                model = Result<WarehouseUserModel>.Error("Phone Number is already Change Requested!");
                 return model;
             }
 
@@ -312,7 +312,7 @@ public class WarehouseUserListService : AuthorizationService
                 .AsNoTracking()
                 .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.PhoneNo!.Trim().ToLower() &&
                                x.WarehouseUserId != reqModel.UserId &&
-                               x.Status == EnumRequestedUserStatus.Pending.ToString());
+                               x.Status == EnumRequestedStatus.Pending.ToString());
             if (phoneNo)
             {
                 model = Result<WarehouseUserModel>.Error("Phone Number is already Requesed!");
@@ -335,20 +335,20 @@ public class WarehouseUserListService : AuthorizationService
 
             bool email = await _db.TblReqWarehouseUserChanges
                 .AsNoTracking()
-                .AnyAsync(x => x.Email == reqModel.Email &&
+                .AnyAsync(x => x.Email.Trim().ToLower() == reqModel.Email.Trim().ToLower() &&
                                x.WarehouseUserId != reqModel.UserId &&
-                               x.Status == EnumRequestedUserStatus.Pending.ToString());
+                               x.Status == EnumRequestedStatus.Pending.ToString());
             if (email)
             {
-                model = Result<WarehouseUserModel>.Error("Email Number is already Change Requesed!");
+                model = Result<WarehouseUserModel>.Error("Email Number is already Change Requested!");
                 return model;
             }
 
             email = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Email == reqModel.Email &&
+                .AnyAsync(x => x.Email.Trim().ToLower() == reqModel.Email.Trim().ToLower() &&
                                x.WarehouseUserId != reqModel.UserId &&
-                               x.Status == EnumRequestedUserStatus.Pending.ToString());
+                               x.Status == EnumRequestedStatus.Pending.ToString());
             if (email)
             {
                 model = Result<WarehouseUserModel>.Error("Email Number is already Requesed!");
@@ -379,7 +379,7 @@ public class WarehouseUserListService : AuthorizationService
                 RoleCode = reqModel.RoleCode!,
                 BranchCode = reqModel.BranchCode!,
                 ChangesType = EnumRequestedType.Update.ToString(),
-                Status = EnumRequestedUserStatus.Pending.ToString(),
+                Status = EnumRequestedStatus.Pending.ToString(),
                 ReqUserId = AuthorizedUserId,
                 ReqDateTime = DevCode.GetServerDateTime()
             };
@@ -418,10 +418,21 @@ public class WarehouseUserListService : AuthorizationService
 
             bool reqUser = await _db.TblReqWarehouseUserChanges
                 .AsNoTracking()
-                .AnyAsync(x => x.WarehouseUserId == reqModel.UserId);
+                .AnyAsync(x => x.WarehouseUserId == reqModel.UserId &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
             if (reqUser)
             {
-                model = Result<WarehouseUserModel>.Error("User is already Requesed!");
+                model = Result<WarehouseUserModel>.Error("User is already Requested!");
+                return model;
+            }
+
+            reqUser = await _db.TblReqWarehouseUsers
+                .AsNoTracking()
+                .AnyAsync(x => x.WarehouseUserId == reqModel.UserId &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (reqUser)
+            {
+                model = Result<WarehouseUserModel>.Error("User is already Requested!");
                 return model;
             }
 
@@ -439,7 +450,7 @@ public class WarehouseUserListService : AuthorizationService
                 RoleCode = user.RoleCode,
                 BranchCode = user.BranchCode,
                 ChangesType = EnumRequestedType.Delete.ToString(),
-                Status = EnumRequestedUserStatus.Pending.ToString(),
+                Status = EnumRequestedStatus.Pending.ToString(),
                 ReqUserId = AuthorizedUserId,
                 ReqDateTime = DevCode.GetServerDateTime()
             };

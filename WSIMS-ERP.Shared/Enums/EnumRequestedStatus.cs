@@ -1,6 +1,6 @@
 ﻿namespace WSIMS_ERP.Shared.Enums;
 
-public enum EnumRequestedUserStatus
+public enum EnumRequestedStatus
 {
     [Description("Approved")] Approved,
     [Description("Rejected")] Rejected,
