@@ -10,6 +10,7 @@
 <MudLayout>
     <MudDrawer class="floating-nav" @bind-Open="_drawerOpen" Elevation="1" Variant="@DrawerVariant.Responsive" Width="280px">
         <div class="drawer-header">
+            <img src="/images/WarehouseLogo.png" alt="Logo" Style="height: 40px; width: auto;" />
             <MudText Typo="Typo.h5" Class="font-weight-bold">WSIMS-ERP</MudText>
         </div>
         <NavMenu />
@@ -99,6 +100,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        gap: 10px;
         border-bottom: 1px solid rgba(0,0,0,0.05);
         color: #5e72e4;
         background-color: #ffffff;
