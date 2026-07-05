@@ -21,6 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Components\Pages\ReqWarehouseUser\" />
 	  <Folder Include="wwwroot\images\" />
 	</ItemGroup>
 
