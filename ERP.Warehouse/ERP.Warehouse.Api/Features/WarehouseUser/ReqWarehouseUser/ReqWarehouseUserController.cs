@@ -41,5 +41,13 @@ public class ReqWarehouseUserController : BaseController
         return Execute(result);
     }
 
+    [HttpPost]
+    [Route("Delete")]
+    public async Task<IActionResult> Delete(ReqWarehouseUserEditModel reqModel)
+    {
+        var result = await _reqWarehouseUserService.Delete(reqModel);
+        return Execute(result);
+    }
+
     #endregion
 }

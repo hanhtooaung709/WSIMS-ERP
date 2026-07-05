@@ -257,7 +257,55 @@ public class ReqWarehouseUserService : AuthorizationService
             _db.Entry(user).State = EntityState.Modified;
             _db.TblReqWarehouseUsers.Update(user);
             await _db.SaveChangesAsync();
-            model = Result<ReqWarehouseUserModel>.Success("Your reuqested is successfully updated");
+            model = Result<ReqWarehouseUserModel>.Success("Reuqested User is successfully updated");
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<ReqWarehouseUserModel>.Error(ex);
+        }
+        return model;
+    }
+
+    public async Task<Result<ReqWarehouseUserModel>> Delete(ReqWarehouseUserEditModel reqModel)
+    {
+        var model = new Result<ReqWarehouseUserModel>();
+        try
+        {
+            #region Check User
+
+            var user = await _db.TblReqWarehouseUsers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ReqWarehouseUserId == reqModel.UserId);
+            if (user is null)
+            {
+                model = Result<ReqWarehouseUserModel>.Error("Requested User does not exist.");
+                return model;
+            }
+
+            bool reqUser = await _db.TblReqWarehouseUsers
+                .AsNoTracking()
+                .AnyAsync(x => x.ReqWarehouseUserId == reqModel.UserId &&
+                               x.Status != EnumRequestedStatus.Pending.ToString());
+            if (reqUser)
+            {
+                model = Result<ReqWarehouseUserModel>.Error("Requseted User is not pending status");
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            _db.TblReqWarehouseUsers.Remove(user);
+            var result = _db.SaveChanges();
+            if (result <= 0)
+            {
+                model = Result<ReqWarehouseUserModel>.Error("Requsted User delete fail!");
+                return model;
+            }
+            model = Result<ReqWarehouseUserModel>.Error("Requsted User is successfully deteted");
 
             #endregion
         }
