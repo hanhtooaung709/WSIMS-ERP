@@ -1,4 +1,5 @@
 ﻿using ERP.Warehouse.App.Api.Endpoints;
+using ERP.Warehouse.Models.Models.ReqWarehouseUser;
 using ERP.Warehouse.Models.Models.Signin;
 using ERP.Warehouse.Models.Models.Signin.Signin;
 using ERP.Warehouse.Models.Models.WarehouseUserList;
@@ -68,6 +69,30 @@ public class WarehouseApiService
     public async Task<Result<List<BranchResponseModel>>> GetBranch()
        => await _httpClientService.ExecuteAsync<object, List<BranchResponseModel>>
        (WarehouseUserListEndpoints.GetBranch, null!);
+
+    #endregion
+
+    #region ReqWarehouseUser
+
+    public async Task<Result<ReqWarehouseUserRepModel>> Get(ReqWarehouseUserReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<ReqWarehouseUserReqModel, ReqWarehouseUserRepModel>
+        (ReqWarehouseUserEndpoints.Get, reqModel);
+
+    public async Task<Result<ReqWarehouseUserModel>> Edit(ReqWarehouseUserEditModel reqModel)
+        => await _httpClientService.ExecuteAsync<ReqWarehouseUserEditModel, ReqWarehouseUserModel>
+        (ReqWarehouseUserEndpoints.Edit, reqModel);
+
+    public async Task<Result<ReqWarehouseUserModel>> Update(ReqWarehouseUserReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<ReqWarehouseUserReqModel, ReqWarehouseUserModel>
+        (ReqWarehouseUserEndpoints.Update, reqModel);
+
+    public async Task<Result<ReqWarehouseUserModel>> Delete(ReqWarehouseUserEditModel reqModel)
+        => await _httpClientService.ExecuteAsync<ReqWarehouseUserEditModel, ReqWarehouseUserModel>
+        (ReqWarehouseUserEndpoints.Delete, reqModel);
+
+    public async Task<Result<ReqWarehouseUserDetailsModel>> Details(ReqWarehouseUserEditModel reqModel)
+        => await _httpClientService.ExecuteAsync<ReqWarehouseUserEditModel, ReqWarehouseUserDetailsModel>
+        (ReqWarehouseUserEndpoints.Details, reqModel);
 
     #endregion
 }

@@ -36,6 +36,7 @@ public class ReqWarehouseUserService : AuthorizationService
         {
             var parameters = new
             {
+                CurrentUserId = AuthorizedUserId,
                 FullName = reqModel.FullName,
                 StaffId = reqModel.StaffId,
                 PhoneNo = reqModel.Phone,
