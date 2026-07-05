@@ -199,17 +199,22 @@
                 <TemplateColumn Hidden="@_readOnly" Title="Actions" HeaderStyle="width: 140px; min-width: 140px;" Style="width: 140px; min-width: 140px; white-space: nowrap;">
                     <CellTemplate>
                         <div style="display: inline-block; white-space: nowrap;">
+                            @{
+                                var _isDisable = context.Item.Status != EnumRequestedStatus.Pending.ToString();
+                            }
                             <MudFab Size="@Size.Small"
                                     Class="mr-2"
                                     StartIcon="@Icons.Material.Filled.Edit"
                                     Color="Color.Warning"
-                                    OnClick="@context.Actions.StartEditingItemAsync" />
+                                    OnClick="@context.Actions.StartEditingItemAsync"
+                                    Disabled="_isDisable" />
 
                             <MudFab Size="@Size.Small"
                                     Class="mr-2"
                                     StartIcon="@Icons.Material.Outlined.Delete"
                                     Color="Color.Error"
-                                    OnClick="@(() => Delete(context.Item))" />
+                                    OnClick="@(() => Delete(context.Item))"
+                                    Disabled="_isDisable" />
 
                             <MudFab Size="@Size.Small"
                                     StartIcon="@Icons.Material.Outlined.Details"
