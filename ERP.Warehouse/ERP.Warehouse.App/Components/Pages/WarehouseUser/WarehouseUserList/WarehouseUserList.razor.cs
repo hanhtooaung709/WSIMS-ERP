@@ -51,10 +51,12 @@ public partial class WarehouseUserList
             if (result.IsError)
             {
                 await _injectService.ShowDialog(result);
+                _reqModel = new();
                 return;
             }
 
             _model = result.Data!.list!;
+            _reqModel = new();
             StateHasChanged();
         }
         catch(Exception ex)
@@ -93,6 +95,7 @@ public partial class WarehouseUserList
                 if (result.IsError)
                 {
                     await _injectService.ShowDialog(result);
+                    _reqModel = new();
                     return;
                 }
                 await _injectService.ShowDialog(result);
@@ -114,12 +117,15 @@ public partial class WarehouseUserList
                 if (result.IsError)
                 {
                     await _injectService.ShowDialog(result);
+                    _reqModel = new();
                     return;
                 }
                 await _injectService.ShowDialog(result);
             }
 
             #endregion
+
+            _reqModel = new();
         }
 
         catch (Exception ex)
