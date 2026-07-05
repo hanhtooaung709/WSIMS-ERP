@@ -419,6 +419,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Phone)
                 .HasMaxLength(30)
                 .IsUnicode(false);
+            entity.Property(e => e.RejectReason).HasMaxLength(200);
             entity.Property(e => e.ReqDateTime).HasColumnType("datetime");
             entity.Property(e => e.ReqUserId)
                 .HasMaxLength(50)
@@ -466,6 +467,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Phone)
                 .HasMaxLength(30)
                 .IsUnicode(false);
+            entity.Property(e => e.RejectReason).HasMaxLength(200);
             entity.Property(e => e.ReqDateTime).HasColumnType("datetime");
             entity.Property(e => e.ReqUserId)
                 .HasMaxLength(50)

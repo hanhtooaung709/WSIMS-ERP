@@ -23,6 +23,8 @@ public partial class TblReqWarehouseUserChange
 
     public string Status { get; set; } = null!;
 
+    public string? RejectReason { get; set; }
+
     public string ReqUserId { get; set; } = null!;
 
     public DateTime ReqDateTime { get; set; }

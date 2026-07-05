@@ -49,5 +49,13 @@ public class ReqWarehouseUserController : BaseController
         return Execute(result);
     }
 
+    [HttpPost]
+    [Route("Details")]
+    public async Task<IActionResult> Details(ReqWarehouseUserEditModel reqModel)
+    {
+        var result = await _reqWarehouseUserService.Details(reqModel);
+        return Execute(result);
+    }
+
     #endregion
 }

@@ -1,6 +1,5 @@
 ﻿using ERP.Warehouse.Api.Common;
 using ERP.Warehouse.Models.Models.ReqWarehouseUser;
-using ERP.Warehouse.Models.Models.WarehouseUserList;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
 using WSIMS_ERP.Shared.Enums;
@@ -8,6 +7,9 @@ using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
+using WSIMS_ERP.Shared.Models.DynamicModel;
+using System.Data;
+using ERP.Warehouse.Models;
 
 namespace ERP.Warehouse.Api.Features.WarehouseUser.ReqWarehouseUser;
 
@@ -43,7 +45,7 @@ public class ReqWarehouseUserService : AuthorizationService
                 Status = reqModel.Status
             };
             var result = await _dapperService.QueryStoredProcedureAsync<ReqWarehouseUserModel>
-                (SqlQueries.Sp_GetReqWarehouseUserDetail, parameters);
+                (SqlQueries.Sp_GetReqWarehouseUserList, parameters);
             model.list = result;
             return Result<ReqWarehouseUserRepModel>.Success(model);
         }
@@ -314,6 +316,45 @@ public class ReqWarehouseUserService : AuthorizationService
             return Result<ReqWarehouseUserModel>.Error(ex);
         }
         return model;
+    }
+
+    public async Task<Result<ReqWarehouseUserDetailsModel>> Details(ReqWarehouseUserEditModel reqModel)
+    {
+        ReqWarehouseUserDetailsModel model = new();
+        try
+        {
+            var detail = await _dapperService.GetDetailAsync<ReqWarehouseUserDetailsInfoModel>(
+                SqlQueries.Sp_GetReqWarehouseUserDetail, new
+                {
+                    UserId = reqModel.UserId
+                }, CommandType.StoredProcedure);
+
+            List<DynamicReportModel> userInfo = new List<DynamicReportModel>();
+            userInfo.Add("User Name", detail.UserName!);
+            userInfo.Add("Full Name", detail.FullName!);
+            userInfo.Add("Staff Id", detail.StaffId!);
+            userInfo.Add("Role ", detail.RoleName!);
+            userInfo.Add("Branch ", detail.BranchName!);
+            userInfo.Add("Phone", detail.Phone!);
+            userInfo.Add("Email", detail.Email!);
+            
+            model.UserInfo = userInfo;
+
+            List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();
+            makerChecker.Add("CreatedUser", detail.RequestedUser!);
+            makerChecker.Add("CreatedDateTime", detail.RequestedDateTime!);
+            makerChecker.Add("Modified User", detail.ApprovedUser!.ToDashFromNull());
+            makerChecker.Add("ModifiedDateTime ", detail.ApprovedDateTime!.ToDashFromNull());
+            userInfo.Add("Status", detail.Status!);
+            userInfo.Add("Reject Reason", detail.RejectReason!.ToDashFromNull());
+            model.MakerChecker = makerChecker;
+
+            return Result<ReqWarehouseUserDetailsModel>.Success(model);
+        }
+        catch(Exception ex)
+        {
+            return Result<ReqWarehouseUserDetailsModel>.Error(ex);
+        }
     }
 
     #endregion
