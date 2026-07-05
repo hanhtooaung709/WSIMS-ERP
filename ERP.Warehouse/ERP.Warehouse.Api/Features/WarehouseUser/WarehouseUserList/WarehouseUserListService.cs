@@ -311,7 +311,6 @@ public class WarehouseUserListService : AuthorizationService
             phoneNo = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
                 .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.PhoneNo!.Trim().ToLower() &&
-                               x.WarehouseUserId != reqModel.UserId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (phoneNo)
             {
@@ -347,7 +346,6 @@ public class WarehouseUserListService : AuthorizationService
             email = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
                 .AnyAsync(x => x.Email.Trim().ToLower() == reqModel.Email.Trim().ToLower() &&
-                               x.WarehouseUserId != reqModel.UserId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (email)
             {

@@ -179,6 +179,30 @@ public class ReqWarehouseUserService : AuthorizationService
 
             #endregion
 
+            #region Check Duplicate UserName
+
+            bool staffId = await _db.TblReqWarehouseUsers
+                .AsNoTracking()
+                .AnyAsync(x => x.StaffId.Trim().ToLower() == reqModel.StaffId!.Trim().ToLower() &&
+                               x.ReqWarehouseUserId != reqModel.UserId &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (staffId)
+            {
+                model = Result<ReqWarehouseUserModel>.Error("StaffId is already Requested!");
+                return model;
+            }
+
+            staffId = await _db.TblWarehouseUsers
+                .AsNoTracking()
+                .AnyAsync(x => x.StaffId.Trim().ToLower() == reqModel.StaffId!.Trim().ToLower());
+            if (staffId)
+            {
+                model = Result<ReqWarehouseUserModel>.Error("StaffId is already exist!");
+                return model;
+            }
+
+            #endregion
+
             #region Check Duplicate PhoneNo
 
             bool phoneNo = await _db.TblReqWarehouseUsers
@@ -251,6 +275,7 @@ public class ReqWarehouseUserService : AuthorizationService
 
             user.UserName = reqModel.UserName!;
             user.FullName = reqModel.FullName!;
+            user.StaffId = reqModel.StaffId!;
             user.Phone = reqModel.Phone!;
             user.Email = reqModel.Email!;
             user.RoleCode = reqModel.RoleCode!;
@@ -260,7 +285,7 @@ public class ReqWarehouseUserService : AuthorizationService
             _db.Entry(user).State = EntityState.Modified;
             _db.TblReqWarehouseUsers.Update(user);
             await _db.SaveChangesAsync();
-            model = Result<ReqWarehouseUserModel>.Success("Reuqested User is successfully updated");
+            model = Result<ReqWarehouseUserModel>.Success("Requested User is successfully updated");
 
             #endregion
         }
@@ -308,7 +333,7 @@ public class ReqWarehouseUserService : AuthorizationService
                 model = Result<ReqWarehouseUserModel>.Error("Requsted User delete fail!");
                 return model;
             }
-            model = Result<ReqWarehouseUserModel>.Error("Requsted User is successfully deteted");
+            model = Result<ReqWarehouseUserModel>.Success("Requsted User is successfully deteted");
 
             #endregion
         }

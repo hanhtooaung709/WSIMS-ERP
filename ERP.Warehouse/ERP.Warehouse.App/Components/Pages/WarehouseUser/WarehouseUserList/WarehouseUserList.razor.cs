@@ -77,47 +77,57 @@ public partial class WarehouseUserList
 
     private async Task Save(WarehouseUserModel reqModel)
     {
-        #region Create
-
-        if (_reqModel.UserId.IsNullOrEmpty())
+        try
         {
-            bool confirm = await _injectService.ShowCreateDialog();
-            if (!confirm) return;
+            #region Create
 
-            await _injectService.EnableLoading();
-            var result = await _apiService.Create(_reqModel);
-            await _injectService.DisableLoading();
-
-            if (result.IsError)
+            if (_reqModel.UserId.IsNullOrEmpty())
             {
+                bool confirm = await _injectService.ShowCreateDialog();
+                if (!confirm) return;
+
+                await _injectService.EnableLoading();
+                var result = await _apiService.Create(_reqModel);
+                await _injectService.DisableLoading();
+
+                if (result.IsError)
+                {
+                    await _injectService.ShowDialog(result);
+                    return;
+                }
                 await _injectService.ShowDialog(result);
-                return;
             }
-            await _injectService.ShowDialog(result);
+
+            #endregion
+
+            #region Update
+
+            else
+            {
+                bool confirm = await _injectService.ShowUpdateDialog();
+                if (!confirm) return;
+
+                await _injectService.EnableLoading();
+                var result = await _apiService.Update(_reqModel);
+                await _injectService.DisableLoading();
+
+                if (result.IsError)
+                {
+                    await _injectService.ShowDialog(result);
+                    return;
+                }
+                await _injectService.ShowDialog(result);
+            }
+
+            #endregion
         }
 
-        #endregion
-
-        #region Update
-
-        else
+        catch (Exception ex)
         {
-            bool confirm = await _injectService.ShowUpdateDialog();
-            if (!confirm) return;
-
-            await _injectService.EnableLoading();
-            var result = await _apiService.Update(_reqModel);
             await _injectService.DisableLoading();
-
-            if (result.IsError)
-            {
-                await _injectService.ShowDialog(result);
-                return;
-            }
-            await _injectService.ShowDialog(result);
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
         }
-
-        #endregion
     }
 
     private async Task Edit(WarehouseUserModel reqModel)
@@ -176,7 +186,9 @@ public partial class WarehouseUserList
         }
         catch (Exception ex)
         {
+            _injectService.DisableLoading();
             _logger.LogCustomError(ex);
+            _injectService.ErrorDialogMessage(ex.Message);
         }
     }
 
@@ -209,7 +221,9 @@ public partial class WarehouseUserList
         }
         catch( Exception ex )
         {
+            await _injectService.DisableLoading();
             _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
         }
     }
 

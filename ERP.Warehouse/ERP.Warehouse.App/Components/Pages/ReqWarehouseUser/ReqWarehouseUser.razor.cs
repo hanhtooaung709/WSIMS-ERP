@@ -68,7 +68,28 @@ public partial class ReqWarehouseUser
 
     private async Task Save(ReqWarehouseUserModel reqModel)
     {
+        try
+        {
+            bool confirm = await _injectService.ShowUpdateDialog();
+            if (!confirm) return;
 
+            await _injectService.EnableLoading();
+            var result = await _apiService.Update(_reqModel);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            await _injectService.ShowDialog(result);
+        }
+        catch(Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
     }
 
     private async Task Edit(ReqWarehouseUserModel reqModel)
@@ -127,13 +148,45 @@ public partial class ReqWarehouseUser
         }
         catch (Exception ex)
         {
+            _injectService.DisableLoading();
             _logger.LogCustomError(ex);
+            _injectService.ErrorDialogMessage(ex.Message);
         }
     }
 
     private async Task Delete(ReqWarehouseUserModel reqModel)
     {
+        try
+        {
+            bool confirm = await _injectService.Confirm();
+            if (!confirm)
+            {
+                return;
+            }
 
+            _edit.UserId = reqModel.ReqWarehouseUserId!;
+
+            await _injectService.EnableLoading();
+            var result = await _apiService.Delete(_edit);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            await _injectService.ShowDialog(result);
+
+            await List();
+            _formType = EnumFormType.List;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
     }
 
     private async Task Details(ReqWarehouseUserModel reqModel)
