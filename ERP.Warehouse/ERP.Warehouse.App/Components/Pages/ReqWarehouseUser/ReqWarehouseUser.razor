@@ -190,17 +190,11 @@
                     </EditTemplate>
                 </PropertyColumn>
 
-                <PropertyColumn Property="x => x.Status" Title="Status" HeaderStyle="min-width: 100px;">
-                    <EditTemplate>
-                        <MudTextField @bind-Value="context.Item.Status"
-                                      Label="Status"
-                                      Margin="Margin.Dense"
-                                      Style="width: 100%; min-width: 500px;"
-                                      Variant="MudBlazor.Variant.Outlined"
-                                      Disabled="@(_formType == EnumFormType.Edit)"
-                                      Required="true" />
-                    </EditTemplate>
-                </PropertyColumn>
+                <TemplateColumn Title="Status" HeaderStyle="min-width: 100px;">
+                    <CellTemplate>
+                        <MudText Class="@GetBadgeClass(context.Item.Status!)">@context.Item.Status</MudText>
+                    </CellTemplate>
+                </TemplateColumn>
 
                 <TemplateColumn Hidden="@_readOnly" Title="Actions" HeaderStyle="width: 140px; min-width: 140px;" Style="width: 140px; min-width: 140px; white-space: nowrap;">
                     <CellTemplate>
@@ -272,14 +266,28 @@
                             </MudText>
                             @foreach (var item in _details.MakerChecker)
                             {
-                                <ul class="list-unstyled mb-4">
-                                    <li class="d-flex align-items-center mb-3">
-                                        <MudText Typo="Typo.body2">
-                                            <span Style="font-weight: 600; color: #555; min-width: 150px; display: inline-block;">@(item.Key) :</span>
-                                            <span Style="color: #333;">@item.Value</span>
-                                        </MudText>
-                                    </li>
-                                </ul>
+                                if (item.Key.Contains("Status"))
+                                {
+                                    <ul class="list-unstyled mb-4">
+                                        <li class="d-flex align-items-center mb-3">
+                                            <MudText Typo="Typo.body2">
+                                                <span Style="font-weight: 600; color: #555; min-width: 150px; display: inline-block;">@(item.Key) :</span>
+                                                    <span class="@GetBadgeClass(item.Value)" Style="color: #333;">@item.Value</span>
+                                            </MudText>
+                                        </li>
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <ul class="list-unstyled mb-4">
+                                        <li class="d-flex align-items-center mb-3">
+                                            <MudText Typo="Typo.body2">
+                                                <span Style="font-weight: 600; color: #555; min-width: 150px; display: inline-block;">@(item.Key) :</span>
+                                                <span Style="color: #333;">@item.Value</span>
+                                            </MudText>
+                                        </li>
+                                    </ul>
+                                }
                             }
                         </MudItem>
                     </MudPaper>

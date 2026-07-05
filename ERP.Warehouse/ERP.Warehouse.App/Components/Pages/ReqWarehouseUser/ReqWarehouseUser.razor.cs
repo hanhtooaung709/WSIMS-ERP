@@ -224,6 +224,22 @@ public partial class ReqWarehouseUser
         }
     }
 
+    private string GetBadgeClass(string status)
+    {
+        var statusStr = "";
+        try
+        {
+            statusStr = _injectService.GetBadgeClass(status.ToEnum<EnumRequestedStatus>());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCustomError(ex);
+            _ = _injectService.ErrorDialogMessage(ex.Message);
+        }
+
+        return statusStr;
+    }
+
     #endregion
 
     #region DropDown
