@@ -371,8 +371,8 @@ public class ReqWarehouseUserService : AuthorizationService
             makerChecker.Add("CreatedDateTime", detail.RequestedDateTime!);
             makerChecker.Add("Modified User", detail.ApprovedUser!.ToDashFromNull());
             makerChecker.Add("ModifiedDateTime ", detail.ApprovedDateTime!.ToDashFromNull());
-            userInfo.Add("Status", detail.Status!);
-            userInfo.Add("Reject Reason", detail.RejectReason!.ToDashFromNull());
+            makerChecker.Add("Status", detail.Status!);
+            makerChecker.Add("Reject Reason", detail.RejectReason!.ToDashFromNull());
             model.MakerChecker = makerChecker;
 
             return Result<ReqWarehouseUserDetailsModel>.Success(model);

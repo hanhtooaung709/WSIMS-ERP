@@ -191,7 +191,30 @@ public partial class ReqWarehouseUser
 
     private async Task Details(ReqWarehouseUserModel reqModel)
     {
+        try
+        {
+            _edit.UserId = reqModel.ReqWarehouseUserId!;
 
+            await _injectService.EnableLoading();
+            var result = await _apiService.Details(_edit);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+
+            _details = result.Data!;
+            _formType = EnumFormType.Detail;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
     }
 
     #endregion
