@@ -27,7 +27,7 @@ public partial class ReqWarehouseUser
         {
             if (firstRender)
             {
-                List();
+                await List();
             }
         }
         catch (Exception ex)

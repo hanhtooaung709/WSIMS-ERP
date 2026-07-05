@@ -26,7 +26,7 @@ public partial class WarehouseUserList
         {
             if (firstRender)
             {
-                List();
+                await List();
             }
         }
         catch (Exception ex)
