@@ -1,1 +1,213 @@
-﻿
+﻿@page "/req-warehouse-user"
+@using ERP.Warehouse.Models.Models.ReqWarehouseUser
+@using Microsoft.AspNetCore.Authorization
+@inject ILogger<ReqWarehouseUser> _logger
+@attribute [Authorize]
+@using System.Net.Http.Json
+@using WSIMS_ERP.Shared.Enums
+@inject HttpClient httpClient
+
+@if (_formType is EnumFormType.List or EnumFormType.Edit or EnumFormType.Create)
+{
+    <MudPaper Class="pa-4 mb-4">
+        <MudText Typo="Typo.h6" Style="font-weight: 600; color: #333; margin-bottom: 12px;">Requested Warehouse User List</MudText>
+        <MudGrid>
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudTextField @bind-Value="_reqModel.FullName" Label="Full Name" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable />
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudTextField @bind-Value="_reqModel.StaffId" Label="StaffId" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable />
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudTextField @bind-Value="_reqModel.Phone" Label="Phone Number" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable />
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudTextField @bind-Value="_reqModel.Email" Label="Email" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable />
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudSelect @bind-Value="_reqModel.RoleCode" Label="Role" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable>
+                    @if (_roleList != null)
+                    {
+                        @foreach (var role in _roleList)
+                        {
+                            <MudSelectItem Value="@role.RoleCode">@role.RoleName</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudSelect @bind-Value="_reqModel.BranchCode" Label="Branch" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable>
+                    @if (_banchList != null)
+                    {
+                        @foreach (var role in _banchList)
+                        {
+                            <MudSelectItem Value="@role.BranchCode">@role.Address</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" Style="display: flex; align-items: flex-end; justify-content: flex-end; gap: 8px;">
+                <MudButton ButtonType="MudBlazor.ButtonType.Button" Variant="MudBlazor.Variant.Outlined" Color="Color.Default" StartIcon="@Icons.Material.Filled.Close" OnClick="@Cancel">Cancel</MudButton>
+                <MudButton ButtonType="MudBlazor.ButtonType.Button" Variant="MudBlazor.Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Search" OnClick="@List">Search</MudButton>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+
+    <div style="width: 100%; overflow-x: auto;">
+        <MudDataGrid @ref="_elementGrid"
+                     T="ReqWarehouseUserModel"
+                     Items="@_model"
+                     Hover="@hover"
+                     ReadOnly="@_readOnly"
+                     Breakpoint="Breakpoint.None"
+                     EditMode="MudBlazor.DataGridEditMode.Form"
+                     StartedEditingItem="@Edit"
+                     CanceledEditingItem="@Cancel"
+                     CommittedItemChanges="@Save">
+
+            <Columns>
+                <TemplateColumn Title="No" Sortable="false" Filterable="false" HeaderStyle="width: 70px;" Style="width: 70px;">
+                    <CellTemplate>
+                        @(_model.ToList().IndexOf(context.Item) + 1)
+                    </CellTemplate>
+                </TemplateColumn>
+
+                <PropertyColumn Property="x => x.UserName" Title="User Name" HeaderStyle="min-width: 180px;" Hidden="true">
+                    <EditTemplate>
+                        <MudText Typo="Typo.h6" Style="padding: 16px 16px 0 16px; font-weight: bold;">
+                            @_formType.ToString() Requested Warehouse User
+                        </MudText>
+                        <MudTextField @bind-Value="_reqModel.UserName"
+                                      Label="User Name"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Required="true"
+                                      RequiredError="User Name is required!" />
+                    </EditTemplate>
+                </PropertyColumn>
+
+                <PropertyColumn Property="x => x.FullName" Title="Full Name" HeaderStyle="min-width: 180px;">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.FullName"
+                                      Label="Full Name"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Required="true"
+                                      RequiredError="Full Name is required!" />
+                    </EditTemplate>
+                </PropertyColumn>
+
+                <PropertyColumn Property="x => x.StaffId" Title="StaffId" HeaderStyle="min-width: 120px;">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.StaffId"
+                                      Label="StaffId"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Disabled="@(_formType == EnumFormType.Edit)"
+                                      Required="true"
+                                      RequiredError="Staff ID is required!" />
+                    </EditTemplate>
+                </PropertyColumn>
+
+                <PropertyColumn Property="x => x.Phone" Title="Phone Number" HeaderStyle="min-width: 200px;">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.Phone"
+                                      Label="Phone Number"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Required="true"
+                                      RequiredError="Phone Number is required!" />
+                    </EditTemplate>
+                </PropertyColumn>
+
+                <PropertyColumn Property="x => x.Email" Title="Email" HeaderStyle="min-width: 280px;">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.Email"
+                                      Label="Email"
+                                      Margin="Margin.Dense"
+                                      InputType="InputType.Email"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Required="true"
+                                      RequiredError="Email address is required!" />
+                    </EditTemplate>
+                </PropertyColumn>
+
+                <PropertyColumn Property="x => x.RoleCode" Title="Role" HeaderStyle="min-width: 120px;">
+                    <EditTemplate>
+                        <MudSelect @bind-Value="_reqModel.RoleCode"
+                                   Label="Role"
+                                   Margin="Margin.Dense"
+                                   Style="width: 100%; min-width: 500px;"
+                                   Variant="MudBlazor.Variant.Outlined"
+                                   AnchorOrigin="Origin.BottomCenter"
+                                   Required="true"
+                                   RequiredError="Please select a role!">
+                            @if (_roleList != null)
+                            {
+                                @foreach (var role in _roleList)
+                                {
+                                    <MudSelectItem Value="@role.RoleCode">@role.RoleName</MudSelectItem>
+                                }
+                            }
+                        </MudSelect>
+                    </EditTemplate>
+                </PropertyColumn>
+
+                <PropertyColumn Property="x => x.BranchCode" Title="Branch" HeaderStyle="min-width: 300px;">
+                    <EditTemplate>
+                        <MudSelect @bind-Value="_reqModel.BranchCode"
+                                   Label="Branch"
+                                   Margin="Margin.Dense"
+                                   Style="width: 100%; min-width: 500px;"
+                                   Variant="MudBlazor.Variant.Outlined"
+                                   AnchorOrigin="Origin.BottomCenter"
+                                   Required="true"
+                                   RequiredError="Please select a branch!">
+                            @if (_banchList != null)
+                            {
+                                @foreach (var role in _banchList)
+                                {
+                                    <MudSelectItem Value="@role.BranchCode">@role.Address</MudSelectItem>
+                                }
+                            }
+                        </MudSelect>
+                    </EditTemplate>
+                </PropertyColumn>
+
+                <PropertyColumn Property="x => x.Status" Title="Status" HeaderStyle="min-width: 100px;" />
+
+                <TemplateColumn Hidden="@_readOnly" Title="Actions" HeaderStyle="width: 140px; min-width: 140px;" Style="width: 140px; min-width: 140px; white-space: nowrap;">
+                    <CellTemplate>
+                        <div style="display: inline-block; white-space: nowrap;">
+                            <MudFab Size="@Size.Small"
+                                    Class="mr-2"
+                                    StartIcon="@Icons.Material.Filled.Edit"
+                                    Color="Color.Warning"
+                                    OnClick="@context.Actions.StartEditingItemAsync" />
+
+                            <MudFab Size="@Size.Small"
+                                    Class="mr-2"
+                                    StartIcon="@Icons.Material.Outlined.Delete"
+                                    Color="Color.Error"
+                                    OnClick="@(() => Delete(context.Item))" />
+
+                            <MudFab Size="@Size.Small"
+                                    StartIcon="@Icons.Material.Outlined.Details"
+                                    Color="Color.Primary"
+                                    OnClick="@(() => Details(context.Item))" />
+                        </div>
+                    </CellTemplate>
+                </TemplateColumn>
+            </Columns>
+            <PagerContent>
+                <MudDataGridPager T="ReqWarehouseUserModel" />
+            </PagerContent>
+        </MudDataGrid>
+    </div>
+}
