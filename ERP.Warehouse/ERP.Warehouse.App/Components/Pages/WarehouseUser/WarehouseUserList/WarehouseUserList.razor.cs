@@ -56,7 +56,6 @@ public partial class WarehouseUserList
             }
 
             _model = result.Data!.list!;
-            _reqModel = new();
             StateHasChanged();
         }
         catch(Exception ex)

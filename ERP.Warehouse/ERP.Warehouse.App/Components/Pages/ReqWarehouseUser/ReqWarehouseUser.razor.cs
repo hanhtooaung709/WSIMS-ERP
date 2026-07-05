@@ -3,6 +3,8 @@ using ERP.Warehouse.Models.Models.WarehouseUserList;
 using MudBlazor;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
+using ERP.Warehouse.App.Common;
+using WSIMS_ERP.Shared.Models;
 
 namespace ERP.Warehouse.App.Components.Pages.ReqWarehouseUser;
 
@@ -15,6 +17,7 @@ public partial class ReqWarehouseUser
 
     private List<RoleResponseModel> _roleList = new();
     private List<BranchResponseModel> _banchList = new();
+    private List<SelectListModel> _lstStatus = Commons.GetStatusList();
 
     private MudDataGrid<ReqWarehouseUserModel> _elementGrid = default!;
     private EnumFormType _formType = EnumFormType.List;
@@ -57,7 +60,6 @@ public partial class ReqWarehouseUser
             }
 
             _model = result.Data!.list!;
-            _reqModel = new();
             StateHasChanged();
         }
         catch (Exception ex)

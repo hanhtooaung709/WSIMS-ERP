@@ -46,6 +46,17 @@
                     }
                 </MudSelect>
             </MudItem>
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudSelect @bind-Value="_reqModel.Status" Label="Status" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable>
+                    @if (_lstStatus != null)
+                    {
+                        @foreach (var item in _lstStatus)
+                        {
+                            <MudSelectItem Value="@item.Value">@item.Text</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+            </MudItem>
             <MudItem xs="12" Style="display: flex; align-items: flex-end; justify-content: flex-end; gap: 8px;">
                 <MudButton ButtonType="MudBlazor.ButtonType.Button" Variant="MudBlazor.Variant.Outlined" Color="Color.Default" StartIcon="@Icons.Material.Filled.Close" OnClick="@Cancel">Cancel</MudButton>
                 <MudButton ButtonType="MudBlazor.ButtonType.Button" Variant="MudBlazor.Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Search" OnClick="@List">Search</MudButton>
