@@ -73,7 +73,47 @@ public partial class ReqWarehouseUser
 
     private async Task Edit(ReqWarehouseUserModel reqModel)
     {
+        try
+        {
+            if (reqModel is null || string.IsNullOrEmpty(reqModel.ReqWarehouseUserId))
+            {
+                _formType = EnumFormType.Create;
+                return;
+            }
 
+            await GetRole();
+            await GetBranch();
+
+            _edit.UserId = reqModel.ReqWarehouseUserId!;
+
+            await _injectService.EnableLoading();
+            var result = await _apiService.Edit(_edit);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+
+            _reqModel.UserId = result.Data.ReqWarehouseUserId;
+            _reqModel.UserName = result.Data.UserName;
+            _reqModel.FullName = result.Data.FullName;
+            _reqModel.StaffId = result.Data.StaffId;
+            _reqModel.Phone = result.Data.Phone;
+            _reqModel.Email = result.Data.Email;
+            _reqModel.RoleCode = result.Data.RoleCode;
+            _reqModel.BranchCode = result.Data.BranchCode;
+
+            _formType = EnumFormType.Edit;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
     }
 
     private void Cancel()

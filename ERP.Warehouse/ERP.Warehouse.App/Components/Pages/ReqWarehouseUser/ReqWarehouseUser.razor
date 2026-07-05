@@ -107,7 +107,6 @@
                                       Margin="Margin.Dense"
                                       Style="width: 100%; min-width: 500px;"
                                       Variant="MudBlazor.Variant.Outlined"
-                                      Disabled="@(_formType == EnumFormType.Edit)"
                                       Required="true"
                                       RequiredError="Staff ID is required!" />
                     </EditTemplate>
@@ -180,7 +179,17 @@
                     </EditTemplate>
                 </PropertyColumn>
 
-                <PropertyColumn Property="x => x.Status" Title="Status" HeaderStyle="min-width: 100px;" />
+                <PropertyColumn Property="x => x.Status" Title="Status" HeaderStyle="min-width: 100px;">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="context.Item.Status"
+                                      Label="Status"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Disabled="@(_formType == EnumFormType.Edit)"
+                                      Required="true" />
+                    </EditTemplate>
+                </PropertyColumn>
 
                 <TemplateColumn Hidden="@_readOnly" Title="Actions" HeaderStyle="width: 140px; min-width: 140px;" Style="width: 140px; min-width: 140px; white-space: nowrap;">
                     <CellTemplate>
