@@ -6,7 +6,7 @@ using WSIMS_ERP.Shared.Models;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 using ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUser;
 
-namespace ERP.Warehouse.App.Components.Pages.ReqWarehouseUser;
+namespace ERP.Warehouse.App.Components.Pages.WarehouseUser.ReqWarehouseUser;
 
 public partial class ReqWarehouseUser
 {

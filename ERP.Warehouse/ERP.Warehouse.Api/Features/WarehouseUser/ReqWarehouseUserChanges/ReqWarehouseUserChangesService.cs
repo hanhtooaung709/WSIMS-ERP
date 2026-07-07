@@ -1,5 +1,4 @@
 ﻿using ERP.Warehouse.Api.Common;
-using ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUser;
 using ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUserChanges;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;

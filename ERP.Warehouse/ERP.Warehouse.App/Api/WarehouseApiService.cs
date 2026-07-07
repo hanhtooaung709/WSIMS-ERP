@@ -2,6 +2,7 @@
 using ERP.Warehouse.Models.Models.Signin;
 using ERP.Warehouse.Models.Models.Signin.Signin;
 using ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUser;
+using ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUserChanges;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 using WSIMS_ERP.Shared.HttpClients;
 using WSIMS_ERP.Shared.Models;
@@ -93,6 +94,30 @@ public class WarehouseApiService
     public async Task<Result<ReqWarehouseUserDetailsModel>> Details(ReqWarehouseUserEditModel reqModel)
         => await _httpClientService.ExecuteAsync<ReqWarehouseUserEditModel, ReqWarehouseUserDetailsModel>
         (ReqWarehouseUserEndpoints.Details, reqModel);
+
+    #endregion
+
+    #region ReqWarehouseUserChanges
+
+    public async Task<Result<ReqWarehouseUserChangesRepModel>> Get(ReqWarehouseUserChangesReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<ReqWarehouseUserChangesReqModel, ReqWarehouseUserChangesRepModel>
+        (ReqWarehouseUserChangesEndpoints.Get, reqModel);
+
+    public async Task<Result<ReqWarehouseUserChangesModel>> Edit(ReqWarehouseUserChangesEditModel reqModel)
+        => await _httpClientService.ExecuteAsync<ReqWarehouseUserChangesEditModel, ReqWarehouseUserChangesModel>
+        (ReqWarehouseUserChangesEndpoints.Edit, reqModel);
+
+    public async Task<Result<ReqWarehouseUserChangesModel>> Update(ReqWarehouseUserChangesReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<ReqWarehouseUserChangesReqModel, ReqWarehouseUserChangesModel>
+        (ReqWarehouseUserChangesEndpoints.Update, reqModel);
+
+    public async Task<Result<ReqWarehouseUserChangesModel>> Delete(ReqWarehouseUserChangesEditModel reqModel)
+        => await _httpClientService.ExecuteAsync<ReqWarehouseUserChangesEditModel, ReqWarehouseUserChangesModel>
+        (ReqWarehouseUserChangesEndpoints.Delete, reqModel);
+
+    public async Task<Result<ReqWarehouseUserChangesDetailsModel>> Details(ReqWarehouseUserChangesEditModel reqModel)
+        => await _httpClientService.ExecuteAsync<ReqWarehouseUserChangesEditModel, ReqWarehouseUserChangesDetailsModel>
+        (ReqWarehouseUserChangesEndpoints.Details, reqModel);
 
     #endregion
 }
