@@ -1,7 +1,7 @@
 ﻿using ERP.Warehouse.App.Api.Endpoints;
-using ERP.Warehouse.Models.Models.ReqWarehouseUser;
 using ERP.Warehouse.Models.Models.Signin;
 using ERP.Warehouse.Models.Models.Signin.Signin;
+using ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUser;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 using WSIMS_ERP.Shared.HttpClients;
 using WSIMS_ERP.Shared.Models;

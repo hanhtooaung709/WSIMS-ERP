@@ -1,8 +1,8 @@
-﻿namespace ERP.Warehouse.Models.Models.ReqWarehouseUser;
+﻿namespace ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUser;
 
 public class ReqWarehouseUserRepModel
 {
-    public List<ReqWarehouseUserModel> list {  get; set; }
+    public List<ReqWarehouseUserModel> list { get; set; }
 }
 
 public class ReqWarehouseUserModel

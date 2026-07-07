@@ -1,4 +1,4 @@
-﻿namespace ERP.Warehouse.Models.Models.ReqWarehouseUser;
+﻿namespace ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUser;
 
 public class ReqWarehouseUserDetailsModel
 {

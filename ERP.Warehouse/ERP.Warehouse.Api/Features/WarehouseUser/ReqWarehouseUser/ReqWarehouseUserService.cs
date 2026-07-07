@@ -1,5 +1,4 @@
 ﻿using ERP.Warehouse.Api.Common;
-using ERP.Warehouse.Models.Models.ReqWarehouseUser;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
 using WSIMS_ERP.Shared.Enums;
@@ -10,6 +9,7 @@ using WSIMS_ERP.Shared.Services;
 using WSIMS_ERP.Shared.Models.DynamicModel;
 using System.Data;
 using ERP.Warehouse.Models;
+using ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUser;
 
 namespace ERP.Warehouse.Api.Features.WarehouseUser.ReqWarehouseUser;
 

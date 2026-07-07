@@ -1,5 +1,5 @@
 ﻿using ERP.Warehouse.Api.Controller;
-using ERP.Warehouse.Models.Models.ReqWarehouseUser;
+using ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUser;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ERP.Warehouse.Api.Features.WarehouseUser.ReqWarehouseUser;
