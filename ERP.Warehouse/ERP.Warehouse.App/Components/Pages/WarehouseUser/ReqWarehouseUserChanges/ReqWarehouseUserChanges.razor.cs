@@ -126,6 +126,7 @@ public partial class ReqWarehouseUserChanges
             }
 
             _reqModel.UserId = result.Data.ReqWarehouseUserChangesId;
+            _reqModel.WarehouseUserId = result.Data.WarehouseUserId;
             _reqModel.UserName = reqModel.UserName;
             _reqModel.FullName = result.Data.FullName;
             _reqModel.StaffId = reqModel.StaffId;

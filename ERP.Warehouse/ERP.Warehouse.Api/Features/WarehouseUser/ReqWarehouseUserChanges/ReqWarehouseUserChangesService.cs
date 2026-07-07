@@ -99,6 +99,7 @@ public class ReqWarehouseUserChangesService : AuthorizationService
             var response = new ReqWarehouseUserChangesModel
             {
                 ReqWarehouseUserChangesId = user.ReqWarehouseUserChangesId,
+                WarehouseUserId = user.WarehouseUserId,
                 FullName = user.FullName,
                 Phone = user.Phone,
                 Email = user.Email,
@@ -147,42 +148,31 @@ public class ReqWarehouseUserChangesService : AuthorizationService
 
             bool userName = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.UserName!.Trim().ToLower() &&
-                               x.ReqWarehouseUserId != reqModel.UserId &&
+                .AnyAsync(x => x.UserName.Trim().ToLower() == reqModel.UserName!.Trim().ToLower() &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (userName)
             {
-                model = Result<ReqWarehouseUserChangesModel>.Error("Phone Number is already Requested!");
-                return model;
-            }
-
-            userName = await _db.TblReqWarehouseUserChanges
-                .AsNoTracking()
-                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.UserName!.Trim().ToLower() &&
-                               x.Status == EnumRequestedStatus.Pending.ToString());
-            if (userName)
-            {
-                model = Result<ReqWarehouseUserChangesModel>.Error("Phone Number is already Requested!");
+                model = Result<ReqWarehouseUserChangesModel>.Error("User Name is already Requested!");
                 return model;
             }
 
             userName = await _db.TblWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.UserName!.Trim().ToLower());
+                .AnyAsync(x => x.UserName.Trim().ToLower() == reqModel.UserName!.Trim().ToLower() &&
+                          x.WarehouseUserId != reqModel.WarehouseUserId);
             if (userName)
             {
-                model = Result<ReqWarehouseUserChangesModel>.Error("Phone Number is already exist!");
+                model = Result<ReqWarehouseUserChangesModel>.Error("User Name is already exist!");
                 return model;
             }
 
             #endregion
 
-            #region Check Duplicate UserName
+            #region Check Duplicate StaffId
 
             bool staffId = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
                 .AnyAsync(x => x.StaffId.Trim().ToLower() == reqModel.StaffId!.Trim().ToLower() &&
-                               x.ReqWarehouseUserId != reqModel.UserId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (staffId)
             {
@@ -192,7 +182,8 @@ public class ReqWarehouseUserChangesService : AuthorizationService
 
             staffId = await _db.TblWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.StaffId.Trim().ToLower() == reqModel.StaffId!.Trim().ToLower());
+                .AnyAsync(x => x.StaffId.Trim().ToLower() == reqModel.StaffId!.Trim().ToLower() &&
+                               x.WarehouseUserId != reqModel.WarehouseUserId);
             if (staffId)
             {
                 model = Result<ReqWarehouseUserChangesModel>.Error("StaffId is already exist!");
@@ -206,7 +197,6 @@ public class ReqWarehouseUserChangesService : AuthorizationService
             bool phoneNo = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
                 .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.Phone!.Trim().ToLower() &&
-                               x.ReqWarehouseUserId != reqModel.UserId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (phoneNo)
             {
@@ -217,6 +207,7 @@ public class ReqWarehouseUserChangesService : AuthorizationService
             phoneNo = await _db.TblReqWarehouseUserChanges
                 .AsNoTracking()
                 .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.Phone!.Trim().ToLower() &&
+                               x.ReqWarehouseUserChangesId != reqModel.UserId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (phoneNo)
             {
@@ -226,7 +217,8 @@ public class ReqWarehouseUserChangesService : AuthorizationService
 
             phoneNo = await _db.TblWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.Phone!.Trim().ToLower());
+                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.Phone!.Trim().ToLower() &&
+                          x.WarehouseUserId != reqModel.WarehouseUserId);
             if (phoneNo)
             {
                 model = Result<ReqWarehouseUserChangesModel>.Error("Phone Number is already exist!");
@@ -240,6 +232,7 @@ public class ReqWarehouseUserChangesService : AuthorizationService
             bool email = await _db.TblReqWarehouseUserChanges
                 .AsNoTracking()
                 .AnyAsync(x => x.Email.Trim().ToLower() == reqModel.Email!.Trim().ToLower() &&
+                               x.ReqWarehouseUserChangesId != reqModel.UserId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (email)
             {
@@ -250,7 +243,6 @@ public class ReqWarehouseUserChangesService : AuthorizationService
             email = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
                 .AnyAsync(x => x.Email.Trim().ToLower() == reqModel.Email!.Trim().ToLower() &&
-                               x.ReqWarehouseUserId != reqModel.UserId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (email)
             {
@@ -260,7 +252,8 @@ public class ReqWarehouseUserChangesService : AuthorizationService
 
             email = await _db.TblWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Email.Trim().ToLower() == reqModel.Email!.Trim().ToLower());
+                .AnyAsync(x => x.Email.Trim().ToLower() == reqModel.Email!.Trim().ToLower() &&
+                               x.WarehouseUserId != reqModel.WarehouseUserId);
             if (email)
             {
                 model = Result<ReqWarehouseUserChangesModel>.Error("Email Number is already exist!");

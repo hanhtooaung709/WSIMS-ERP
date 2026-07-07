@@ -149,18 +149,8 @@ public class ReqWarehouseUserService : AuthorizationService
 
             bool userName = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.UserName!.Trim().ToLower() &&
+                .AnyAsync(x => x.UserName.Trim().ToLower() == reqModel.UserName!.Trim().ToLower() &&
                                x.ReqWarehouseUserId != reqModel.UserId &&
-                               x.Status == EnumRequestedStatus.Pending.ToString());
-            if (userName)
-            {
-                model = Result<ReqWarehouseUserModel>.Error("Phone Number is already Requested!");
-                return model;
-            }
-
-            userName = await _db.TblReqWarehouseUserChanges
-                .AsNoTracking()
-                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.UserName!.Trim().ToLower() &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (userName)
             {
@@ -170,7 +160,7 @@ public class ReqWarehouseUserService : AuthorizationService
 
             userName = await _db.TblWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.UserName!.Trim().ToLower());
+                .AnyAsync(x => x.UserName.Trim().ToLower() == reqModel.UserName!.Trim().ToLower());
             if (userName)
             {
                 model = Result<ReqWarehouseUserModel>.Error("Phone Number is already exist!");

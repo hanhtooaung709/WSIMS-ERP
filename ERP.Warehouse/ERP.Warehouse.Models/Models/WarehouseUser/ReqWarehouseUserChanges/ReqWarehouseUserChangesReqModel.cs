@@ -3,6 +3,7 @@
 public class ReqWarehouseUserChangesReqModel
 {
     public string? UserId { get; set; }
+    public string? WarehouseUserId { get; set; }
     public string? UserName { get; set; }
     public string? FullName { get; set; }
     public string? StaffId { get; set; }

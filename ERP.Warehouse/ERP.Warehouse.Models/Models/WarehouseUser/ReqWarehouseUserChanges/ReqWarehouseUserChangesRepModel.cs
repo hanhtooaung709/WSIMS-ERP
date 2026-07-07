@@ -8,6 +8,7 @@ public class ReqWarehouseUserChangesRepModel
 public class ReqWarehouseUserChangesModel
 {
     public string? ReqWarehouseUserChangesId { get; set; }
+    public string? WarehouseUserId { get; set; }
     public string? UserName { get; set; }
     public string? FullName { get; set; }
     public string? StaffId { get; set; }
