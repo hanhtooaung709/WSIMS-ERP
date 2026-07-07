@@ -1,4 +1,4 @@
-﻿using ERP.Warehouse.Models.Models.WarehouseUserList;
+﻿using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 using MudBlazor;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;

@@ -1,6 +1,6 @@
-﻿using ERP.Warehouse.Models.Models.WarehouseUserList;
-using ERP.Warehouse.Api.Controller;
+﻿using ERP.Warehouse.Api.Controller;
 using Microsoft.AspNetCore.Mvc;
+using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 
 namespace ERP.Warehouse.Api.Features.WarehouseUser.WarehouseUserList;
 

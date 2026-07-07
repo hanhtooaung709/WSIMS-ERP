@@ -1,4 +1,4 @@
-﻿namespace ERP.Warehouse.Models.Models.WarehouseUserList;
+﻿namespace ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 
 public class WarehouseUserDetailsInfoModel
 {
@@ -9,9 +9,9 @@ public class WarehouseUserDetailsInfoModel
     public string? Email { get; set; }
     public string? RoleName { get; set; }
     public string? BranchName { get; set; }
-    public string? LockFlag { get; set;}
-    public string? CreatedUser { get; set;}
-    public string? CreatedDateTime { get; set;}
+    public string? LockFlag { get; set; }
+    public string? CreatedUser { get; set; }
+    public string? CreatedDateTime { get; set; }
     public string? ModifiedUser { get; set; }
-    public string? ModifiedDateTime { get; set;}
+    public string? ModifiedDateTime { get; set; }
 }

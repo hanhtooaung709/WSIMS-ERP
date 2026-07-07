@@ -1,13 +1,10 @@
-﻿namespace ERP.Warehouse.Models.Models.WarehouseUserList;
+﻿using WSIMS_ERP.Shared.Models.PageSetting;
 
-public class WarehouseUserRepModel
-{
-    public List<WarehouseUserModel> list { get; set; }
-}
+namespace ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 
-public class WarehouseUserModel
+public class WarehouseUserReqModel
 {
-    public string? WarehouseUserId { get; set; }
+    public string? UserId { get; set; }
     public string? UserName { get; set; }
     public string? FullName { get; set; }
     public string? StaffId { get; set; }

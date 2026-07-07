@@ -1,4 +1,4 @@
-﻿namespace ERP.Warehouse.Models.Models.WarehouseUserList;
+﻿namespace ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 
 public class WarehouseUserEditModel
 {
