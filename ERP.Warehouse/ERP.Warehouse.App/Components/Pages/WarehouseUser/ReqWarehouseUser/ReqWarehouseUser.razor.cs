@@ -89,6 +89,7 @@ public partial class ReqWarehouseUser
             }
             await _injectService.ShowDialog(result);
             _reqModel = new();
+            await List();
         }
         catch(Exception ex)
         {

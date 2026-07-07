@@ -90,6 +90,7 @@ public partial class ReqWarehouseUserChanges
             }
             await _injectService.ShowDialog(result);
             _reqModel = new();
+            await List();
         }
         catch (Exception ex)
         {

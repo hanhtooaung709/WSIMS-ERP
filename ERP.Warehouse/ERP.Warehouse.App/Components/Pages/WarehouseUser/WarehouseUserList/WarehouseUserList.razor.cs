@@ -125,6 +125,7 @@ public partial class WarehouseUserList
             #endregion
 
             _reqModel = new();
+            await List();
         }
 
         catch (Exception ex)

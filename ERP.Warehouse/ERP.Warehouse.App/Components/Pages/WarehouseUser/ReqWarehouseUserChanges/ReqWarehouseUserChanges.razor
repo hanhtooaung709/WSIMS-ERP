@@ -10,7 +10,7 @@
 @if (_formType is EnumFormType.List or EnumFormType.Edit or EnumFormType.Create)
 {
     <MudPaper Class="pa-4 mb-4">
-        <MudText Typo="Typo.h6" Style="font-weight: 600; color: #333; margin-bottom: 12px;">Requested Warehouse User List</MudText>
+        <MudText Typo="Typo.h6" Style="font-weight: 600; color: #333; margin-bottom: 12px;">Requested Warehouse User Changes List</MudText>
         <MudGrid>
             <MudItem xs="12" sm="6" md="4" lg="3">
                 <MudTextField @bind-Value="_reqModel.FullName" Label="Full Name" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable />
@@ -87,7 +87,7 @@
                 <PropertyColumn Property="x => x.UserName" Title="User Name" HeaderStyle="min-width: 180px;" Hidden="true">
                     <EditTemplate>
                         <MudText Typo="Typo.h6" Style="padding: 16px 16px 0 16px; font-weight: bold;">
-                            @_formType.ToString() Requested Warehouse User
+                            @_formType.ToString() Requested Warehouse User Changes
                         </MudText>
                         <MudTextField @bind-Value="_reqModel.UserName"
                                       Label="User Name"
@@ -236,7 +236,7 @@
     <MudPaper Elevation="2" Class="pa-0 mt-4" Style="border-radius: 12px; overflow: hidden;">
         <div Style="background-color: #3f7375; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
             <MudText Typo="Typo.h5" Style="color: #fff; font-weight: 600; margin: 0;">
-                Warehouse User Details
+                Requested Warehouse User Changes Details
             </MudText>
             <MudFab Size="@Size.Small" Color="Color.Default" StartIcon="@Icons.Material.Filled.ArrowBack" Style="background-color: rgba(255,255,255,0.2); color: #fff;" OnClick="@(() => { _formType = EnumFormType.List; StateHasChanged(); })" />
         </div>
