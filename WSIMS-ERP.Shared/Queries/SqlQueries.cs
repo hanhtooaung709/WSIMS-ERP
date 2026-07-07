@@ -8,4 +8,7 @@ public class SqlQueries
 
     public const string Sp_GetReqWarehouseUserList = "Sp_GetReqWarehouseUserList";
     public const string Sp_GetReqWarehouseUserDetail = "Sp_GetReqWarehouseUserDetail";
+
+    public const string Sp_GetReqWarehouseUserChangesList = "Sp_GetReqWarehouseUserChangesList";
+    public const string Sp_GetReqWarehouseUserChangesDetail = "Sp_GetReqWarehouseUserChangesDetail";
 }

@@ -1,6 +1,7 @@
 ﻿using ERP.Warehouse.Api.Common;
 using ERP.Warehouse.Api.Features.SignIn;
 using ERP.Warehouse.Api.Features.WarehouseUser.ReqWarehouseUser;
+using ERP.Warehouse.Api.Features.WarehouseUser.ReqWarehouseUserChanges;
 using ERP.Warehouse.Api.Features.WarehouseUser.WarehouseUserList;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
@@ -41,6 +42,7 @@ public static class FeatureManager
         builder.Services.AddScoped<SignInService>();
         builder.Services.AddScoped<WarehouseUserListService>();
         builder.Services.AddScoped<ReqWarehouseUserService>();
+        builder.Services.AddScoped<ReqWarehouseUserChangesService>();
         return builder;
     }
 }
