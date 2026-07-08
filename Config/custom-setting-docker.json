@@ -1,0 +1,17 @@
+{
+  "IsDevelopment": false,
+  "DbConnection": "server=host.docker.internal;database=WSIMS-ERP;user id=sa;password=sasa@123;TrustServerCertificate=true;MultipleActiveResultSets=True;Connect Timeout=60;",
+
+  "WarehouseApp": {
+    "WarehouseApiBaseUrl": "http://host.docker.internal:5066"
+  },
+
+  "WarehouseApi": {
+    "WarehouseAppBaseUrl": "http://host.docker.internal:5000"
+  },
+
+  "Jwt": {
+    "Key": "W3b_3rmp_W4r3h0us3_S3cur3_Jwwt_K3y_St0r4g3_2026_ERP_SYSTEM",
+    "Subject": "WarehouseERP"
+  }
+}
