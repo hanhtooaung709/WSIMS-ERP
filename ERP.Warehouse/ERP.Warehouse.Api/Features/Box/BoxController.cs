@@ -27,5 +27,21 @@ public class BoxController : BaseController
         return Execute(result);
     }
 
+    [HttpPost]
+    [Route("Create")]
+    public async Task<IActionResult> Create(BoxReqModel reqModel)
+    {
+        var result = await _boxService.Create(reqModel);
+        return Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Edit")]
+    public async Task<IActionResult> Edit(BoxEditModel reqModel)
+    {
+        var result = await _boxService.Edit(reqModel);
+        return Execute(result);
+    }
+
     #endregion
 }

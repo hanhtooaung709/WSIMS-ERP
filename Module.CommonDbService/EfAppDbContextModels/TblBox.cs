@@ -19,7 +19,7 @@ public partial class TblBox
 
     public string CreatedUserId { get; set; } = null!;
 
-    public string CreatedDateTime { get; set; } = null!;
+    public DateTime CreatedDateTime { get; set; }
 
     public string? ModifiedUserId { get; set; }
 

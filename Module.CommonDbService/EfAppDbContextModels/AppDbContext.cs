@@ -65,9 +65,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.BoxCode)
                 .HasMaxLength(20)
                 .IsUnicode(false);
-            entity.Property(e => e.CreatedDateTime)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
             entity.Property(e => e.CreatedUserId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
