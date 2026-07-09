@@ -43,5 +43,29 @@ public class BoxController : BaseController
         return Execute(result);
     }
 
+    [HttpPost]
+    [Route("Update")]
+    public async Task<IActionResult> Update(BoxReqModel reqModel)
+    {
+        var result = await _boxService.Update(reqModel);
+        return Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Delete")]
+    public async Task<IActionResult> Delete(BoxEditModel reqModel)
+    {
+        var result = await _boxService.Delete(reqModel);
+        return Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Details")]
+    public async Task<IActionResult> Details(BoxEditModel reqModel)
+    {
+        var result = await _boxService.Details(reqModel);
+        return Execute(result);
+    }
+
     #endregion
 }

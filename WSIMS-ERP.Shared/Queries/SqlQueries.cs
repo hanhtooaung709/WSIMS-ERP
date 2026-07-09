@@ -13,5 +13,7 @@ public class SqlQueries
     public const string Sp_GetReqWarehouseUserChangesDetail = "Sp_GetReqWarehouseUserChangesDetail";
 
     public const string Sp_GetBranch = "Sp_GetBranch";
+
     public const string Sp_GetBox = "Sp_GetBox";
+    public const string Sp_GetBoxDetail = "Sp_GetBoxDetail";
 }

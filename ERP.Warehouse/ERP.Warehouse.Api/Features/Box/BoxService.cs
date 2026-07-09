@@ -8,6 +8,9 @@ using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
+using ERP.Warehouse.Models;
+using WSIMS_ERP.Shared.Models.DynamicModel;
+using System.Data;
 
 namespace ERP.Warehouse.Api.Features.Box;
 
@@ -142,6 +145,149 @@ public class BoxService : AuthorizationService
             return Result<BoxModel>.Error(ex);
         }
         return model;
+    }
+
+    public async Task<Result<BoxModel>> Update(BoxReqModel reqModel)
+    {
+        var model = new Result<BoxModel>();
+        try
+        {
+            #region Check User
+
+            var box = await _db.TblBoxes
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.BoxId == reqModel.BoxId && x.DelFlag == 0);
+            if (box is null)
+            {
+                model = Result<BoxModel>.Error("Box does not exist.");
+                return model;
+            }
+
+            #endregion
+
+            #region Check Box Code
+
+            bool code = await _db.TblBoxes
+                .AsNoTracking()
+                .AnyAsync(x => x.BoxCode == reqModel.BoxCode &&
+                          x.BoxId != reqModel.BoxId);
+            if (code)
+            {
+                model = Result<BoxModel>.Error("Box Code is already exist!");
+                return model;
+            }
+
+            #endregion
+
+            #region Check Box Type
+
+            bool type = await _db.TblBoxes
+                .AsNoTracking()
+                .AnyAsync(x => x.Type == reqModel.Type &&
+                          x.BoxId != reqModel.BoxId);
+            if (type)
+            {
+                model = Result<BoxModel>.Error("Box Type is already exist!");
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            box.BoxId = reqModel.BoxId!;
+            box.BoxCode = reqModel.BoxCode!;
+            box.Type = reqModel.Type!;
+            box.Size = reqModel.Size!;
+            box.TareWeight = reqModel.TareWeight!;
+            box.MaxNetWeight = reqModel.MaxNetWeight!;
+            box.ModifiedUserId = AuthorizedUserId;
+            box.ModifiedDateTime = DevCode.GetServerDateTime();
+
+
+            _db.Entry(box).State = EntityState.Modified;
+            _db.TblBoxes.Update(box);
+            await _db.SaveChangesAsync();
+            model = Result<BoxModel>.Success("Box is successfully updated");
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<BoxModel>.Error(ex);
+        }
+        return model;
+    }
+
+    public async Task<Result<BoxModel>> Delete(BoxEditModel reqModel)
+    {
+        var model = new Result<BoxModel>();
+        try
+        {
+            #region Check Box
+
+            var box = await _db.TblBoxes
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.BoxId == reqModel.BoxId);
+            if (box is null)
+            {
+                model = Result<BoxModel>.Error("Box does not exist.");
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            _db.TblBoxes.Remove(box);
+            var result = _db.SaveChanges();
+            if (result <= 0)
+            {
+                model = Result<BoxModel>.Error("Box delete fail!");
+                return model;
+            }
+            model = Result<BoxModel>.Success("Box is successfully deteted");
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<BoxModel>.Error(ex);
+        }
+        return model;
+    }
+
+    public async Task<Result<BoxDetailModel>> Details(BoxEditModel reqModel)
+    {
+        BoxDetailModel model = new();
+        try
+        {
+            var detail = await _dapperService.GetDetailAsync<BoxDetailInfoModel>(
+                SqlQueries.Sp_GetBoxDetail, new
+                {
+                    BoxId = reqModel.BoxId
+                }, CommandType.StoredProcedure);
+
+            List<DynamicReportModel> userInfo = new List<DynamicReportModel>();
+            userInfo.Add("User Name", detail.BoxCode!);
+            userInfo.Add("Full Name", detail.Type!);
+            userInfo.Add("Staff Id", detail.Size!);
+            userInfo.Add("Role ", detail.TareWeight!);
+            model.BoxInfo = userInfo;
+
+            List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();
+            makerChecker.Add("CreatedUser", detail.CreatedUser!);
+            makerChecker.Add("CreatedDateTime", detail.CreatedDateTime!);
+            makerChecker.Add("Modified User", detail.ModifiedUser!.ToDashFromNull());
+            makerChecker.Add("ModifiedDateTime ", detail.ModifiedDateTime!.ToDashFromNull());
+            model.MakerChecker = makerChecker;
+
+            return Result<BoxDetailModel>.Success(model);
+        }
+        catch (Exception ex)
+        {
+            return Result<BoxDetailModel>.Error(ex);
+        }
     }
 
     #endregion
