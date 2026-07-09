@@ -1,4 +1,5 @@
 ﻿using ERP.Warehouse.Api.Common;
+using ERP.Warehouse.Api.Features.Branch;
 using ERP.Warehouse.Api.Features.SignIn;
 using ERP.Warehouse.Api.Features.WarehouseUser.ReqWarehouseUser;
 using ERP.Warehouse.Api.Features.WarehouseUser.ReqWarehouseUserChanges;
@@ -43,6 +44,7 @@ public static class FeatureManager
         builder.Services.AddScoped<WarehouseUserListService>();
         builder.Services.AddScoped<ReqWarehouseUserService>();
         builder.Services.AddScoped<ReqWarehouseUserChangesService>();
+        builder.Services.AddScoped<BranchService>();
         return builder;
     }
 }
