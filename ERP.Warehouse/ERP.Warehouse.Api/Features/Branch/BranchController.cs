@@ -6,7 +6,7 @@ using ERP.Warehouse.Api.Controller;
 using ERP.Warehouse.Api.Features.WarehouseUser.WarehouseUserList;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 using Microsoft.AspNetCore.Http;
-[Route("api/")]
+[Route("api/branch")]
 [ApiController]
 public class BranchController : BaseController
 {

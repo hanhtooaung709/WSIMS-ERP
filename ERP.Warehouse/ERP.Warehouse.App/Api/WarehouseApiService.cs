@@ -1,4 +1,5 @@
 ﻿using ERP.Warehouse.App.Api.Endpoints;
+using ERP.Warehouse.Models.Models.Branch;
 using ERP.Warehouse.Models.Models.Signin;
 using ERP.Warehouse.Models.Models.Signin.Signin;
 using ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUser;
@@ -118,6 +119,14 @@ public class WarehouseApiService
     public async Task<Result<ReqWarehouseUserChangesDetailsModel>> Details(ReqWarehouseUserChangesEditModel reqModel)
         => await _httpClientService.ExecuteAsync<ReqWarehouseUserChangesEditModel, ReqWarehouseUserChangesDetailsModel>
         (ReqWarehouseUserChangesEndpoints.Details, reqModel);
+
+    #endregion
+
+    #region Branch
+
+    public async Task<Result<BranchRepModel>> Get()
+        => await _httpClientService.ExecuteAsync<object, BranchRepModel>
+        (BranchEndpoints.Get, null!);
 
     #endregion
 }

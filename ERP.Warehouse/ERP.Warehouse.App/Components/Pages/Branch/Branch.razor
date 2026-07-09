@@ -1,0 +1,26 @@
+﻿@page "/branch"
+@using Microsoft.AspNetCore.Authorization
+@inject ILogger<Branch> _logger
+@attribute [Authorize]
+@using System.Net.Http.Json
+@using WSIMS_ERP.Shared.Enums
+@inject HttpClient httpClient
+
+<MudTable Items="@_model" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Nr</MudTh>
+        <MudTh>State Name</MudTh>
+        <MudTh>City Name</MudTh>
+        <MudTh>Township Name</MudTh>
+        <MudTh>Address</MudTh>
+        <MudTh>UserCount</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Nr">@(_model.ToList().IndexOf(context) + 1)</MudTd>
+        <MudTd DataLabel="Sign">@context.StateName</MudTd>
+        <MudTd DataLabel="Name">@context.CityName</MudTd>
+        <MudTd DataLabel="Position">@context.TownshipName</MudTd>
+        <MudTd DataLabel="Molar mass">@context.Address</MudTd>
+        <MudTd DataLabel="Molar mass">@context.UserCount</MudTd>
+    </RowTemplate>
+</MudTable>
