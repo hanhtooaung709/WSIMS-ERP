@@ -18,4 +18,5 @@ public class SqlQueries
     public const string Sp_GetBoxDetail = "Sp_GetBoxDetail";
 
     public const string Sp_GetCurrency = "Sp_GetCurrency";
+    public const string Sp_GetCurrencyDetail = "Sp_GetCurrencyDetail";
 }

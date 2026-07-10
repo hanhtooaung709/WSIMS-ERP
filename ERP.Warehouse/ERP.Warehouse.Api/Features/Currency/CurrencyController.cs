@@ -59,5 +59,13 @@ public class CurrencyController : BaseController
         return Execute(result);
     }
 
+    [HttpPost]
+    [Route("Details")]
+    public async Task<IActionResult> Details(CurrencyEditModel reqModel)
+    {
+        var result = await _currencyService.Details(reqModel);
+        return Execute(result);
+    }
+
     #endregion
 }
