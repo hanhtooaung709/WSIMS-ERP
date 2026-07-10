@@ -1,4 +1,4 @@
-﻿namespace ERP.Warehouse.App.Api.Endpoints;
+﻿namespace ERP.Warehouse.App.Api.Endpoints.WarehouseUser;
 
 public class ReqWarehouseUserEndpoints
 {

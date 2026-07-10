@@ -1,4 +1,8 @@
-﻿using ERP.Warehouse.App.Api.Endpoints;
+﻿using ERP.Warehouse.App.Api.Endpoints.Box;
+using ERP.Warehouse.App.Api.Endpoints.Branch;
+using ERP.Warehouse.App.Api.Endpoints.Currency;
+using ERP.Warehouse.App.Api.Endpoints.SignIn;
+using ERP.Warehouse.App.Api.Endpoints.WarehouseUser;
 using ERP.Warehouse.Models.Models.Box;
 using ERP.Warehouse.Models.Models.Branch;
 using ERP.Warehouse.Models.Models.Currency;
