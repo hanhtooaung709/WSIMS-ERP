@@ -344,6 +344,16 @@ public class ReqWarehouseUserChangesService : AuthorizationService
                     UserId = reqModel.UserId
                 }, CommandType.StoredProcedure);
 
+            List<DynamicReportModel> oldInfo = new List<DynamicReportModel>();
+            oldInfo.Add("User Name", detail.OldName!);
+            oldInfo.Add("Full Name", detail.OldFullName!);
+            oldInfo.Add("Staff Id", detail.OldStaffId!);
+            oldInfo.Add("Role ", detail.OldRole!);
+            oldInfo.Add("Branch ", detail.OldBranch!);
+            oldInfo.Add("Phone", detail.OldPhone!);
+            oldInfo.Add("Email", detail.OldEmail!);
+            model.OldInfo = oldInfo;
+
             List<DynamicReportModel> userInfo = new List<DynamicReportModel>();
             userInfo.Add("User Name", detail.UserName!);
             userInfo.Add("Full Name", detail.FullName!);
@@ -352,7 +362,6 @@ public class ReqWarehouseUserChangesService : AuthorizationService
             userInfo.Add("Branch ", detail.BranchName!);
             userInfo.Add("Phone", detail.Phone!);
             userInfo.Add("Email", detail.Email!);
-
             model.UserInfo = userInfo;
 
             List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();

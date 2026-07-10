@@ -248,7 +248,28 @@
                     <MudPaper Class="d-flex align-center justify-center mud-width-full pa-4" Elevation="0" Style="background-color: #e8e8e8; border-radius: 8px;">
                         <MudItem xs="12" sm="11">
                             <MudText Typo="Typo.subtitle1" Style="font-weight: 600; color: #333; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #3f7375;">
-                                User Information
+                                Current User Information
+                            </MudText>
+                            @foreach (var item in _details.OldInfo)
+                            {
+                                <ul class="list-unstyled mb-4">
+                                    <li class="d-flex align-items-center mb-3">
+                                        <MudText Typo="Typo.body2">
+                                            <span Style="font-weight: 600; color: #555; min-width: 120px; display: inline-block;">@(item.Key) :</span>
+                                            <span Style="color: #333;">@item.Value</span>
+                                        </MudText>
+                                    </li>
+                                </ul>
+                            }
+                        </MudItem>
+                    </MudPaper>
+                </MudItem>
+
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-center justify-center mud-width-full pa-4" Elevation="0" Style="background-color: #e8e8e8; border-radius: 8px;">
+                        <MudItem xs="12" sm="11">
+                            <MudText Typo="Typo.subtitle1" Style="font-weight: 600; color: #333; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #3f7375;">
+                                Change User Information
                             </MudText>
                             @foreach (var item in _details.UserInfo)
                             {
