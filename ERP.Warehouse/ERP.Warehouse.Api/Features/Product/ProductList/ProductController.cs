@@ -51,5 +51,13 @@ public class ProductController : BaseController
         return Execute(result);
     }
 
+    [HttpPost]
+    [Route("Delete")]
+    public async Task<IActionResult> Delete(ProductEditModel reqModel)
+    {
+        var result = await _productListService.Delete(reqModel);
+        return Execute(result);
+    }
+
     #endregion
 }

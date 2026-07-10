@@ -333,5 +333,73 @@ public class ProductListService : AuthorizationService
         return model;
     }
 
+    public async Task<Result<ProductModel>> Delete(ProductEditModel reqModel)
+    {
+        var model = new Result<ProductModel>();
+        try
+        {
+            #region Check Product
+
+            var product = await _db.TblProducts
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ProductId == reqModel.ProductId && x.DelFlag == 0);
+            if (product is null)
+            {
+                model = Result<ProductModel>.Error("Product does not exist.");
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate
+
+            bool reqUser = await _db.TblReqProductChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductId == reqModel.ProductId &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (reqUser)
+            {
+                model = Result<ProductModel>.Error("Product is already Requested!");
+                return model;
+            }
+
+            reqUser = await _db.TblReqProducts
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductId == reqModel.ProductId &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (reqUser)
+            {
+                model = Result<ProductModel>.Error("Product is already Requested!");
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            TblReqProductChange item = new TblReqProductChange
+            {
+                ReqProductChangesId = DevCode.GenerateUlid(),
+                ProductId = product.ProductId,
+                ProductName = product.ProductName,
+                ProductCode = product.ProductCode,
+                ChangesType = EnumRequestedType.Delete.ToString(),
+                Status = EnumRequestedStatus.Pending.ToString(),
+                ReqUserId = AuthorizedUserId,
+                ReqDateTime = DevCode.GetServerDateTime()
+            };
+            await _db.TblReqProductChanges.AddAsync(item);
+            await _db.SaveChangesAsync();
+            model = Result<ProductModel>.Success("Your request is pending for approval!");
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<ProductModel>.Error(ex);
+        }
+        return model;
+    }
+
     #endregion
 }
