@@ -282,7 +282,7 @@ public class CurrencyService : AuthorizationService
             var detail = await _dapperService.GetDetailAsync<CurrencyDetailInfoModel>(
                 SqlQueries.Sp_GetCurrencyDetail, new
                 {
-                    BoxId = reqModel.BoxId
+                    CurrencyId = reqModel.CurrencyId
                 }, CommandType.StoredProcedure);
 
             List<DynamicReportModel> CurrencyInfo = new List<DynamicReportModel>();
