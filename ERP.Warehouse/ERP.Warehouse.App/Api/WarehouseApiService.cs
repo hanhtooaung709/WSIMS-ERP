@@ -1,6 +1,7 @@
 ﻿using ERP.Warehouse.App.Api.Endpoints;
 using ERP.Warehouse.Models.Models.Box;
 using ERP.Warehouse.Models.Models.Branch;
+using ERP.Warehouse.Models.Models.Currency;
 using ERP.Warehouse.Models.Models.Signin;
 using ERP.Warehouse.Models.Models.Signin.Signin;
 using ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUser;
@@ -156,6 +157,34 @@ public class WarehouseApiService
     public async Task<Result<BoxDetailModel>> Details(BoxEditModel reqModel)
        => await _httpClientService.ExecuteAsync<BoxEditModel, BoxDetailModel>
        (BoxEndpoints.Details, reqModel);
+
+    #endregion
+
+    #region Currency
+
+    public async Task<Result<CurrencyRepModel>> Get(CurrencyReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<CurrencyReqModel, CurrencyRepModel>
+        (CurrencyEndpoints.Get, reqModel);
+
+    public async Task<Result<CurrencyModel>> Create(CurrencyReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<CurrencyReqModel, CurrencyModel>
+        (CurrencyEndpoints.Create, reqModel);
+
+    public async Task<Result<CurrencyModel>> Edit(CurrencyEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<CurrencyEditModel, CurrencyModel>
+       (CurrencyEndpoints.Edit, reqModel);
+
+    public async Task<Result<CurrencyModel>> Update(CurrencyReqModel reqModel)
+       => await _httpClientService.ExecuteAsync<CurrencyReqModel, CurrencyModel>
+       (CurrencyEndpoints.Update, reqModel);
+
+    public async Task<Result<CurrencyModel>> Delete(CurrencyEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<CurrencyEditModel, CurrencyModel>
+       (CurrencyEndpoints.Delete, reqModel);
+
+    public async Task<Result<CurrencyDetailModel>> Details(CurrencyEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<CurrencyEditModel, CurrencyDetailModel>
+       (CurrencyEndpoints.Details, reqModel);
 
     #endregion
 }
