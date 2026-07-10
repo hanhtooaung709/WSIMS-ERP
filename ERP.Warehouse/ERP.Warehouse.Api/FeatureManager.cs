@@ -1,6 +1,7 @@
 ﻿using ERP.Warehouse.Api.Common;
 using ERP.Warehouse.Api.Features.Box;
 using ERP.Warehouse.Api.Features.Branch;
+using ERP.Warehouse.Api.Features.Currency;
 using ERP.Warehouse.Api.Features.SignIn;
 using ERP.Warehouse.Api.Features.WarehouseUser.ReqWarehouseUser;
 using ERP.Warehouse.Api.Features.WarehouseUser.ReqWarehouseUserChanges;
@@ -47,6 +48,7 @@ public static class FeatureManager
         builder.Services.AddScoped<ReqWarehouseUserChangesService>();
         builder.Services.AddScoped<BranchService>();
         builder.Services.AddScoped<BoxService>();
+        builder.Services.AddScoped<CurrencyService>();
         return builder;
     }
 }
