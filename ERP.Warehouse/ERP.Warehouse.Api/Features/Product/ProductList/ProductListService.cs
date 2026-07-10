@@ -1,10 +1,11 @@
 ﻿using ERP.Warehouse.Api.Common;
-using ERP.Warehouse.Models.Models.Currency;
+using ERP.Warehouse.Models;
 using ERP.Warehouse.Models.Models.Product.ProductList;
-using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 using Microsoft.EntityFrameworkCore;
+using WSIMS_ERP.Shared.Models.DynamicModel;
 using Microsoft.IdentityModel.Tokens;
 using Module.CommonDbService.EfAppDbContextModels;
+using System.Data;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared.Models;
@@ -399,6 +400,37 @@ public class ProductListService : AuthorizationService
             return Result<ProductModel>.Error(ex);
         }
         return model;
+    }
+
+    public async Task<Result<ProductDetailModel>> Details(ProductEditModel reqModel)
+    {
+        ProductDetailModel model = new();
+        try
+        {
+            var detail = await _dapperService.GetDetailAsync<ProductDetailInfoModel>(
+                SqlQueries.Sp_GetProductDetail, new
+                {
+                    ProductId = reqModel.ProductId
+                }, CommandType.StoredProcedure);
+
+            List<DynamicReportModel> productInfo = new List<DynamicReportModel>();
+            productInfo.Add("Product Name", detail.ProductName!);
+            productInfo.Add("Product Code", detail.ProductCode!);
+            model.ProductInfo = productInfo;
+
+            List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();
+            makerChecker.Add("CreatedUser", detail.CreatedUser!);
+            makerChecker.Add("CreatedDateTime", detail.CreatedDateTime!);
+            makerChecker.Add("Modified User", detail.ModifiedUser!.ToDashFromNull());
+            makerChecker.Add("ModifiedDateTime ", detail.ModifiedDateTime!.ToDashFromNull());
+            model.MakerChecker = makerChecker;
+
+            return Result<ProductDetailModel>.Success(model);
+        }
+        catch (Exception ex)
+        {
+            return Result<ProductDetailModel>.Error(ex);
+        }
     }
 
     #endregion
