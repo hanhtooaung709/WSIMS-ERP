@@ -9,7 +9,7 @@ public partial class TblReqPackage
 
     public string PackageName { get; set; } = null!;
 
-    public string ProductId { get; set; } = null!;
+    public string ProductCode { get; set; } = null!;
 
     public int ProductsQuanity { get; set; }
 

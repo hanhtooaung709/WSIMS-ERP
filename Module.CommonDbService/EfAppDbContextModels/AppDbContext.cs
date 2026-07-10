@@ -191,8 +191,8 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.PackageName).HasMaxLength(100);
-            entity.Property(e => e.ProductId)
-                .HasMaxLength(50)
+            entity.Property(e => e.ProductCode)
+                .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.SupplierName).HasMaxLength(100);
         });
@@ -246,8 +246,8 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.PackageName).HasMaxLength(100);
-            entity.Property(e => e.ProductId)
-                .HasMaxLength(50)
+            entity.Property(e => e.ProductCode)
+                .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.RejectReason)
                 .HasMaxLength(100)
@@ -283,8 +283,8 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.PackageName).HasMaxLength(100);
-            entity.Property(e => e.ProductsId)
-                .HasMaxLength(50)
+            entity.Property(e => e.ProductCode)
+                .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.RejectReason)
                 .HasMaxLength(100)

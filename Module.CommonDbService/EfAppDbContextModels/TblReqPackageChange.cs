@@ -11,7 +11,7 @@ public partial class TblReqPackageChange
 
     public string PackageName { get; set; } = null!;
 
-    public string ProductsId { get; set; } = null!;
+    public string ProductCode { get; set; } = null!;
 
     public int ProductsQuanity { get; set; }
 
