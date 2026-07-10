@@ -1,4 +1,5 @@
 ﻿using ERP.Warehouse.App.Api.Endpoints;
+using ERP.Warehouse.Models.Models.Box;
 using ERP.Warehouse.Models.Models.Branch;
 using ERP.Warehouse.Models.Models.Signin;
 using ERP.Warehouse.Models.Models.Signin.Signin;
@@ -127,6 +128,34 @@ public class WarehouseApiService
     public async Task<Result<BranchRepModel>> Get()
         => await _httpClientService.ExecuteAsync<object, BranchRepModel>
         (BranchEndpoints.Get, null!);
+
+    #endregion
+
+    #region Box
+
+    public async Task<Result<BoxRepModel>> Get(BoxReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<BoxReqModel, BoxRepModel>
+        (BoxEndpoints.Get, reqModel);
+
+    public async Task<Result<BoxModel>> Create(BoxReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<BoxReqModel, BoxModel>
+        (BoxEndpoints.Create, reqModel);
+
+    public async Task<Result<BoxModel>> Edit(BoxEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<BoxEditModel, BoxModel>
+       (BoxEndpoints.Edit, reqModel);
+
+    public async Task<Result<BoxModel>> Update(BoxReqModel reqModel)
+       => await _httpClientService.ExecuteAsync<BoxReqModel, BoxModel>
+       (BoxEndpoints.Update, reqModel);
+
+    public async Task<Result<BoxModel>> Delete(BoxEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<BoxEditModel, BoxModel>
+       (BoxEndpoints.Delete, reqModel);
+
+    public async Task<Result<BoxDetailModel>> Details(BoxEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<BoxEditModel, BoxDetailModel>
+       (BoxEndpoints.Details, reqModel);
 
     #endregion
 }
