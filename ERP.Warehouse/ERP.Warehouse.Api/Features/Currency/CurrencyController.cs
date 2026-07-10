@@ -51,5 +51,13 @@ public class CurrencyController : BaseController
         return Execute(result);
     }
 
+    [HttpPost]
+    [Route("Delete")]
+    public async Task<IActionResult> Delete(CurrencyEditModel reqModel)
+    {
+        var result = await _currencyService.Delete(reqModel);
+        return Execute(result);
+    }
+
     #endregion
 }

@@ -235,5 +235,43 @@ public class CurrencyService : AuthorizationService
         return model;
     }
 
+    public async Task<Result<CurrencyModel>> Delete(CurrencyEditModel reqModel)
+    {
+        var model = new Result<CurrencyModel>();
+        try
+        {
+            #region Check Currency
+
+            var currency = await _db.TblCurrencies
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.CurrencyId == reqModel.CurrencyId);
+            if (currency is null)
+            {
+                model = Result<CurrencyModel>.Error("Currency does not exist.");
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            _db.TblCurrencies.Remove(currency);
+            var result = _db.SaveChanges();
+            if (result <= 0)
+            {
+                model = Result<CurrencyModel>.Error("Currency delete fail!");
+                return model;
+            }
+            model = Result<CurrencyModel>.Success("Currency is successfully deteted");
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<CurrencyModel>.Error(ex);
+        }
+        return model;
+    }
+
     #endregion
 }
