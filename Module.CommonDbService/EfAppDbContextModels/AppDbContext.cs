@@ -344,6 +344,9 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.ApprovedUserId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.ChangesType)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.ProductCode)
                 .HasMaxLength(20)
                 .IsUnicode(false);

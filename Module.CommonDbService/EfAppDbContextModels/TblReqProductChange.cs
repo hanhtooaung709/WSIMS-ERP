@@ -13,6 +13,8 @@ public partial class TblReqProductChange
 
     public string ProductCode { get; set; } = null!;
 
+    public string ChangesType { get; set; } = null!;
+
     public string Status { get; set; } = null!;
 
     public string ReqUserId { get; set; } = null!;
