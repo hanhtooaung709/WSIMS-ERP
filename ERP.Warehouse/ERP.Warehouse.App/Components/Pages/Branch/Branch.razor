@@ -8,7 +8,7 @@
 
 <MudTable Items="@_model" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
     <HeaderContent>
-        <MudTh>Nr</MudTh>
+        <MudTh>No</MudTh>
         <MudTh>State Name</MudTh>
         <MudTh>City Name</MudTh>
         <MudTh>Township Name</MudTh>
@@ -16,7 +16,7 @@
         <MudTh>UserCount</MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Nr">@(_model.ToList().IndexOf(context) + 1)</MudTd>
+        <MudTd DataLabel="No">@(_model.ToList().IndexOf(context) + 1)</MudTd>
         <MudTd DataLabel="Sign">@context.StateName</MudTd>
         <MudTd DataLabel="Name">@context.CityName</MudTd>
         <MudTd DataLabel="Position">@context.TownshipName</MudTd>
