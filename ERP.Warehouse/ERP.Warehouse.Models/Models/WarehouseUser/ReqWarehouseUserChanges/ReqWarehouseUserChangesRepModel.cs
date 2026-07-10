@@ -16,5 +16,6 @@ public class ReqWarehouseUserChangesModel
     public string? Email { get; set; }
     public string? RoleCode { get; set; }
     public string? BranchCode { get; set; }
+    public string? ChangesType { get; set; }
     public string? Status { get; set; }
 }

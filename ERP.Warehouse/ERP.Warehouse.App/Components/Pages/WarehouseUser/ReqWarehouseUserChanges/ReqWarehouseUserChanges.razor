@@ -192,6 +192,12 @@
                     </EditTemplate>
                 </PropertyColumn>
 
+                <TemplateColumn Title="Changes Type" HeaderStyle="min-width: 200px;">
+                    <CellTemplate>
+                        <MudText>@context.Item.ChangesType</MudText>
+                    </CellTemplate>
+                </TemplateColumn>
+
                 <TemplateColumn Title="Status" HeaderStyle="min-width: 100px;">
                     <CellTemplate>
                         <MudText Class="@GetBadgeClass(context.Item.Status!)">@context.Item.Status</MudText>
@@ -203,13 +209,15 @@
                         <div style="display: inline-block; white-space: nowrap;">
                             @{
                                 var _isDisable = context.Item.Status != EnumRequestedStatus.Pending.ToString();
+                                var _isDisableEdit = context.Item.ChangesType != EnumRequestedType.Update.ToString() ||
+                                                     context.Item.Status != EnumRequestedStatus.Pending.ToString();
                             }
                             <MudFab Size="@Size.Small"
                                     Class="mr-2"
                                     StartIcon="@Icons.Material.Filled.Edit"
                                     Color="Color.Warning"
                                     OnClick="@context.Actions.StartEditingItemAsync"
-                                    Disabled="_isDisable" />
+                                    Disabled="_isDisableEdit" />
 
                             <MudFab Size="@Size.Small"
                                     Class="mr-2"

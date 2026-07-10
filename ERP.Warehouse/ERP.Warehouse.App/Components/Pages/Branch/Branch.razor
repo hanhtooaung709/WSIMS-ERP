@@ -7,6 +7,9 @@
 @inject HttpClient httpClient
 
 <MudTable Items="@_model" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+    <ToolBarContent>
+        <MudText Typo="Typo.h5">Branch List</MudText>
+    </ToolBarContent>
     <HeaderContent>
         <MudTh>No</MudTh>
         <MudTh>State Name</MudTh>

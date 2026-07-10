@@ -362,6 +362,7 @@ public class ReqWarehouseUserChangesService : AuthorizationService
             userInfo.Add("Branch ", detail.BranchName!);
             userInfo.Add("Phone", detail.Phone!);
             userInfo.Add("Email", detail.Email!);
+            userInfo.Add("Changes Type", detail.ChangesType!);
             model.UserInfo = userInfo;
 
             List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();

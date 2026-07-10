@@ -11,6 +11,7 @@ public class ReqWarehouseUserChangesDetailsInfoModel
     public string? Email { get; set; }
     public string? RoleName { get; set; }
     public string? BranchName { get; set; }
+    public string? ChangesType { get; set; }
 
     // -- Old data --
     public string? OldName { get; set; }
