@@ -115,6 +115,7 @@ public class BoxService : AuthorizationService
         try
         {
             #region Check Box
+
             var box = await _db.TblBoxes
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.BoxId == reqModel.BoxId && x.DelFlag == 0);
@@ -123,6 +124,7 @@ public class BoxService : AuthorizationService
                 model = Result<BoxModel>.Error("Box does not exist.");
                 return model;
             }
+
             #endregion
 
             #region Prepare Data
@@ -169,7 +171,7 @@ public class BoxService : AuthorizationService
 
             bool code = await _db.TblBoxes
                 .AsNoTracking()
-                .AnyAsync(x => x.BoxCode == reqModel.BoxCode &&
+                .AnyAsync(x => x.BoxCode.Trim().ToLower() == reqModel.BoxCode.Trim().ToLower() &&
                           x.BoxId != reqModel.BoxId);
             if (code)
             {
@@ -183,7 +185,7 @@ public class BoxService : AuthorizationService
 
             bool type = await _db.TblBoxes
                 .AsNoTracking()
-                .AnyAsync(x => x.Type == reqModel.Type &&
+                .AnyAsync(x => x.Type.Trim().ToLower() == reqModel.Type.Trim().ToLower() &&
                           x.BoxId != reqModel.BoxId);
             if (type)
             {

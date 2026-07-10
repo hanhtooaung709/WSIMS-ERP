@@ -27,5 +27,29 @@ public class CurrencyController : BaseController
         return Execute(result);
     }
 
+    [HttpPost]
+    [Route("Create")]
+    public async Task<IActionResult> Create(CurrencyReqModel reqModel)
+    {
+        var result = await _currencyService.Create(reqModel);
+        return Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Edit")]
+    public async Task<IActionResult> Edit(CurrencyEditModel reqModel)
+    {
+        var result = await _currencyService.Edit(reqModel);
+        return Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Update")]
+    public async Task<IActionResult> Update(CurrencyReqModel reqModel)
+    {
+        var result = await _currencyService.Update(reqModel);
+        return Execute(result);
+    }
+
     #endregion
 }
