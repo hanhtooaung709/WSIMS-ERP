@@ -1,11 +1,13 @@
 ﻿using ERP.Warehouse.App.Api.Endpoints.Box;
 using ERP.Warehouse.App.Api.Endpoints.Branch;
 using ERP.Warehouse.App.Api.Endpoints.Currency;
+using ERP.Warehouse.App.Api.Endpoints.Product;
 using ERP.Warehouse.App.Api.Endpoints.SignIn;
 using ERP.Warehouse.App.Api.Endpoints.WarehouseUser;
 using ERP.Warehouse.Models.Models.Box;
 using ERP.Warehouse.Models.Models.Branch;
 using ERP.Warehouse.Models.Models.Currency;
+using ERP.Warehouse.Models.Models.Product.ProductList;
 using ERP.Warehouse.Models.Models.Signin;
 using ERP.Warehouse.Models.Models.Signin.Signin;
 using ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUser;
@@ -189,6 +191,34 @@ public class WarehouseApiService
     public async Task<Result<CurrencyDetailModel>> Details(CurrencyEditModel reqModel)
        => await _httpClientService.ExecuteAsync<CurrencyEditModel, CurrencyDetailModel>
        (CurrencyEndpoints.Details, reqModel);
+
+    #endregion
+
+    #region Product
+
+    public async Task<Result<ProductRepModel>> Get(ProductReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<ProductReqModel, ProductRepModel>
+        (ProductEndpoints.Get, reqModel);
+
+    public async Task<Result<ProductModel>> Create(ProductReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<ProductReqModel, ProductModel>
+        (ProductEndpoints.Create, reqModel);
+
+    public async Task<Result<ProductModel>> Edit(ProductEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ProductEditModel, ProductModel>
+       (ProductEndpoints.Edit, reqModel);
+
+    public async Task<Result<ProductModel>> Update(ProductReqModel reqModel)
+       => await _httpClientService.ExecuteAsync<ProductReqModel, ProductModel>
+       (ProductEndpoints.Update, reqModel);
+
+    public async Task<Result<ProductModel>> Delete(ProductEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ProductEditModel, ProductModel>
+       (ProductEndpoints.Delete, reqModel);
+
+    public async Task<Result<ProductDetailModel>> Details(ProductEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ProductEditModel, ProductDetailModel>
+       (ProductEndpoints.Details, reqModel);
 
     #endregion
 }
