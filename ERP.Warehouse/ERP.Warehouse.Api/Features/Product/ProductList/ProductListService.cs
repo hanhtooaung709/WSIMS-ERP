@@ -166,5 +166,42 @@ public class ProductListService : AuthorizationService
         return model;
     }
 
+    public async Task<Result<ProductModel>> Edit(ProductEditModel reqModel)
+    {
+        var model = new Result<ProductModel>();
+        try
+        {
+            #region Check Procuct
+
+            var user = await _db.TblProducts
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ProductId == reqModel.ProductId && x.DelFlag == 0);
+            if (user is null)
+            {
+                model = Result<ProductModel>.Error("Product does not exist.");
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            var response = new ProductModel
+            {
+                ProductId = user.ProductId,
+                ProductName = user.ProductName,
+                ProductCode = user.ProductCode
+            };
+            model = Result<ProductModel>.Success(response);
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<ProductModel>.Error(ex);
+        }
+        return model;
+    }
+
     #endregion
 }

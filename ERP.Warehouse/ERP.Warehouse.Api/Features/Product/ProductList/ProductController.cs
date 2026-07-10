@@ -35,5 +35,13 @@ public class ProductController : BaseController
         return Execute(result);
     }
 
+    [HttpPost]
+    [Route("Edit")]
+    public async Task<IActionResult> Edit(ProductEditModel reqModel)
+    {
+        var result = await _productListService.Edit(reqModel);
+        return Execute(result);
+    }
+
     #endregion
 }
