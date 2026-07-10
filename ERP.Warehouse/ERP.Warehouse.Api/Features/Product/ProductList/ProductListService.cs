@@ -5,6 +5,8 @@ using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Module.CommonDbService.EfAppDbContextModels;
+using WSIMS_ERP.Shared;
+using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
@@ -70,6 +72,98 @@ public class ProductListService : AuthorizationService
         {
             return Result<ProductRepModel>.Error(ex);
         }
+    }
+
+    public async Task<Result<ProductModel>> Create(ProductReqModel reqModel)
+    {
+        var model = new Result<ProductModel>();
+        try
+        {
+            #region Check Duplicate Product Name
+
+            bool name = await _db.TblProducts
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductName.Trim().ToLower() == reqModel.ProductName!.Trim().ToLower());
+            if (name)
+            {
+                model = Result<ProductModel>.Error("Currency Name is already exist!");
+                return model;
+            }
+
+            name = await _db.TblReqProducts
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductName.Trim().ToLower() == reqModel.ProductName!.Trim().ToLower());
+            if (name)
+            {
+                model = Result<ProductModel>.Error("Currency Name is already Requested!");
+                return model;
+            }
+
+            name = await _db.TblReqProductChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductName.Trim().ToLower() == reqModel.ProductName!.Trim().ToLower());
+            if (name)
+            {
+                model = Result<ProductModel>.Error("Currency Name is already Requested!");
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate Product Code
+
+            bool code = await _db.TblProducts
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower());
+            if (code)
+            {
+                model = Result<ProductModel>.Error("Currency Code is already exist!");
+                return model;
+            }
+
+            code = await _db.TblReqProducts
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower());
+            if (code)
+            {
+                model = Result<ProductModel>.Error("Currency Code is already Requested!");
+                return model;
+            }
+
+            code = await _db.TblReqProductChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower());
+            if (code)
+            {
+                model = Result<ProductModel>.Error("Currency Code is already Requested!");
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            TblReqProduct item = new TblReqProduct
+            {
+                ReqProductId = DevCode.GenerateUlid(),
+                ProductName = reqModel.ProductName!,
+                ProductCode = reqModel.ProductCode!,
+                Status = EnumRequestedStatus.Pending.ToString(),
+                ReqUserId = AuthorizedUserId,
+                ReqDateTime = DevCode.GetServerDateTime()
+            };
+            await _db.TblReqProducts.AddAsync(item);
+            await _db.SaveChangesAsync();
+
+            model = Result<ProductModel>.Success("Your request is pending for approval!");
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<ProductModel>.Error(ex);
+        }
+        return model;
     }
 
     #endregion

@@ -27,5 +27,13 @@ public class ProductController : BaseController
         return Execute(result);
     }
 
+    [HttpPost]
+    [Route("Create")]
+    public async Task<IActionResult> Create(ProductReqModel reqModel)
+    {
+        var result = await _productListService.Create(reqModel);
+        return Execute(result);
+    }
+
     #endregion
 }

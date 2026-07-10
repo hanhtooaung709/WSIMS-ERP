@@ -119,7 +119,7 @@ public class CurrencyService : AuthorizationService
             await _db.TblCurrencies.AddAsync(item);
             await _db.SaveChangesAsync();
 
-            model = Result<CurrencyModel>.Success("Curreycy is successfully created");
+            model = Result<CurrencyModel>.Success("Currency is successfully created");
 
             #endregion
         }
