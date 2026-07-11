@@ -1,8 +1,10 @@
-﻿using ERP.Warehouse.Models.Models.Product.ReqProduct;
+﻿using ERP.Warehouse.App.Common;
+using ERP.Warehouse.Models.Models.Product.ReqProduct;
 using ERP.Warehouse.Models.Models.Product.ReqProductChanges;
 using MudBlazor;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
+using WSIMS_ERP.Shared.Models;
 
 namespace ERP.Warehouse.App.Components.Pages.Product.ReqProductChanges;
 
@@ -12,6 +14,8 @@ public partial class ReqProductChanges
     private IEnumerable<ReqProductChangesModel> _model = new List<ReqProductChangesModel>();
     private ReqProductChangesEditModel _edit = new();
     private ReqProductChangesDetailModel _details = new();
+
+    private List<SelectListModel> _lstStatus = Commons.GetStatusList();
 
     private MudDataGrid<ReqProductChangesModel> _elementGrid = default!;
     private EnumFormType _formType = EnumFormType.List;
