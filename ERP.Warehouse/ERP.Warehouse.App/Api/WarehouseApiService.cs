@@ -9,6 +9,7 @@ using ERP.Warehouse.Models.Models.Branch;
 using ERP.Warehouse.Models.Models.Currency;
 using ERP.Warehouse.Models.Models.Product.ProductList;
 using ERP.Warehouse.Models.Models.Product.ReqProduct;
+using ERP.Warehouse.Models.Models.Product.ReqProductChanges;
 using ERP.Warehouse.Models.Models.Signin;
 using ERP.Warehouse.Models.Models.Signin.Signin;
 using ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUser;
@@ -244,6 +245,30 @@ public class WarehouseApiService
     public async Task<Result<ReqProductDetailModel>> Details(ReqProductEditModel reqModel)
        => await _httpClientService.ExecuteAsync<ReqProductEditModel, ReqProductDetailModel>
        (ReqProductEndpoints.Details, reqModel);
+
+    #endregion
+
+    #region ReqProductChanges
+
+    public async Task<Result<ReqProductChangesRepModel>> Get(ReqProductChangesReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<ReqProductChangesReqModel, ReqProductChangesRepModel>
+        (ReqProductChangesEndpoints.Get, reqModel);
+
+    public async Task<Result<ReqProductChangesModel>> Edit(ReqProductChangesEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqProductChangesEditModel, ReqProductChangesModel>
+       (ReqProductChangesEndpoints.Edit, reqModel);
+
+    public async Task<Result<ReqProductChangesModel>> Update(ReqProductChangesReqModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqProductChangesReqModel, ReqProductChangesModel>
+       (ReqProductChangesEndpoints.Update, reqModel);
+
+    public async Task<Result<ReqProductChangesModel>> Delete(ReqProductChangesEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqProductChangesEditModel, ReqProductChangesModel>
+       (ReqProductChangesEndpoints.Delete, reqModel);
+
+    public async Task<Result<ReqProductChangesDetailModel>> Details(ReqProductChangesEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqProductChangesEditModel, ReqProductChangesDetailModel>
+       (ReqProductChangesEndpoints.Details, reqModel);
 
     #endregion
 }

@@ -302,6 +302,7 @@ public class ReqProductChangesService : AuthorizationService
             List<DynamicReportModel> oldInfo = new List<DynamicReportModel>();
             oldInfo.Add("Product Name", detail.OldName!);
             oldInfo.Add("Product Code", detail.OldCode!);
+            oldInfo.Add("Changes Type", detail.ChangesType!);
             model.OldInfo = oldInfo;
 
             List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();

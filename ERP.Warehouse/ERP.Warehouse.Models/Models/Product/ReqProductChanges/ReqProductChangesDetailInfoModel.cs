@@ -5,6 +5,7 @@ public class ReqProductChangesDetailInfoModel
     // -- Change data --
     public string? ProductName { get; set; }
     public string? ProductCode { get; set; }
+    public string? ChangesType { get; set; }
 
     // -- Old data --
     public string? OldName { get; set; }

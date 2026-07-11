@@ -1,19 +1,19 @@
-﻿using ERP.Warehouse.Models.Models.Product.ProductList;
-using ERP.Warehouse.Models.Models.Product.ReqProduct;
+﻿using ERP.Warehouse.Models.Models.Product.ReqProduct;
+using ERP.Warehouse.Models.Models.Product.ReqProductChanges;
 using MudBlazor;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
 
-namespace ERP.Warehouse.App.Components.Pages.Product.ReqProduct;
+namespace ERP.Warehouse.App.Components.Pages.Product.ReqProductChanges;
 
-public partial class ReqProduct
+public partial class ReqProductChanges
 {
-    private ReqProductReqModel _reqModel = new();
-    private IEnumerable<ReqProductModel> _model = new List<ReqProductModel>();
-    private ReqProductEditModel _edit = new();
-    private ReqProductDetailModel _details = new();
+    private ReqProductChangesReqModel _reqModel = new();
+    private IEnumerable<ReqProductChangesModel> _model = new List<ReqProductChangesModel>();
+    private ReqProductChangesEditModel _edit = new();
+    private ReqProductChangesDetailModel _details = new();
 
-    private MudDataGrid<ReqProductModel> _elementGrid = default!;
+    private MudDataGrid<ReqProductChangesModel> _elementGrid = default!;
     private EnumFormType _formType = EnumFormType.List;
     private bool hover = true;
     private bool _readOnly;
@@ -62,7 +62,7 @@ public partial class ReqProduct
         }
     }
 
-    private async Task Save(ReqProductModel reqModel)
+    private async Task Save(ReqProductChangesModel reqModel)
     {
         try
         {
@@ -93,17 +93,17 @@ public partial class ReqProduct
         }
     }
 
-    private async Task Edit(ReqProductModel reqModel)
+    private async Task Edit(ReqProductChangesModel reqModel)
     {
         try
         {
-            if (reqModel is null || string.IsNullOrEmpty(reqModel.ReqProductId))
+            if (reqModel is null || string.IsNullOrEmpty(reqModel.ReqProductChangesId))
             {
                 _formType = EnumFormType.Create;
                 return;
             }
 
-            _edit.ReqProductId = reqModel.ReqProductId!;
+            _edit.ReqProductChangesId = reqModel.ReqProductChangesId!;
 
             await _injectService.EnableLoading();
             var result = await _apiService.Edit(_edit);
@@ -115,7 +115,8 @@ public partial class ReqProduct
                 return;
             }
 
-            _reqModel.ReqProductId = result.Data.ReqProductId;
+            _reqModel.ReqProductChangesId = result.Data.ReqProductChangesId
+;
             _reqModel.ProductName = result.Data.ProductName;
             _reqModel.ProductCode = result.Data.ProductCode;
 
@@ -147,7 +148,7 @@ public partial class ReqProduct
         }
     }
 
-    private async Task Delete(ReqProductModel reqModel)
+    private async Task Delete(ReqProductChangesModel reqModel)
     {
         try
         {
@@ -157,7 +158,7 @@ public partial class ReqProduct
                 return;
             }
 
-            _edit.ReqProductId = reqModel.ReqProductId!;
+            _edit.ReqProductChangesId = reqModel.ReqProductChangesId!;
 
             await _injectService.EnableLoading();
             var result = await _apiService.Delete(_edit);
@@ -182,11 +183,11 @@ public partial class ReqProduct
         }
     }
 
-    private async Task Details(ReqProductModel reqModel)
+    private async Task Details(ReqProductChangesModel reqModel)
     {
         try
         {
-            _edit.ReqProductId = reqModel.ReqProductId!;
+            _edit.ReqProductChangesId = reqModel.ReqProductChangesId!;
 
             await _injectService.EnableLoading();
             var result = await _apiService.Details(_edit);
