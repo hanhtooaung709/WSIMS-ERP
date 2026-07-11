@@ -35,7 +35,8 @@ public class ReqProductService : AuthorizationService
         try
         {
             IQueryable<TblReqProduct>? product = _db.TblReqProducts
-                .AsNoTracking();
+                .AsNoTracking()
+                .Where(x => x.ReqUserId == AuthorizedUserId);
 
             #region Filters
 
