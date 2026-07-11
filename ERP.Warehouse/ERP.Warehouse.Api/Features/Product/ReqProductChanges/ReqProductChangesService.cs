@@ -77,5 +77,42 @@ public class ReqProductChangesService : AuthorizationService
 
     }
 
+    public async Task<Result<ReqProductChangesModel>> Edit(ReqProductChangesEditModel reqModel)
+    {
+        var model = new Result<ReqProductChangesModel>();
+        try
+        {
+            #region Check ReqProduct
+
+            var product = await _db.TblReqProductChanges
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ReqProductChangesId == reqModel.ReqProductChangesId);
+            if (product is null)
+            {
+                model = Result<ReqProductChangesModel>.Error("Requested Product does not exist.");
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            var response = new ReqProductChangesModel
+            {
+                ReqProductChangesId = product.ReqProductChangesId,
+                ProductName = product.ProductName,
+                ProductCode = product.ProductCode,
+            };
+            model = Result<ReqProductChangesModel>.Success(response);
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<ReqProductChangesModel>.Error(ex);
+        }
+        return model;
+    }
+
     #endregion
 }
