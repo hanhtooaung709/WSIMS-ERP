@@ -4,17 +4,17 @@ using WSIMS_ERP.Shared.Models.ConfigModel;
 
 namespace ERP.Warehouse.Api.Common;
 
-public class CommonAdminServices
+public class CommonServices
 {
     private readonly AppDbContext _db;
-    private readonly ILogger<CommonAdminServices> _logger;
+    private readonly ILogger<CommonServices> _logger;
     private readonly CustomSettingModel _customSettingModel;
 
 
-    public CommonAdminServices(
+    public CommonServices(
         AppDbContext db,
         IOptionsMonitor<CustomSettingModel> customSetting,
-        ILogger<CommonAdminServices> logger)
+        ILogger<CommonServices> logger)
     {
         _db = db;
         _logger = logger;
