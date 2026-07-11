@@ -51,6 +51,10 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<TblWarehouseUserSession> TblWarehouseUserSessions { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=.;Database=WSIMS-ERP;User Id=sa;Password=sasa@123;TrustServerCertificate=True;MultipleActiveResultSets=True;Connection Timeout=30");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblBox>(entity =>
@@ -194,7 +198,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.ProductCode)
                 .HasMaxLength(20)
                 .IsUnicode(false);
-            entity.Property(e => e.SupplierName).HasMaxLength(100);
         });
 
         modelBuilder.Entity<TblProduct>(entity =>
@@ -218,6 +221,7 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.ProductName).HasMaxLength(100);
+            entity.Property(e => e.SupplierName).HasMaxLength(100);
         });
 
         modelBuilder.Entity<TblReqPackage>(entity =>
@@ -257,7 +261,6 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Status).HasMaxLength(10);
-            entity.Property(e => e.SupplierName).HasMaxLength(100);
         });
 
         modelBuilder.Entity<TblReqPackageChange>(entity =>
@@ -296,7 +299,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Status)
                 .HasMaxLength(10)
                 .IsUnicode(false);
-            entity.Property(e => e.SupplierName).HasMaxLength(100);
         });
 
         modelBuilder.Entity<TblReqProduct>(entity =>
@@ -329,6 +331,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Status)
                 .HasMaxLength(10)
                 .IsUnicode(false);
+            entity.Property(e => e.SupplierName).HasMaxLength(100);
         });
 
         modelBuilder.Entity<TblReqProductChange>(entity =>
@@ -364,6 +367,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Status)
                 .HasMaxLength(10)
                 .IsUnicode(false);
+            entity.Property(e => e.SupplierName).HasMaxLength(100);
         });
 
         modelBuilder.Entity<TblReqStockTran>(entity =>

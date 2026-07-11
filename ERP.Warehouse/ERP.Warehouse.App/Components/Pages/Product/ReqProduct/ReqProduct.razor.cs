@@ -118,6 +118,7 @@ public partial class ReqProduct
             _reqModel.ReqProductId = result.Data.ReqProductId;
             _reqModel.ProductName = result.Data.ProductName;
             _reqModel.ProductCode = result.Data.ProductCode;
+            _reqModel.SupplierName = result.Data.SupplierName;
 
             _formType = EnumFormType.Edit;
             StateHasChanged();

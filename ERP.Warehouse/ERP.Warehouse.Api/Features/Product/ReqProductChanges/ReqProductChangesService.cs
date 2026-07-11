@@ -51,6 +51,10 @@ public class ReqProductChangesService : AuthorizationService
             {
                 product = product.Where(x => x.ProductName.ToUpper().Trim() == reqModel.ProductCode!.ToUpper().Trim());
             }
+            if (!reqModel.SupplierName.IsNullOrEmpty())
+            {
+                product = product.Where(x => x.SupplierName.ToUpper().Trim() == reqModel.SupplierName!.ToUpper().Trim());
+            }
             if (!reqModel.Status.IsNullOrEmpty())
             {
                 product = product.Where(x => x.Status.ToUpper().Trim() == reqModel.Status!.ToUpper().Trim());
@@ -66,6 +70,7 @@ public class ReqProductChangesService : AuthorizationService
                         ReqProductChangesId = x.ReqProductChangesId,
                         ProductName = x.ProductName,
                         ProductCode = x.ProductCode,
+                        SupplierName = x.SupplierName,
                         ChangesType = x.ChangesType,
                         Status = x.Status
                     })
@@ -108,6 +113,7 @@ public class ReqProductChangesService : AuthorizationService
                 ReqProductChangesId = product.ReqProductChangesId,
                 ProductName = product.ProductName,
                 ProductCode = product.ProductCode,
+                SupplierName = product.SupplierName
             };
             model = Result<ReqProductChangesModel>.Success(response);
 
@@ -219,6 +225,7 @@ public class ReqProductChangesService : AuthorizationService
 
             product.ProductName = reqModel.ProductName!;
             product.ProductCode = reqModel.ProductCode!;
+            product.SupplierName = reqModel.SupplierName;
             product.ReqDateTime = DevCode.GetServerDateTime();
 
             _db.Entry(product).State = EntityState.Modified;
@@ -297,11 +304,13 @@ public class ReqProductChangesService : AuthorizationService
             List<DynamicReportModel> productInfo = new List<DynamicReportModel>();
             productInfo.Add("Product Name", detail.ProductName!);
             productInfo.Add("Product Code", detail.ProductCode!);
+            productInfo.Add("Supplier Name", detail.SupplierName!);
             model.ProductInfo = productInfo;
 
             List<DynamicReportModel> oldInfo = new List<DynamicReportModel>();
             oldInfo.Add("Product Name", detail.OldName!);
             oldInfo.Add("Product Code", detail.OldCode!);
+            oldInfo.Add("Supplier Name", detail.OldSupplierName!);
             oldInfo.Add("Changes Type", detail.ChangesType!);
             model.OldInfo = oldInfo;
 

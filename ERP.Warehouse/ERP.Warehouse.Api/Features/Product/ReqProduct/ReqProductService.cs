@@ -48,6 +48,10 @@ public class ReqProductService : AuthorizationService
             {
                 product = product.Where(x => x.ProductName.ToUpper().Trim() == reqModel.ProductCode!.ToUpper().Trim());
             }
+            if (!reqModel.SupplierName.IsNullOrEmpty())
+            {
+                product = product.Where(x => x.SupplierName.ToUpper().Trim() == reqModel.SupplierName!.ToUpper().Trim());
+            }
             if (!reqModel.Status.IsNullOrEmpty())
             {
                 product = product.Where(x => x.Status.ToUpper().Trim() == reqModel.Status!.ToUpper().Trim());
@@ -63,6 +67,7 @@ public class ReqProductService : AuthorizationService
                         ReqProductId = x.ReqProductId,
                         ProductName = x.ProductName,
                         ProductCode = x.ProductCode,
+                        SupplierName = x.SupplierName,
                         Status = x.Status
                     })
                     .ToListAsync();
@@ -103,7 +108,8 @@ public class ReqProductService : AuthorizationService
             {
                 ReqProductId = product.ReqProductId,
                 ProductName = product.ProductName,
-                ProductCode = product.ProductCode
+                ProductCode = product.ProductCode,
+                SupplierName = product.SupplierName,
             };
             model = Result<ReqProductModel>.Success(response);
 
@@ -215,6 +221,7 @@ public class ReqProductService : AuthorizationService
 
             product.ProductName = reqModel.ProductName!;
             product.ProductCode = reqModel.ProductCode!;
+            product.SupplierName = reqModel.SupplierName!;
             product.ReqDateTime = DevCode.GetServerDateTime();
 
             _db.Entry(product).State = EntityState.Modified;
@@ -293,6 +300,7 @@ public class ReqProductService : AuthorizationService
             List<DynamicReportModel> productInfo = new List<DynamicReportModel>();
             productInfo.Add("Product Name", detail.ProductName!);
             productInfo.Add("Product Code", detail.ProductCode!);
+            productInfo.Add("Supplier Name", detail.SupplierName!);
             model.ProductInfo = productInfo;
 
             List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();

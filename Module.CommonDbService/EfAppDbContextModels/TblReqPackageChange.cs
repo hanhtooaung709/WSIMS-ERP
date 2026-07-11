@@ -13,7 +13,7 @@ public partial class TblReqPackageChange
 
     public string ProductCode { get; set; } = null!;
 
-    public int ProductsQuanity { get; set; }
+    public int Quanity { get; set; }
 
     public int Price { get; set; }
 
@@ -22,8 +22,6 @@ public partial class TblReqPackageChange
     public int Weight { get; set; }
 
     public string BoxCode { get; set; } = null!;
-
-    public string SupplierName { get; set; } = null!;
 
     public string Status { get; set; } = null!;
 

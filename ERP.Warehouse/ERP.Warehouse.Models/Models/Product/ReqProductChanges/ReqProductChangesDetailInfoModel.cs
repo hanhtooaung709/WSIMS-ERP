@@ -6,10 +6,12 @@ public class ReqProductChangesDetailInfoModel
     public string? ProductName { get; set; }
     public string? ProductCode { get; set; }
     public string? ChangesType { get; set; }
+    public string? SupplierName { get; set; }
 
     // -- Old data --
     public string? OldName { get; set; }
     public string? OldCode { get; set; }
+    public string? OldSupplierName { get; set; }
 
     // -- Maker/Chacker --
     public string? Status { get; set; }

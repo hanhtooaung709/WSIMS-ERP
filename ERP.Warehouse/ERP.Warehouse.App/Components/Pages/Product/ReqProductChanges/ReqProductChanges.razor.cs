@@ -115,10 +115,10 @@ public partial class ReqProductChanges
                 return;
             }
 
-            _reqModel.ReqProductChangesId = result.Data.ReqProductChangesId
-;
+            _reqModel.ReqProductChangesId = result.Data.ReqProductChangesId;
             _reqModel.ProductName = result.Data.ProductName;
             _reqModel.ProductCode = result.Data.ProductCode;
+            _reqModel.SupplierName = result.Data.SupplierName;
 
             _formType = EnumFormType.Edit;
             StateHasChanged();

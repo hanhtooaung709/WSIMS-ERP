@@ -11,6 +11,8 @@ public partial class TblProduct
 
     public string ProductCode { get; set; } = null!;
 
+    public string SupplierName { get; set; } = null!;
+
     public string CreatedUserId { get; set; } = null!;
 
     public DateTime CreatedDateTime { get; set; }

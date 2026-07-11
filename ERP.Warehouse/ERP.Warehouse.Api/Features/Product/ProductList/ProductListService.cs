@@ -49,6 +49,10 @@ public class ProductListService : AuthorizationService
             {
                 product = product.Where(x => x.ProductName.ToUpper().Trim() == reqModel.ProductName!.ToUpper().Trim());
             }
+            if (!reqModel.SupplierName.IsNullOrEmpty())
+            {
+                product = product.Where(x => x.SupplierName.ToUpper().Trim() == reqModel.SupplierName!.ToUpper().Trim());
+            }
 
             #endregion
 
@@ -60,7 +64,9 @@ public class ProductListService : AuthorizationService
                 {
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,
-                    ProductCode = x.ProductCode
+                    ProductCode = x.ProductCode,
+                    SupplierName = x.SupplierName
+                    
                 })
                 .ToListAsync();
 
@@ -149,6 +155,7 @@ public class ProductListService : AuthorizationService
                 ReqProductId = DevCode.GenerateUlid(),
                 ProductName = reqModel.ProductName!,
                 ProductCode = reqModel.ProductCode!,
+                SupplierName = reqModel.SupplierName!,
                 Status = EnumRequestedStatus.Pending.ToString(),
                 ReqUserId = AuthorizedUserId,
                 ReqDateTime = DevCode.GetServerDateTime()
@@ -174,10 +181,10 @@ public class ProductListService : AuthorizationService
         {
             #region Check Procuct
 
-            var user = await _db.TblProducts
+            var product = await _db.TblProducts
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.ProductId == reqModel.ProductId && x.DelFlag == 0);
-            if (user is null)
+            if (product is null)
             {
                 model = Result<ProductModel>.Error("Product does not exist.");
                 return model;
@@ -189,9 +196,10 @@ public class ProductListService : AuthorizationService
 
             var response = new ProductModel
             {
-                ProductId = user.ProductId,
-                ProductName = user.ProductName,
-                ProductCode = user.ProductCode
+                ProductId = product.ProductId,
+                ProductName = product.ProductName,
+                ProductCode = product.ProductCode,
+                SupplierName = product.SupplierName
             };
             model = Result<ProductModel>.Success(response);
 
@@ -316,6 +324,7 @@ public class ProductListService : AuthorizationService
                 ProductId = reqModel.ProductId!,
                 ProductName = reqModel.ProductName!,
                 ProductCode = reqModel.ProductCode!,
+                SupplierName = reqModel.SupplierName!,
                 ChangesType = EnumRequestedType.Update.ToString(),
                 Status = EnumRequestedStatus.Pending.ToString(),
                 ReqUserId = AuthorizedUserId,
@@ -416,6 +425,7 @@ public class ProductListService : AuthorizationService
             List<DynamicReportModel> productInfo = new List<DynamicReportModel>();
             productInfo.Add("Product Name", detail.ProductName!);
             productInfo.Add("Product Code", detail.ProductCode!);
+            productInfo.Add("Supplier Name", detail.SupplierName!);
             model.ProductInfo = productInfo;
 
             List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();

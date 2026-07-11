@@ -11,6 +11,8 @@ public partial class TblReqProduct
 
     public string ProductCode { get; set; } = null!;
 
+    public string SupplierName { get; set; } = null!;
+
     public string? ProductId { get; set; }
 
     public string Status { get; set; } = null!;
