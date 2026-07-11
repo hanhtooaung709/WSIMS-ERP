@@ -75,5 +75,43 @@ public class ReqProductService : AuthorizationService
         }
         
      }
+
+    public async Task<Result<ReqProductModel>> Edit(ReqProductEditModel reqModel)
+    {
+        var model = new Result<ReqProductModel>();
+        try
+        {
+            #region Check ReqProduct
+
+            var product = await _db.TblReqProducts
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ReqProductId == reqModel.ReqProductId);
+            if (product is null)
+            {
+                model = Result<ReqProductModel>.Error("Requested Product does not exist.");
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            var response = new ReqProductModel
+            {
+                ReqProductId = product.ReqProductId,
+                ProductName = product.ProductName,
+                ProductCode = product.ProductCode
+            };
+            model = Result<ReqProductModel>.Success(response);
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<ReqProductModel>.Error(ex);
+        }
+        return model;
+    }
+
     #endregion
 }

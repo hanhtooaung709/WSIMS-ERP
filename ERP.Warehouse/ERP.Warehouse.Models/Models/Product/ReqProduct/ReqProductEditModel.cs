@@ -2,5 +2,5 @@
 
 public class ReqProductEditModel
 {
-    public int ReqProductId { get; set; }
+    public string? ReqProductId { get; set; }
 }

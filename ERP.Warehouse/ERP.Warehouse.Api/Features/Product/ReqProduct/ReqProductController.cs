@@ -27,5 +27,13 @@ public class ReqProductController : BaseController
         return Execute(result);
     }
 
+    [HttpPost]
+    [Route("Edit")]
+    public async Task<IActionResult> Edit(ReqProductEditModel reqModel)
+    {
+        var result = await _reqProductService.Edit(reqModel);
+        return Execute(result);
+    }
+
     #endregion
 }
