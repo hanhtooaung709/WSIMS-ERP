@@ -1,4 +1,5 @@
 ﻿using ERP.Warehouse.Api.Common;
+using ERP.Warehouse.Api.Features.ApproveProduct.ApproveReqProduct;
 using ERP.Warehouse.Api.Features.Box;
 using ERP.Warehouse.Api.Features.Branch;
 using ERP.Warehouse.Api.Features.Currency;
@@ -55,6 +56,7 @@ public static class FeatureManager
         builder.Services.AddScoped<ProductListService>();
         builder.Services.AddScoped<ReqProductService>();
         builder.Services.AddScoped<ReqProductChangesService>();
+        builder.Services.AddScoped<ApproveReqProductService>();
         return builder;
     }
 }
