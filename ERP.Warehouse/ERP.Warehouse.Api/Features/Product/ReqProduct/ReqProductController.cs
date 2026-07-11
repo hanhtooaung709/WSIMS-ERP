@@ -35,5 +35,14 @@ public class ReqProductController : BaseController
         return Execute(result);
     }
 
+
+    [HttpPost]
+    [Route("Update")]
+    public async Task<IActionResult> Update(ReqProductReqModel reqModel)
+    {
+        var result = await _reqProductService.Update(reqModel);
+        return Execute(result);
+    }
+
     #endregion
 }

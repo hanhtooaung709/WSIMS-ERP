@@ -169,7 +169,7 @@ public class ReqWarehouseUserService : AuthorizationService
 
             #endregion
 
-            #region Check Duplicate UserName
+            #region Check Duplicate StaffId
 
             bool staffId = await _db.TblReqWarehouseUsers
                 .AsNoTracking()

@@ -152,7 +152,6 @@ public class CurrencyService : AuthorizationService
 
             var response = new CurrencyModel
             {
-                CurrencyId = box.CurrencyId!,
                 CurrencyCode = box.CurrencyCode!,
                 CurrencyDes = box.CurrencyDescription!
             };
@@ -215,7 +214,6 @@ public class CurrencyService : AuthorizationService
 
             #region Prepare Data
 
-            currency.CurrencyId = reqModel.CurrencyId!;
             currency.CurrencyCode = reqModel.CurrencyCode!;
             currency.CurrencyDescription = reqModel.CurrencyDes!;
             currency.ModifiedUserId = AuthorizedUserId;

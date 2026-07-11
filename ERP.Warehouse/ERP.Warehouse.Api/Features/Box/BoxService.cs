@@ -197,7 +197,6 @@ public class BoxService : AuthorizationService
 
             #region Prepare Data
 
-            box.BoxId = reqModel.BoxId!;
             box.BoxCode = reqModel.BoxCode!;
             box.Type = reqModel.Type!;
             box.Size = reqModel.Size!;
