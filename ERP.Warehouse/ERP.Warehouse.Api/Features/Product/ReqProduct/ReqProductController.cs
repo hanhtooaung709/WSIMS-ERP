@@ -35,12 +35,27 @@ public class ReqProductController : BaseController
         return Execute(result);
     }
 
-
     [HttpPost]
     [Route("Update")]
     public async Task<IActionResult> Update(ReqProductReqModel reqModel)
     {
         var result = await _reqProductService.Update(reqModel);
+        return Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Delete")]
+    public async Task<IActionResult> Delete(ReqProductEditModel reqModel)
+    {
+        var result = await _reqProductService.Delete(reqModel);
+        return Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Details")]
+    public async Task<IActionResult> Details(ReqProductEditModel reqModel)
+    {
+        var result = await _reqProductService.Details(reqModel);
         return Execute(result);
     }
 

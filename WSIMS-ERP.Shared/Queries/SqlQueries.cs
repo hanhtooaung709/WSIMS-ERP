@@ -21,4 +21,6 @@ public class SqlQueries
     public const string Sp_GetCurrencyDetail = "Sp_GetCurrencyDetail";
 
     public const string Sp_GetProductDetail = "Sp_GetProductDetail";
+
+    public const string Sp_GetReqProductDetail = "Sp_GetReqProductDetail";
 }
