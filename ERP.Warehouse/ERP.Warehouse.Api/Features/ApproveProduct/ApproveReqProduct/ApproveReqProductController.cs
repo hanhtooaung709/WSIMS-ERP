@@ -26,5 +26,13 @@ public class ApproveReqProductController : BaseController
         return Execute(result);
     }
 
+    [HttpPost]
+    [Route("Approve")]
+    public async Task<IActionResult> Approve(ReqProductEditModel reqModel)
+    {
+        var result = await _approveReqProductService.Approve(reqModel);
+        return Execute(result);
+    }
+
     #endregion
 }

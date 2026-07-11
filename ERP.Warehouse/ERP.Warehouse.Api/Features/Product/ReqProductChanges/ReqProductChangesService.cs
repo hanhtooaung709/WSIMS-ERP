@@ -142,11 +142,11 @@ public class ReqProductChangesService : AuthorizationService
                 return model;
             }
 
-            bool reqUser = await _db.TblReqProductChanges
+            bool reqProduct = await _db.TblReqProductChanges
                 .AsNoTracking()
                 .AnyAsync(x => x.ReqProductChangesId == reqModel.ReqProductChangesId &&
                                x.Status != EnumRequestedStatus.Pending.ToString());
-            if (reqUser)
+            if (reqProduct)
             {
                 model = Result<ReqProductChangesModel>.Error("Requseted User is not pending status");
                 return model;
