@@ -4,6 +4,7 @@ using ERP.Warehouse.Api.Features.Branch;
 using ERP.Warehouse.Api.Features.Currency;
 using ERP.Warehouse.Api.Features.Product.ProductList;
 using ERP.Warehouse.Api.Features.Product.ReqProduct;
+using ERP.Warehouse.Api.Features.Product.ReqProductChanges;
 using ERP.Warehouse.Api.Features.SignIn;
 using ERP.Warehouse.Api.Features.WarehouseUser.ReqWarehouseUser;
 using ERP.Warehouse.Api.Features.WarehouseUser.ReqWarehouseUserChanges;
@@ -53,6 +54,7 @@ public static class FeatureManager
         builder.Services.AddScoped<CurrencyService>();
         builder.Services.AddScoped<ProductListService>();
         builder.Services.AddScoped<ReqProductService>();
+        builder.Services.AddScoped<ReqProductChangesService>();
         return builder;
     }
 }
