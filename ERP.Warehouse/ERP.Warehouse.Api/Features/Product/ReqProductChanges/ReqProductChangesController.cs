@@ -43,5 +43,21 @@ public class ReqProductChangesController : BaseController
         return Execute(result);
     }
 
+    [HttpPost]
+    [Route("Delete")]
+    public async Task<IActionResult> Delete(ReqProductChangesEditModel reqModel)
+    {
+        var result = await _reqProductChangesService.Delete(reqModel);
+        return Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Details")]
+    public async Task<IActionResult> Details(ReqProductChangesEditModel reqModel)
+    {
+        var result = await _reqProductChangesService.Details(reqModel);
+        return Execute(result);
+    }
+
     #endregion
 }

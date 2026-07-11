@@ -293,7 +293,6 @@ public class ReqProductService : AuthorizationService
             List<DynamicReportModel> productInfo = new List<DynamicReportModel>();
             productInfo.Add("Product Name", detail.ProductName!);
             productInfo.Add("Product Code", detail.ProductCode!);
-
             model.ProductInfo = productInfo;
 
             List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();

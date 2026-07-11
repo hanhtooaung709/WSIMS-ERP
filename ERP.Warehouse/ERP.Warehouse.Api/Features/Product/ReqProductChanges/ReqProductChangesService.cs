@@ -4,10 +4,14 @@ using ERP.Warehouse.Models.Models.Product.ReqProductChanges;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Module.CommonDbService.EfAppDbContextModels;
+using WSIMS_ERP.Shared.Models.DynamicModel;
 using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Services;
+using ERP.Warehouse.Models;
+using System.Data;
+using WSIMS_ERP.Shared.Queries;
 
 namespace ERP.Warehouse.Api.Features.Product.ReqProductChanges;
 
@@ -229,6 +233,92 @@ public class ReqProductChangesService : AuthorizationService
             return Result<ReqProductChangesModel>.Error(ex);
         }
         return model;
+    }
+
+    public async Task<Result<ReqProductChangesModel>> Delete(ReqProductChangesEditModel reqModel)
+    {
+        var model = new Result<ReqProductChangesModel>();
+        try
+        {
+            #region Check Product
+
+            var product = await _db.TblReqProductChanges
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ReqProductChangesId == reqModel.ReqProductChangesId);
+            if (product is null)
+            {
+                model = Result<ReqProductChangesModel>.Error("Requested Product does not exist.");
+                return model;
+            }
+
+            bool reqUser = await _db.TblReqProductChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.ReqProductChangesId == reqModel.ReqProductChangesId &&
+                               x.Status != EnumRequestedStatus.Pending.ToString());
+            if (reqUser)
+            {
+                model = Result<ReqProductChangesModel>.Error("Requseted Product is not pending status");
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            _db.TblReqProductChanges.Remove(product);
+            var result = _db.SaveChanges();
+            if (result <= 0)
+            {
+                model = Result<ReqProductChangesModel>.Error("Requsted Product delete fail!");
+                return model;
+            }
+            model = Result<ReqProductChangesModel>.Success("Requsted Product is successfully deteted");
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<ReqProductChangesModel>.Error(ex);
+        }
+        return model;
+    }
+
+    public async Task<Result<ReqProductChangesDetailModel>> Details(ReqProductChangesEditModel reqModel)
+    {
+        ReqProductChangesDetailModel model = new();
+        try
+        {
+            var detail = await _dapperService.GetDetailAsync<ReqProductChangesDetailInfoModel>(
+                SqlQueries.Sp_GetReqProductChangesDetail, new
+                {
+                    ReqProductChangesId = reqModel.ReqProductChangesId
+                }, CommandType.StoredProcedure);
+
+            List<DynamicReportModel> productInfo = new List<DynamicReportModel>();
+            productInfo.Add("Product Name", detail.ProductName!);
+            productInfo.Add("Product Code", detail.ProductCode!);
+            model.ProductInfo = productInfo;
+
+            List<DynamicReportModel> oldInfo = new List<DynamicReportModel>();
+            oldInfo.Add("Product Name", detail.OldName!);
+            oldInfo.Add("Product Code", detail.OldCode!);
+            model.OldInfo = oldInfo;
+
+            List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();
+            makerChecker.Add("Requested User", detail.ReqUser!);
+            makerChecker.Add("Requested DateTime", detail.ReqDateTime!);
+            makerChecker.Add("Approved User", detail.ApprovedUser!.ToDashFromNull());
+            makerChecker.Add("Approved DateTime ", detail.ApprovedDateTime!.ToDashFromNull());
+            makerChecker.Add("Status", detail.Status!);
+            makerChecker.Add("Reject Reason", detail.RejectReason!.ToDashFromNull());
+            model.MakerChecker = makerChecker;
+
+            return Result<ReqProductChangesDetailModel>.Success(model);
+        }
+        catch (Exception ex)
+        {
+            return Result<ReqProductChangesDetailModel>.Error(ex);
+        }
     }
 
     #endregion
