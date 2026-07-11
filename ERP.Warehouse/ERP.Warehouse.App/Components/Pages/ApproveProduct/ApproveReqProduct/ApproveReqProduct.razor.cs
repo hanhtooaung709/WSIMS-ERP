@@ -1,13 +1,14 @@
-﻿using ERP.Warehouse.App.Common;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using ERP.Warehouse.App.Common;
 using ERP.Warehouse.Models.Models.Product.ReqProduct;
 using MudBlazor;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared.Models;
 
-namespace ERP.Warehouse.App.Components.Pages.Product.ReqProduct;
+namespace ERP.Warehouse.App.Components.Pages.ApproveProduct.ApproveReqProduct;
 
-public partial class ReqProduct
+public partial class ApproveReqProduct
 {
     private ReqProductReqModel _reqModel = new();
     private IEnumerable<ReqProductModel> _model = new List<ReqProductModel>();
@@ -37,14 +38,14 @@ public partial class ReqProduct
         }
     }
 
-    #region Get/Create/Edit/Update/Delete/Details
+    #region Get/Approve/Reject/Details
 
     private async Task List()
     {
         try
         {
             await _injectService.EnableLoading();
-            var result = await _apiService.Get(_reqModel);
+            var result = await _apiService.GetApproveReqProduct(_reqModel);
             await _injectService.DisableLoading();
 
             if (result.IsError)
@@ -65,15 +66,17 @@ public partial class ReqProduct
         }
     }
 
-    private async Task Save(ReqProductModel reqModel)
+    private async Task Approve(ReqProductModel reqModel)
     {
         try
         {
-            bool confirm = await _injectService.ShowUpdateDialog();
+            bool confirm = await _injectService.ShowApproveDialog();
             if (!confirm) return;
 
+            _edit.ReqProductId = reqModel.ReqProductId!;
+
             await _injectService.EnableLoading();
-            var result = await _apiService.Update(_reqModel);
+            var result = await _apiService.Approve(_edit);
             await _injectService.DisableLoading();
 
             if (result.IsError)
@@ -96,36 +99,34 @@ public partial class ReqProduct
         }
     }
 
-    private async Task Edit(ReqProductModel reqModel)
+    private async Task Reject(ReqProductModel reqModel)
     {
         try
         {
-            if (reqModel is null || string.IsNullOrEmpty(reqModel.ReqProductId))
-            {
-                _formType = EnumFormType.Create;
-                return;
-            }
+            DialogResult RejectReason = await _injectService.ShowRejectDialog("Reason for rejection");
+
+            bool confirm = await _injectService.ShowApproveDialog();
+            if (!confirm) return;
 
             _edit.ReqProductId = reqModel.ReqProductId!;
+            _edit.RejectReason = RejectReason.Data!.ToString();
 
             await _injectService.EnableLoading();
-            var result = await _apiService.Edit(_edit);
+            var result = await _apiService.Reject(_edit);
             await _injectService.DisableLoading();
 
             if (result.IsError)
             {
                 await _injectService.ShowDialog(result);
+                _reqModel = new();
                 return;
             }
+            await _injectService.ShowDialog(result);
 
-            _reqModel.ReqProductId = result.Data.ReqProductId;
-            _reqModel.ProductName = result.Data.ProductName;
-            _reqModel.ProductCode = result.Data.ProductCode;
-            _reqModel.SupplierName = result.Data.SupplierName;
-
-            _formType = EnumFormType.Edit;
-            StateHasChanged();
+            _reqModel = new();
+            await List();
         }
+
         catch (Exception ex)
         {
             await _injectService.DisableLoading();
@@ -151,41 +152,6 @@ public partial class ReqProduct
         }
     }
 
-    private async Task Delete(ReqProductModel reqModel)
-    {
-        try
-        {
-            bool confirm = await _injectService.Confirm();
-            if (!confirm)
-            {
-                return;
-            }
-
-            _edit.ReqProductId = reqModel.ReqProductId!;
-
-            await _injectService.EnableLoading();
-            var result = await _apiService.Delete(_edit);
-            await _injectService.DisableLoading();
-
-            if (result.IsError)
-            {
-                await _injectService.ShowDialog(result);
-                return;
-            }
-            await _injectService.ShowDialog(result);
-
-            await List();
-            _formType = EnumFormType.List;
-            StateHasChanged();
-        }
-        catch (Exception ex)
-        {
-            await _injectService.DisableLoading();
-            _logger.LogCustomError(ex);
-            await _injectService.ErrorDialogMessage(ex.Message);
-        }
-    }
-
     private async Task Details(ReqProductModel reqModel)
     {
         try
@@ -193,7 +159,7 @@ public partial class ReqProduct
             _edit.ReqProductId = reqModel.ReqProductId!;
 
             await _injectService.EnableLoading();
-            var result = await _apiService.Details(_edit);
+            var result = await _apiService.ApproveReqProductDetails(_edit);
             await _injectService.DisableLoading();
 
             if (result.IsError)
