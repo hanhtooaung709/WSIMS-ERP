@@ -8,6 +8,7 @@ using ERP.Warehouse.Models.Models.Box;
 using ERP.Warehouse.Models.Models.Branch;
 using ERP.Warehouse.Models.Models.Currency;
 using ERP.Warehouse.Models.Models.Product.ProductList;
+using ERP.Warehouse.Models.Models.Product.ReqProduct;
 using ERP.Warehouse.Models.Models.Signin;
 using ERP.Warehouse.Models.Models.Signin.Signin;
 using ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUser;
@@ -219,6 +220,30 @@ public class WarehouseApiService
     public async Task<Result<ProductDetailModel>> Details(ProductEditModel reqModel)
        => await _httpClientService.ExecuteAsync<ProductEditModel, ProductDetailModel>
        (ProductEndpoints.Details, reqModel);
+
+    #endregion
+
+    #region ReqProduct
+
+    public async Task<Result<ReqProductRepModel>> Get(ReqProductReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<ReqProductReqModel, ReqProductRepModel>
+        (ReqProductEndpoints.Get, reqModel);
+
+    public async Task<Result<ReqProductModel>> Edit(ReqProductEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqProductEditModel, ReqProductModel>
+       (ReqProductEndpoints.Edit, reqModel);
+
+    public async Task<Result<ReqProductModel>> Update(ReqProductReqModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqProductReqModel, ReqProductModel>
+       (ReqProductEndpoints.Update, reqModel);
+
+    public async Task<Result<ReqProductModel>> Delete(ReqProductEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqProductEditModel, ReqProductModel>
+       (ReqProductEndpoints.Delete, reqModel);
+
+    public async Task<Result<ReqProductDetailModel>> Details(ReqProductEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqProductEditModel, ReqProductDetailModel>
+       (ReqProductEndpoints.Details, reqModel);
 
     #endregion
 }
