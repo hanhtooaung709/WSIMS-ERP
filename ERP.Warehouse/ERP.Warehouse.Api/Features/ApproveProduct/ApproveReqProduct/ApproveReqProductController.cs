@@ -1,7 +1,5 @@
 ﻿using ERP.Warehouse.Api.Controller;
-using ERP.Warehouse.Api.Features.Product.ReqProduct;
 using ERP.Warehouse.Models.Models.Product.ReqProduct;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ERP.Warehouse.Api.Features.ApproveProduct.ApproveReqProduct;
@@ -31,6 +29,22 @@ public class ApproveReqProductController : BaseController
     public async Task<IActionResult> Approve(ReqProductEditModel reqModel)
     {
         var result = await _approveReqProductService.Approve(reqModel);
+        return Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Reject")]
+    public async Task<IActionResult> Reject(ReqProductEditModel reqModel)
+    {
+        var result = await _approveReqProductService.Reject(reqModel);
+        return Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Details")]
+    public async Task<IActionResult> Details(ReqProductEditModel reqModel)
+    {
+        var result = await _approveReqProductService.Details(reqModel);
         return Execute(result);
     }
 

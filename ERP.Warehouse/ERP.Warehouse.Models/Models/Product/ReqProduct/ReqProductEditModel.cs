@@ -3,4 +3,5 @@
 public class ReqProductEditModel
 {
     public string? ReqProductId { get; set; }
+    public string? RejectReason { get; set; }
 }

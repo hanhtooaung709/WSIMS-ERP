@@ -1,11 +1,15 @@
 ﻿using ERP.Warehouse.Api.Common;
+using ERP.Warehouse.Models;
 using ERP.Warehouse.Models.Models.Product.ReqProduct;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Module.CommonDbService.EfAppDbContextModels;
+using System.Data;
+using WSIMS_ERP.Shared.Models.DynamicModel;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared.Models;
+using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
 
 namespace ERP.Warehouse.Api.Features.ApproveProduct.ApproveReqProduct;
@@ -143,6 +147,88 @@ public class ApproveReqProductService : AuthorizationService
         }
 
         return model;
+    }
+
+    public async Task<Result<ReqProductModel>> Reject(ReqProductEditModel reqModel)
+    {
+        var model = new Result<ReqProductModel>();
+        try
+        {
+            #region Check Product
+
+            TblReqProduct? product = await _db.TblReqProducts
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ReqProductId == reqModel.ReqProductId);
+            if (product is null)
+            {
+                model = Result<ReqProductModel>.Error("Requseted Product does not exist.");
+                return model;
+            }
+
+            bool reqProduct = await _db.TblReqProducts
+                .AsNoTracking()
+                .AnyAsync(x => x.ReqProductId == reqModel.ReqProductId &&
+                               x.Status != EnumRequestedStatus.Pending.ToString());
+            if (reqProduct)
+            {
+                model = Result<ReqProductModel>.Error("Requseted User is not pending status");
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            product!.Status = EnumRequestedStatus.Rejected.ToString();
+            product.ApprovedUserId = AuthorizedUserId;
+            product.ApprovedDateTime = DevCode.GetServerDateTime();
+            product.RejectReason = reqModel.RejectReason;
+            _db.Entry(product).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+
+            model = Result<ReqProductModel>.Success("Requested Product is successfully rejected");
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<ReqProductModel>.Error(ex);
+        }
+        return model;
+    }
+
+    public async Task<Result<ReqProductDetailModel>> Details(ReqProductEditModel reqModel)
+    {
+        ReqProductDetailModel model = new();
+        try
+        {
+            var detail = await _dapperService.GetDetailAsync<ReqProductDetailInfoModel>(
+                SqlQueries.Sp_GetReqProductDetail, new
+                {
+                    ReqProductId = reqModel.ReqProductId
+                }, CommandType.StoredProcedure);
+
+            List<DynamicReportModel> productInfo = new List<DynamicReportModel>();
+            productInfo.Add("Product Name", detail.ProductName!);
+            productInfo.Add("Product Code", detail.ProductCode!);
+            productInfo.Add("Supplier Name", detail.SupplierName!);
+            model.ProductInfo = productInfo;
+
+            List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();
+            makerChecker.Add("Requested User", detail.ReqUser!);
+            makerChecker.Add("Requested DateTime", detail.ReqDateTime!);
+            makerChecker.Add("Approved User", detail.ApprovedUser!.ToDashFromNull());
+            makerChecker.Add("Approved DateTime ", detail.ApprovedDateTime!.ToDashFromNull());
+            makerChecker.Add("Status", detail.Status!);
+            makerChecker.Add("Reject Reason", detail.RejectReason!.ToDashFromNull());
+            model.MakerChecker = makerChecker;
+
+            return Result<ReqProductDetailModel>.Success(model);
+        }
+        catch (Exception ex)
+        {
+            return Result<ReqProductDetailModel>.Error(ex);
+        }
     }
 
     #endregion
