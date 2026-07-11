@@ -4,6 +4,8 @@ using ERP.Warehouse.Models.Models.Product.ReqProductChanges;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Module.CommonDbService.EfAppDbContextModels;
+using WSIMS_ERP.Shared.Enums;
+using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Services;
 
@@ -104,6 +106,121 @@ public class ReqProductChangesService : AuthorizationService
                 ProductCode = product.ProductCode,
             };
             model = Result<ReqProductChangesModel>.Success(response);
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<ReqProductChangesModel>.Error(ex);
+        }
+        return model;
+    }
+
+    public async Task<Result<ReqProductChangesModel>> Update(ReqProductChangesReqModel reqModel)
+    {
+        var model = new Result<ReqProductChangesModel>();
+        try
+        {
+            #region Check Product
+
+            TblReqProductChange? product = await _db.TblReqProductChanges
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ReqProductChangesId == reqModel.ReqProductChangesId);
+            if (product is null)
+            {
+                model = Result<ReqProductChangesModel>.Error("Requseted Product does not exist.");
+                return model;
+            }
+
+            bool reqUser = await _db.TblReqProductChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.ReqProductChangesId == reqModel.ReqProductChangesId &&
+                               x.Status != EnumRequestedStatus.Pending.ToString());
+            if (reqUser)
+            {
+                model = Result<ReqProductChangesModel>.Error("Requseted User is not pending status");
+                return model;
+            }
+            #endregion
+
+            #region Check Duplicate Product Name
+
+            bool userName = await _db.TblProducts
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductName.Trim().ToLower() == reqModel.ProductName!.Trim().ToLower());
+            if (userName)
+            {
+                model = Result<ReqProductChangesModel>.Error("Product Name is already exist!");
+                return model;
+            }
+
+            userName = await _db.TblReqProducts
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductName.Trim().ToLower() == reqModel.ProductName!.Trim().ToLower() &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (userName)
+            {
+                model = Result<ReqProductChangesModel>.Error("Product Name is already Requested!");
+                return model;
+            }
+
+            userName = await _db.TblReqProductChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductName.Trim().ToLower() == reqModel.ProductName!.Trim().ToLower() &&
+                               x.ReqProductChangesId != reqModel.ReqProductChangesId &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (userName)
+            {
+                model = Result<ReqProductChangesModel>.Error("Product Name is already Requested!");
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate Product code
+
+            bool code = await _db.TblProducts
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower());
+            if (code)
+            {
+                model = Result<ReqProductChangesModel>.Error("Product Code is already exist!");
+                return model;
+            }
+
+            code = await _db.TblReqProducts
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (code)
+            {
+                model = Result<ReqProductChangesModel>.Error("Product Code is already Requested!");
+                return model;
+            }
+
+            code = await _db.TblReqProductChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
+                               x.ReqProductChangesId != reqModel.ReqProductChangesId &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (code)
+            {
+                model = Result<ReqProductChangesModel>.Error("Product Code is already Requested!");
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            product.ProductName = reqModel.ProductName!;
+            product.ProductCode = reqModel.ProductCode!;
+            product.ReqDateTime = DevCode.GetServerDateTime();
+
+            _db.Entry(product).State = EntityState.Modified;
+            _db.TblReqProductChanges.Update(product);
+            await _db.SaveChangesAsync();
+            model = Result<ReqProductChangesModel>.Success("Requested Product is successfully updated");
 
             #endregion
         }

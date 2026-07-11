@@ -226,7 +226,7 @@ public class ProductListService : AuthorizationService
 
             bool reqUser = await _db.TblReqProductChanges
                 .AsNoTracking()
-                .AnyAsync(x => x.ReqProductChangesId == reqModel.ProductId &&
+                .AnyAsync(x => x.ProductId == reqModel.ProductId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (reqUser)
             {
