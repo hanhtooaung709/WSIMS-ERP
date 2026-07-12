@@ -87,7 +87,9 @@ public interface IInjectService
         List<DynamicReportModel>? lstData = null);
     string GetBadgeClass(EnumRequestedStatus status);
     Task<DialogResult> ShowRejectDialog(string title);
-    Task<bool> ShowApproveDialog(string title = "Confirm", string message = "Are you sure want to approve?",
+    Task<bool> ShowApprove(string title = "Confirm", string message = "Are you sure want to Approve?",
+        List<DynamicReportModel>? lstData = null);
+    Task<bool> ShowReject(string title = "Confirm", string message = "Are you sure want to Reject?",
         List<DynamicReportModel>? lstData = null);
     Task<bool> ShowCreateDialog(string title = "Confirm", string message = "Are you sure want to create?",
         List<DynamicReportModel>? lstData = null);

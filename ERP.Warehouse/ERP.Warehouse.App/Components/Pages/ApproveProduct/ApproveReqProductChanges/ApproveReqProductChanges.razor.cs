@@ -1,23 +1,23 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using ERP.Warehouse.App.Common;
+﻿using ERP.Warehouse.App.Common;
 using ERP.Warehouse.Models.Models.Product.ReqProduct;
+using ERP.Warehouse.Models.Models.Product.ReqProductChanges;
 using MudBlazor;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared.Models;
 
-namespace ERP.Warehouse.App.Components.Pages.ApproveProduct.ApproveReqProduct;
+namespace ERP.Warehouse.App.Components.Pages.ApproveProduct.ApproveReqProductChanges;
 
-public partial class ApproveReqProduct
+public partial class ApproveReqProductChanges
 {
-    private ReqProductReqModel _reqModel = new();
-    private IEnumerable<ReqProductModel> _model = new List<ReqProductModel>();
-    private ReqProductEditModel _edit = new();
-    private ReqProductDetailModel _details = new();
+    private ReqProductChangesReqModel _reqModel = new();
+    private IEnumerable<ReqProductChangesModel> _model = new List<ReqProductChangesModel>();
+    private ReqProductChangesEditModel _edit = new();
+    private ReqProductChangesDetailModel _details = new();
 
     private List<SelectListModel> _lstStatus = Commons.GetStatusList();
 
-    private MudDataGrid<ReqProductModel> _elementGrid = default!;
+    private MudDataGrid<ReqProductChangesModel> _elementGrid = default!;
     private EnumFormType _formType = EnumFormType.List;
     private bool hover = true;
     private bool _readOnly;
@@ -66,14 +66,15 @@ public partial class ApproveReqProduct
         }
     }
 
-    private async Task Approve(ReqProductModel reqModel)
+    private async Task Approve(ReqProductChangesModel reqModel)
     {
         try
         {
             bool confirm = await _injectService.ShowApprove();
             if (!confirm) return;
 
-            _edit.ReqProductId = reqModel.ReqProductId!;
+            _edit.ReqProductChangesId = reqModel.ReqProductChangesId!;
+            _edit.ProductId = reqModel.ProductId!;
 
             await _injectService.EnableLoading();
             var result = await _apiService.Approve(_edit);
@@ -99,7 +100,7 @@ public partial class ApproveReqProduct
         }
     }
 
-    private async Task Reject(ReqProductModel reqModel)
+    private async Task Reject(ReqProductChangesModel reqModel)
     {
         try
         {
@@ -108,7 +109,8 @@ public partial class ApproveReqProduct
             bool confirm = await _injectService.ShowReject();
             if (!confirm) return;
 
-            _edit.ReqProductId = reqModel.ReqProductId!;
+            _edit.ReqProductChangesId = reqModel.ReqProductChangesId!;
+            _edit.ProductId = reqModel.ProductId;
             _edit.RejectReason = RejectReason.Data!.ToString();
 
             await _injectService.EnableLoading();
@@ -152,11 +154,11 @@ public partial class ApproveReqProduct
         }
     }
 
-    private async Task Details(ReqProductModel reqModel)
+    private async Task Details(ReqProductChangesModel reqModel)
     {
         try
         {
-            _edit.ReqProductId = reqModel.ReqProductId!;
+            _edit.ReqProductChangesId = reqModel.ReqProductChangesId!;
 
             await _injectService.EnableLoading();
             var result = await _apiService.ApproveReqProductDetails(_edit);

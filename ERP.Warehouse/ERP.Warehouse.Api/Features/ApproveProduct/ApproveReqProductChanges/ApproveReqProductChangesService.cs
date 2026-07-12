@@ -202,6 +202,7 @@ public class ApproveReqProductChangesService : AuthorizationService
             #region Prepare Data
 
             productChanges!.Status = EnumRequestedStatus.Rejected.ToString();
+            productChanges!.RejectReason = reqModel.RejectReason;
             productChanges.ApprovedUserId = AuthorizedUserId;
             productChanges.ApprovedDateTime = DevCode.GetServerDateTime();
             _db.Entry(productChanges).State = EntityState.Modified;

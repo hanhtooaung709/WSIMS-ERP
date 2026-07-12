@@ -1522,7 +1522,7 @@ public class InjectService : IInjectService
         }
     }
 
-    public async Task<bool> ShowApproveDialog(string title = "Confirm", string message = "Are you sure want to approve?",
+    public async Task<bool> ShowApprove(string title = "Confirm", string message = "Are you sure want to approve?",
         List<DynamicReportModel>? lstData = null)
     {
         try
