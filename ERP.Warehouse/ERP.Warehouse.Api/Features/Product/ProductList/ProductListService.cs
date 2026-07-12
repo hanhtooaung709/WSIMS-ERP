@@ -93,7 +93,7 @@ public class ProductListService : AuthorizationService
                 .AnyAsync(x => x.ProductName.Trim().ToLower() == reqModel.ProductName!.Trim().ToLower());
             if (name)
             {
-                model = Result<ProductModel>.Error("Currency Name is already exist!");
+                model = Result<ProductModel>.Error("Product Name is already exist!");
                 return model;
             }
 
@@ -102,7 +102,7 @@ public class ProductListService : AuthorizationService
                 .AnyAsync(x => x.ProductName.Trim().ToLower() == reqModel.ProductName!.Trim().ToLower());
             if (name)
             {
-                model = Result<ProductModel>.Error("Currency Name is already Requested!");
+                model = Result<ProductModel>.Error("Product Name is already Requested!");
                 return model;
             }
 
@@ -111,7 +111,7 @@ public class ProductListService : AuthorizationService
                 .AnyAsync(x => x.ProductName.Trim().ToLower() == reqModel.ProductName!.Trim().ToLower());
             if (name)
             {
-                model = Result<ProductModel>.Error("Currency Name is already Requested!");
+                model = Result<ProductModel>.Error("Product Name is already Requested!");
                 return model;
             }
 
@@ -124,7 +124,7 @@ public class ProductListService : AuthorizationService
                 .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower());
             if (code)
             {
-                model = Result<ProductModel>.Error("Currency Code is already exist!");
+                model = Result<ProductModel>.Error("Product Code is already exist!");
                 return model;
             }
 
@@ -133,7 +133,7 @@ public class ProductListService : AuthorizationService
                 .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower());
             if (code)
             {
-                model = Result<ProductModel>.Error("Currency Code is already Requested!");
+                model = Result<ProductModel>.Error("Product Code is already Requested!");
                 return model;
             }
 
@@ -142,7 +142,7 @@ public class ProductListService : AuthorizationService
                 .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower());
             if (code)
             {
-                model = Result<ProductModel>.Error("Currency Code is already Requested!");
+                model = Result<ProductModel>.Error("Product Code is already Requested!");
                 return model;
             }
 
