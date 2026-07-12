@@ -8,6 +8,7 @@ public class ReqProductChangesRepModel
 public class ReqProductChangesModel
 {
     public string? ReqProductChangesId { get; set; }
+    public string? ProductId { get; set; }
     public string? ProductName { get; set; }
     public string? ProductCode { get; set; }
     public string? SupplierName { get; set; }

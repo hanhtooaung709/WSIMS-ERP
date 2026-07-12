@@ -393,6 +393,7 @@ public class ProductListService : AuthorizationService
                 ProductId = product.ProductId,
                 ProductName = product.ProductName,
                 ProductCode = product.ProductCode,
+                SupplierName = product.SupplierName,
                 ChangesType = EnumRequestedType.Delete.ToString(),
                 Status = EnumRequestedStatus.Pending.ToString(),
                 ReqUserId = AuthorizedUserId,
