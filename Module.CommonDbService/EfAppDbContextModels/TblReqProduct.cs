@@ -13,6 +13,8 @@ public partial class TblReqProduct
 
     public string SupplierName { get; set; } = null!;
 
+    public string? ImagePath { get; set; }
+
     public string? ProductId { get; set; }
 
     public string Status { get; set; } = null!;

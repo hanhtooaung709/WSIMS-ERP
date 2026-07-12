@@ -13,6 +13,8 @@ public partial class TblProduct
 
     public string SupplierName { get; set; } = null!;
 
+    public string? ImagePath { get; set; }
+
     public string CreatedUserId { get; set; } = null!;
 
     public DateTime CreatedDateTime { get; set; }

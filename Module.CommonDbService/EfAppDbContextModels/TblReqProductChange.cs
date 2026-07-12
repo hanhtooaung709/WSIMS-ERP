@@ -15,6 +15,8 @@ public partial class TblReqProductChange
 
     public string SupplierName { get; set; } = null!;
 
+    public string? ImagePath { get; set; }
+
     public string ChangesType { get; set; } = null!;
 
     public string Status { get; set; } = null!;
