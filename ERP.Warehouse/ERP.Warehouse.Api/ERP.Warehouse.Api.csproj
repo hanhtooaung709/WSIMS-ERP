@@ -24,4 +24,8 @@
     <ProjectReference Include="..\ERP.Warehouse.Models\ERP.Warehouse.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>
