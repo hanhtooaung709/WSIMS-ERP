@@ -292,4 +292,24 @@ public class WarehouseApiService
        (ApproveReqProductEndpoints.Details, reqModel);
 
     #endregion
+
+    #region ApproveReqProductChanges
+
+    public async Task<Result<ReqProductChangesRepModel>> GetApproveReqProduct(ReqProductChangesReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<ReqProductChangesReqModel, ReqProductChangesRepModel>
+        (ApproveReqProductChangesEndpoints.Get, reqModel);
+
+    public async Task<Result<ReqProductChangesModel>> Approve(ReqProductChangesEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqProductChangesEditModel, ReqProductChangesModel>
+       (ApproveReqProductChangesEndpoints.Approve, reqModel);
+
+    public async Task<Result<ReqProductChangesModel>> Reject(ReqProductChangesEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqProductChangesEditModel, ReqProductChangesModel>
+       (ApproveReqProductChangesEndpoints.Reject, reqModel);
+
+    public async Task<Result<ReqProductChangesDetailModel>> ApproveReqProductDetails(ReqProductChangesEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqProductChangesEditModel, ReqProductChangesDetailModel>
+       (ApproveReqProductChangesEndpoints.Details, reqModel);
+
+    #endregion
 }
