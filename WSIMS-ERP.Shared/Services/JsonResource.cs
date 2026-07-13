@@ -21,22 +21,12 @@ public class JsonResource
     /// <summary>
     /// Requsted Change User is successfully Deteted.
     /// </summary>
-    public static readonly string WHS029 = "WH#S029";
+    public static readonly string WHS028 = "WH#S028";
 
     /// <summary>
     /// Requsted Change User delete fail!
     /// </summary>
-    public static readonly string WHE028 = "WH#E028";
-
-    /// <summary>
-    /// Requseted Change User is not pending status!
-    /// </summary>
     public static readonly string WHE027 = "WH#E027";
-
-    /// <summary>
-    /// Requested Change User does not exist!
-    /// </summary>
-    public static readonly string WHE026 = "WH#E026";
 
     /// <summary>
     /// Requested Change User is successfully Updated.

@@ -302,7 +302,7 @@ public class ReqWarehouseUserChangesService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.ReqWarehouseUserChangesId == reqModel.UserId);
             if (user is null)
             {
-                model = Result<ReqWarehouseUserChangesModel>.Error(JsonResource.WHE026);
+                model = Result<ReqWarehouseUserChangesModel>.Error(JsonResource.WHE024);
                 return model;
             }
 
@@ -312,7 +312,7 @@ public class ReqWarehouseUserChangesService : AuthorizationService
                                x.Status != EnumRequestedStatus.Pending.ToString());
             if (reqUser)
             {
-                model = Result<ReqWarehouseUserChangesModel>.Error(JsonResource.WHE027);
+                model = Result<ReqWarehouseUserChangesModel>.Error(JsonResource.WHE025);
                 return model;
             }
 
@@ -324,10 +324,10 @@ public class ReqWarehouseUserChangesService : AuthorizationService
             var result = _db.SaveChanges();
             if (result <= 0)
             {
-                model = Result<ReqWarehouseUserChangesModel>.Error(JsonResource.WHE028);
+                model = Result<ReqWarehouseUserChangesModel>.Error(JsonResource.WHE027);
                 return model;
             }
-            model = Result<ReqWarehouseUserChangesModel>.Success(JsonResource.WHS029);
+            model = Result<ReqWarehouseUserChangesModel>.Success(JsonResource.WHS028);
 
             #endregion
         }
