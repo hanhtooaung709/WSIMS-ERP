@@ -51,7 +51,7 @@ public class Result<T>
         };
     }
 
-    public static Result<T> Error(Exception ex, string code = "ME#999")
+    public static Result<T> Error(Exception ex)
     {
         return new Result<T>
         {
