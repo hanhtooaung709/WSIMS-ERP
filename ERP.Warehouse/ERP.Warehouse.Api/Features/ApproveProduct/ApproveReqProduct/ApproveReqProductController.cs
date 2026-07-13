@@ -1,6 +1,7 @@
 ﻿using ERP.Warehouse.Api.Controller;
 using ERP.Warehouse.Models.Models.Product.ReqProduct;
 using Microsoft.AspNetCore.Mvc;
+using WSIMS_ERP.Shared.Services;
 
 namespace ERP.Warehouse.Api.Features.ApproveProduct.ApproveReqProduct;
 
@@ -10,7 +11,7 @@ public class ApproveReqProductController : BaseController
 {
     private readonly ApproveReqProductService _approveReqProductService;
 
-    public ApproveReqProductController(ApproveReqProductService approveReqProductService)
+    public ApproveReqProductController(ApproveReqProductService approveReqProductService, ResponseService responseService) : base(responseService)
     {
         _approveReqProductService = approveReqProductService;
     }
@@ -21,7 +22,7 @@ public class ApproveReqProductController : BaseController
     public async Task<IActionResult> Get(ReqProductReqModel reqModel)
     {
         var result = await _approveReqProductService.Get(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -29,7 +30,7 @@ public class ApproveReqProductController : BaseController
     public async Task<IActionResult> Approve(ReqProductEditModel reqModel)
     {
         var result = await _approveReqProductService.Approve(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -37,7 +38,7 @@ public class ApproveReqProductController : BaseController
     public async Task<IActionResult> Reject(ReqProductEditModel reqModel)
     {
         var result = await _approveReqProductService.Reject(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -45,7 +46,7 @@ public class ApproveReqProductController : BaseController
     public async Task<IActionResult> Details(ReqProductEditModel reqModel)
     {
         var result = await _approveReqProductService.Details(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     #endregion

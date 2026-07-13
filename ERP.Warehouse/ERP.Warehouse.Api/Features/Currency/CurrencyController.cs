@@ -3,6 +3,7 @@ using ERP.Warehouse.Api.Features.Box;
 using ERP.Warehouse.Models.Models.Box;
 using ERP.Warehouse.Models.Models.Currency;
 using Microsoft.AspNetCore.Mvc;
+using WSIMS_ERP.Shared.Services;
 
 namespace ERP.Warehouse.Api.Features.Currency;
 
@@ -12,7 +13,7 @@ public class CurrencyController : BaseController
 {
     private readonly CurrencyService _currencyService;
 
-    public CurrencyController(CurrencyService currencyService)
+    public CurrencyController(CurrencyService currencyService, ResponseService responseService) : base(responseService)
     {
         _currencyService = currencyService;
     }
@@ -24,7 +25,7 @@ public class CurrencyController : BaseController
     public async Task<IActionResult> Get(CurrencyReqModel reqModel)
     {
         var result = await _currencyService.Get(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -32,7 +33,7 @@ public class CurrencyController : BaseController
     public async Task<IActionResult> Create(CurrencyReqModel reqModel)
     {
         var result = await _currencyService.Create(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -40,7 +41,7 @@ public class CurrencyController : BaseController
     public async Task<IActionResult> Edit(CurrencyEditModel reqModel)
     {
         var result = await _currencyService.Edit(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -48,7 +49,7 @@ public class CurrencyController : BaseController
     public async Task<IActionResult> Update(CurrencyReqModel reqModel)
     {
         var result = await _currencyService.Update(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -56,7 +57,7 @@ public class CurrencyController : BaseController
     public async Task<IActionResult> Delete(CurrencyEditModel reqModel)
     {
         var result = await _currencyService.Delete(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -64,7 +65,7 @@ public class CurrencyController : BaseController
     public async Task<IActionResult> Details(CurrencyEditModel reqModel)
     {
         var result = await _currencyService.Details(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     #endregion

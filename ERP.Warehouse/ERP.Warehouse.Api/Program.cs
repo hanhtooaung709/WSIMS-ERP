@@ -12,7 +12,6 @@ try
     builder.Services.AddHttpContextAccessor();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-    builder.Services.AddScoped<DapperService>();
 
     builder.AddModularService();
 

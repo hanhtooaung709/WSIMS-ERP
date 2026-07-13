@@ -1,6 +1,7 @@
 ﻿using ERP.Warehouse.Api.Controller;
 using Microsoft.AspNetCore.Mvc;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
+using WSIMS_ERP.Shared.Services;
 
 namespace ERP.Warehouse.Api.Features.WarehouseUser.WarehouseUserList;
 
@@ -10,7 +11,7 @@ public class WarehouseUserListController : BaseController
 {
     private readonly WarehouseUserListService _warehouseUserListService;
 
-    public WarehouseUserListController(WarehouseUserListService warehouseUserListService)
+    public WarehouseUserListController(WarehouseUserListService warehouseUserListService, ResponseService responseService) : base(responseService)
     {
         _warehouseUserListService = warehouseUserListService;
     }
@@ -22,7 +23,7 @@ public class WarehouseUserListController : BaseController
     public async Task<IActionResult> Get(WarehouseUserReqModel reqModel)
     {
         var result = await _warehouseUserListService.Get(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -30,7 +31,7 @@ public class WarehouseUserListController : BaseController
     public async Task<IActionResult> Create(WarehouseUserReqModel reqModel)
     {
         var result = await _warehouseUserListService.Create(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -38,7 +39,7 @@ public class WarehouseUserListController : BaseController
     public async Task<IActionResult> Edit(WarehouseUserEditModel reqModel)
     {
         var result = await _warehouseUserListService.Edit(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -46,7 +47,7 @@ public class WarehouseUserListController : BaseController
     public async Task<IActionResult> Update(WarehouseUserReqModel reqModel)
     {
         var result = await _warehouseUserListService.Update(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -54,7 +55,7 @@ public class WarehouseUserListController : BaseController
     public async Task<IActionResult> Delete(WarehouseUserEditModel reqModel)
     {
         var result = await _warehouseUserListService.Delete(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -62,7 +63,7 @@ public class WarehouseUserListController : BaseController
     public async Task<IActionResult> Details(WarehouseUserEditModel reqModel)
     {
         var result = await _warehouseUserListService.Details(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     #endregion
@@ -74,7 +75,7 @@ public class WarehouseUserListController : BaseController
     public async Task<IActionResult> GetRole()
     {
         var result = await _warehouseUserListService.GetRole();
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -82,7 +83,7 @@ public class WarehouseUserListController : BaseController
     public async Task<IActionResult> GetBranch()
     {
         var result = await _warehouseUserListService.GetBranch();
-        return Execute(result);
+        return await Execute(result);
     }
 
     #endregion

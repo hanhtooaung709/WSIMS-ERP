@@ -45,7 +45,7 @@ public class SignInService : AuthorizationService
 
             if (user is null)
             {
-                return Result<SigninResModel>.Error("User does not exist.");
+                return Result<SigninResModel>.Error(JsonResource.WHS001);
             }
 
             if (user.LockFlag)

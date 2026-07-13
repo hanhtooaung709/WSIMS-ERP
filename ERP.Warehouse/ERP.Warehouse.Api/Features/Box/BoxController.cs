@@ -3,6 +3,7 @@ using ERP.Warehouse.Api.Features.WarehouseUser.WarehouseUserList;
 using ERP.Warehouse.Models.Models.Box;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 using Microsoft.AspNetCore.Mvc;
+using WSIMS_ERP.Shared.Services;
 
 namespace ERP.Warehouse.Api.Features.Box;
 
@@ -12,7 +13,7 @@ public class BoxController : BaseController
 {
     private readonly BoxService _boxService;
 
-    public BoxController(BoxService boxService)
+    public BoxController(BoxService boxService, ResponseService responseService) : base(responseService)
     {
         _boxService = boxService;
     }
@@ -24,7 +25,7 @@ public class BoxController : BaseController
     public async Task<IActionResult> Get(BoxReqModel reqModel)
     {
         var result = await _boxService.Get(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -32,7 +33,7 @@ public class BoxController : BaseController
     public async Task<IActionResult> Create(BoxReqModel reqModel)
     {
         var result = await _boxService.Create(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -40,7 +41,7 @@ public class BoxController : BaseController
     public async Task<IActionResult> Edit(BoxEditModel reqModel)
     {
         var result = await _boxService.Edit(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -48,7 +49,7 @@ public class BoxController : BaseController
     public async Task<IActionResult> Update(BoxReqModel reqModel)
     {
         var result = await _boxService.Update(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -56,7 +57,7 @@ public class BoxController : BaseController
     public async Task<IActionResult> Delete(BoxEditModel reqModel)
     {
         var result = await _boxService.Delete(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -64,7 +65,7 @@ public class BoxController : BaseController
     public async Task<IActionResult> Details(BoxEditModel reqModel)
     {
         var result = await _boxService.Details(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     #endregion

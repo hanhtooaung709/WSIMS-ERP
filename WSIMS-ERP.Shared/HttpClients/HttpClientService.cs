@@ -66,7 +66,11 @@ public class HttpClientService
 
                     if (respType == 1)
                     {
-                        return Result<TResponse>.Error(respDesp);
+                        return new Result<TResponse>
+                        {
+                            RespDesp = respDesp,
+                            RespType = EnumRespType.Error
+                        };
                     }
 
                     if (!root.TryGetProperty("data", out JsonElement dataElement) &&

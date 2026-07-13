@@ -1,6 +1,7 @@
 ﻿using ERP.Warehouse.Api.Controller;
 using ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUserChanges;
 using Microsoft.AspNetCore.Mvc;
+using WSIMS_ERP.Shared.Services;
 
 namespace ERP.Warehouse.Api.Features.WarehouseUser.ReqWarehouseUserChanges;
 
@@ -10,7 +11,7 @@ public class ReqWarehouseUserChangesController : BaseController
 {
     private readonly ReqWarehouseUserChangesService _reqWarehouseUserChangesService;
 
-    public ReqWarehouseUserChangesController(ReqWarehouseUserChangesService reqWarehouseUserChangesService)
+    public ReqWarehouseUserChangesController(ReqWarehouseUserChangesService reqWarehouseUserChangesService, ResponseService responseService) : base(responseService)
     {
         _reqWarehouseUserChangesService = reqWarehouseUserChangesService;
     }
@@ -22,7 +23,7 @@ public class ReqWarehouseUserChangesController : BaseController
     public async Task<IActionResult> Get(ReqWarehouseUserChangesReqModel reqModel)
     {
         var result = await _reqWarehouseUserChangesService.Get(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -30,7 +31,7 @@ public class ReqWarehouseUserChangesController : BaseController
     public async Task<IActionResult> Edit(ReqWarehouseUserChangesEditModel reqModel)
     {
         var result = await _reqWarehouseUserChangesService.Edit(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -38,7 +39,7 @@ public class ReqWarehouseUserChangesController : BaseController
     public async Task<IActionResult> Update(ReqWarehouseUserChangesReqModel reqModel)
     {
         var result = await _reqWarehouseUserChangesService.Update(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -46,7 +47,7 @@ public class ReqWarehouseUserChangesController : BaseController
     public async Task<IActionResult> Delete(ReqWarehouseUserChangesEditModel reqModel)
     {
         var result = await _reqWarehouseUserChangesService.Delete(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -54,7 +55,7 @@ public class ReqWarehouseUserChangesController : BaseController
     public async Task<IActionResult> Details(ReqWarehouseUserChangesEditModel reqModel)
     {
         var result = await _reqWarehouseUserChangesService.Details(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     #endregion

@@ -1556,6 +1556,39 @@ public class InjectService : IInjectService
         }
     }
 
+    public async Task<bool> ShowReject(string title = "Confirm", string message = "Are you sure want to Reject?",
+        List<DynamicReportModel>? lstData = null)
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+            parameters.Add("Title", title);
+            parameters.Add("Message", message);
+            if (lstData != null && lstData.Count > 0)
+            {
+                parameters.Add("lstDynamicReport", lstData);
+            }
+
+            var dialog = _dialogService.Show<DialogComponent>("", parameters);
+            var result = await dialog.Result;
+
+            return !result.Canceled;
+        }
+        catch (JSDisconnectedException)
+        {
+            return false;
+        }
+        catch (TaskCanceledException)
+        {
+            return false;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCustomError(ex);
+            return false;
+        }
+    }
+
     public async Task<bool> ShowCreateDialog(string title = "Confirm", string message = "Are you sure want to save?",
         List<DynamicReportModel>? lstData = null)
     {

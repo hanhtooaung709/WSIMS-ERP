@@ -14,6 +14,7 @@ using ERP.Warehouse.Api.Features.WarehouseUser.WarehouseUserList;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
 using WSIMS_ERP.Shared;
+using WSIMS_ERP.Shared.Services;
 
 namespace ERP.Warehouse.Api;
 
@@ -45,6 +46,9 @@ public static class FeatureManager
 
     private static WebApplicationBuilder AddWarehouseServices(this WebApplicationBuilder builder)
     {
+        builder.Services.AddScoped<DapperService>();
+        builder.Services.AddScoped<IResponseService, ResponseService>();
+        builder.Services.AddScoped<ResponseService>();
         builder.Services.AddScoped<AuthorizationService>();
         builder.Services.AddScoped<JwtTokenHelper>();
         builder.Services.AddScoped<SignInService>();

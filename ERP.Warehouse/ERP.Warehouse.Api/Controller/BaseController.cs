@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared.Models;
+using WSIMS_ERP.Shared.Services;
 
 namespace ERP.Warehouse.Api.Controller;
 
@@ -8,17 +9,17 @@ namespace ERP.Warehouse.Api.Controller;
 [ApiController]
 public class BaseController : ControllerBase
 {
-    public IActionResult Execute<T>(Result<T> model)
+    private readonly IResponseService _responseService;
+
+    public BaseController(IResponseService responseService)
     {
-        if (model.RespType == EnumRespType.Success)
-            return StatusCode(201, model);
+        _responseService = responseService;
+    }
 
-        if (model.RespType == EnumRespType.Error)
-            return Ok(model);
-
-        if (model.RespType == EnumRespType.SystemError)
-            return BadRequest(model);
-
+    public async Task<IActionResult> Execute<T>(Result<T> model)
+    {
+        string translation = await _responseService.GetResponseData(model.RespCode!, model.RespDesp);
+        model.RespDesp = translation;
         return Ok(model);
     }
 }

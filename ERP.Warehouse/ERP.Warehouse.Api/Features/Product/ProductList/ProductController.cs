@@ -3,6 +3,7 @@ using ERP.Warehouse.Api.Features.WarehouseUser.WarehouseUserList;
 using ERP.Warehouse.Models.Models.Product.ProductList;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 using Microsoft.AspNetCore.Mvc;
+using WSIMS_ERP.Shared.Services;
 
 namespace ERP.Warehouse.Api.Features.Product.ProductList;
 
@@ -12,7 +13,7 @@ public class ProductController : BaseController
 {
     private readonly ProductListService _productListService;
 
-    public ProductController(ProductListService productListService)
+    public ProductController(ProductListService productListService, ResponseService responseService) : base(responseService)
     {
         _productListService = productListService;
     }
@@ -24,7 +25,7 @@ public class ProductController : BaseController
     public async Task<IActionResult> Get(ProductReqModel reqModel)
     {
         var result = await _productListService.Get(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -32,7 +33,7 @@ public class ProductController : BaseController
     public async Task<IActionResult> Create(ProductReqModel reqModel)
     {
         var result = await _productListService.Create(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -40,7 +41,7 @@ public class ProductController : BaseController
     public async Task<IActionResult> Edit(ProductEditModel reqModel)
     {
         var result = await _productListService.Edit(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -48,7 +49,7 @@ public class ProductController : BaseController
     public async Task<IActionResult> Update(ProductReqModel reqModel)
     {
         var result = await _productListService.Update(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -56,7 +57,7 @@ public class ProductController : BaseController
     public async Task<IActionResult> Delete(ProductEditModel reqModel)
     {
         var result = await _productListService.Delete(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -64,7 +65,7 @@ public class ProductController : BaseController
     public async Task<IActionResult> Details(ProductEditModel reqModel)
     {
         var result = await _productListService.Details(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     #endregion

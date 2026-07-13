@@ -6,13 +6,14 @@ using ERP.Warehouse.Api.Controller;
 using ERP.Warehouse.Api.Features.WarehouseUser.WarehouseUserList;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 using Microsoft.AspNetCore.Http;
+using WSIMS_ERP.Shared.Services;
 [Route("api/branch")]
 [ApiController]
 public class BranchController : BaseController
 {
     private readonly BranchService _branchService;
 
-    public BranchController(BranchService branchService)
+    public BranchController(BranchService branchService, ResponseService responseService) : base(responseService)
     {
         _branchService = branchService;
     }
@@ -22,6 +23,6 @@ public class BranchController : BaseController
     public async Task<IActionResult> Get()
     {
         var result = await _branchService.Get();
-        return Execute(result);
+        return await Execute(result);
     }
 }

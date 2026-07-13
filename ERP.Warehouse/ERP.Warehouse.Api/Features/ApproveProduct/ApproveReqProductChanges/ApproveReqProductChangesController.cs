@@ -2,6 +2,7 @@
 using ERP.Warehouse.Api.Features.Product.ReqProductChanges;
 using ERP.Warehouse.Models.Models.Product.ReqProductChanges;
 using Microsoft.AspNetCore.Mvc;
+using WSIMS_ERP.Shared.Services;
 
 namespace ERP.Warehouse.Api.Features.ApproveProduct.ApproveReqProductChanges;
 
@@ -11,7 +12,7 @@ public class ApproveReqProductChangesController : BaseController
 {
     private readonly ApproveReqProductChangesService _approveReqProductChangesService;
 
-    public ApproveReqProductChangesController(ApproveReqProductChangesService approveReqProductChangesService)
+    public ApproveReqProductChangesController(ApproveReqProductChangesService approveReqProductChangesService, ResponseService responseService) : base(responseService)
     {
         _approveReqProductChangesService = approveReqProductChangesService;
     }
@@ -23,7 +24,7 @@ public class ApproveReqProductChangesController : BaseController
     public async Task<IActionResult> Get(ReqProductChangesReqModel reqModel)
     {
         var result = await _approveReqProductChangesService.Get(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -31,7 +32,7 @@ public class ApproveReqProductChangesController : BaseController
     public async Task<IActionResult> Approve(ReqProductChangesEditModel reqModel)
     {
         var result = await _approveReqProductChangesService.Approve(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -39,7 +40,7 @@ public class ApproveReqProductChangesController : BaseController
     public async Task<IActionResult> Reject(ReqProductChangesEditModel reqModel)
     {
         var result = await _approveReqProductChangesService.Reject(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     [HttpPost]
@@ -47,7 +48,7 @@ public class ApproveReqProductChangesController : BaseController
     public async Task<IActionResult> Details(ReqProductChangesEditModel reqModel)
     {
         var result = await _approveReqProductChangesService.Details(reqModel);
-        return Execute(result);
+        return await Execute(result);
     }
 
     #endregion

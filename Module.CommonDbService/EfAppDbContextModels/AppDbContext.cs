@@ -51,9 +51,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<TblWarehouseUser> TblWarehouseUsers { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=.;Database=WSIMS-ERP;User Id=sa;Password=sasa@123;TrustServerCertificate=True;MultipleActiveResultSets=True;Connection Timeout=30");
+    public virtual DbSet<TblWarehouseUserSession> TblWarehouseUserSessions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -547,6 +545,7 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Translation).HasMaxLength(200);
+            entity.Property(e => e.WarehouseResponseCodeId).ValueGeneratedOnAdd();
         });
 
         modelBuilder.Entity<TblWarehouseRole>(entity =>
@@ -612,6 +611,23 @@ public partial class AppDbContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.UserName)
                 .HasMaxLength(50)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<TblWarehouseUserSession>(entity =>
+        {
+            entity.HasKey(e => e.SessionId);
+
+            entity.ToTable("Tbl_WarehouseUserSession");
+
+            entity.Property(e => e.SessionId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.LoginTime).HasColumnType("datetime");
+            entity.Property(e => e.LogoutTime).HasColumnType("datetime");
+            entity.Property(e => e.SessionToken).IsUnicode(false);
+            entity.Property(e => e.UserId)
+                .HasMaxLength(100)
                 .IsUnicode(false);
         });
 
