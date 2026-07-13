@@ -45,11 +45,15 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<TblTownship> TblTownships { get; set; }
 
+    public virtual DbSet<TblWarehouseResponseCode> TblWarehouseResponseCodes { get; set; }
+
     public virtual DbSet<TblWarehouseRole> TblWarehouseRoles { get; set; }
 
     public virtual DbSet<TblWarehouseUser> TblWarehouseUsers { get; set; }
 
-    public virtual DbSet<TblWarehouseUserSession> TblWarehouseUserSessions { get; set; }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=.;Database=WSIMS-ERP;User Id=sa;Password=sasa@123;TrustServerCertificate=True;MultipleActiveResultSets=True;Connection Timeout=30");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -533,6 +537,18 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.TownshipName).HasMaxLength(100);
         });
 
+        modelBuilder.Entity<TblWarehouseResponseCode>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("Tbl_WarehouseResponseCode");
+
+            entity.Property(e => e.LanguageCode)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Translation).HasMaxLength(200);
+        });
+
         modelBuilder.Entity<TblWarehouseRole>(entity =>
         {
             entity.HasKey(e => e.WarehouseRoleId);
@@ -595,23 +611,6 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.UserName)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<TblWarehouseUserSession>(entity =>
-        {
-            entity.HasKey(e => e.SessionId);
-
-            entity.ToTable("Tbl_WarehouseUserSession");
-
-            entity.Property(e => e.SessionId)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.LoginTime).HasColumnType("datetime");
-            entity.Property(e => e.LogoutTime).HasColumnType("datetime");
-            entity.Property(e => e.SessionToken).IsUnicode(false);
-            entity.Property(e => e.UserId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
         });
