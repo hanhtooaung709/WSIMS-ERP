@@ -19,6 +19,31 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// Requsted User is successfully Deteted.
+    /// </summary>
+    public static readonly string WHS023 = "WH#S023";
+
+    /// <summary>
+    /// Requsted User delete fail!
+    /// </summary>
+    public static readonly string WHE022 = "WH#E022";
+
+    /// <summary>
+    /// Requested User is successfully Updated.
+    /// </summary>
+    public static readonly string WHS021 = "WH#S021";
+
+    /// <summary>
+    /// Requseted User is not pending status!
+    /// </summary>
+    public static readonly string WHE020 = "WH#E020";
+
+    /// <summary>
+    /// Requested User does not exist!
+    /// </summary>
+    public static readonly string WHE019 = "WH#E019";
+
+    /// <summary>
     /// User is already Change Requested!
     /// </summary>
     public static readonly string WHE018 = "WH#E018";

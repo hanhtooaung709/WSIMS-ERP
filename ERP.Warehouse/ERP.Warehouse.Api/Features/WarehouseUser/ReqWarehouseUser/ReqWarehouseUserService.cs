@@ -67,7 +67,7 @@ public class ReqWarehouseUserService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.ReqWarehouseUserId == reqModel.UserId);
             if (user is null)
             {
-                model = Result<ReqWarehouseUserModel>.Error("User does not exist.");
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE001);
                 return model;
             }
             #endregion
@@ -78,7 +78,7 @@ public class ReqWarehouseUserService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.RoleCode == user.RoleCode && x.DelFlag == 0);
             if (role is null)
             {
-                model = Result<ReqWarehouseUserModel>.Error("User Role does not exist.");
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE015);
                 return model;
             }
             #endregion
@@ -89,7 +89,7 @@ public class ReqWarehouseUserService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.BranchCode == user.BranchCode && x.DelFlag == 0);
             if (branch is null)
             {
-                model = Result<ReqWarehouseUserModel>.Error("Branch does not exist.");
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE016);
                 return model;
             }
             #endregion
@@ -130,7 +130,7 @@ public class ReqWarehouseUserService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.ReqWarehouseUserId == reqModel.UserId);
             if (user is null)
             {
-                model = Result<ReqWarehouseUserModel>.Error("Requseted User does not exist.");
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE019);
                 return model;
             }
 
@@ -140,54 +140,55 @@ public class ReqWarehouseUserService : AuthorizationService
                                x.Status != EnumRequestedStatus.Pending.ToString());
             if (reqUser)
             {
-                model = Result<ReqWarehouseUserModel>.Error("Requseted User is not pending status");
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE020);
                 return model;
             }
             #endregion
 
             #region Check Duplicate UserName
 
-            bool userName = await _db.TblReqWarehouseUsers
+            bool userName = await _db.TblWarehouseUsers
+                .AsNoTracking()
+                .AnyAsync(x => x.UserName.Trim().ToLower() == reqModel.UserName!.Trim().ToLower());
+            if (userName)
+            {
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE004);
+                return model;
+            }
+
+            userName = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
                 .AnyAsync(x => x.UserName.Trim().ToLower() == reqModel.UserName!.Trim().ToLower() &&
                                x.ReqWarehouseUserId != reqModel.UserId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (userName)
             {
-                model = Result<ReqWarehouseUserModel>.Error("Phone Number is already Requested!");
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE005);
                 return model;
             }
 
-            userName = await _db.TblWarehouseUsers
-                .AsNoTracking()
-                .AnyAsync(x => x.UserName.Trim().ToLower() == reqModel.UserName!.Trim().ToLower());
-            if (userName)
-            {
-                model = Result<ReqWarehouseUserModel>.Error("Phone Number is already exist!");
-                return model;
-            }
 
             #endregion
 
             #region Check Duplicate StaffId
 
-            bool staffId = await _db.TblReqWarehouseUsers
+            bool staffId = await _db.TblWarehouseUsers
+                .AsNoTracking()
+                .AnyAsync(x => x.StaffId.Trim().ToLower() == reqModel.StaffId!.Trim().ToLower());
+            if (staffId)
+            {
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE006);
+                return model;
+            }
+
+            staffId = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
                 .AnyAsync(x => x.StaffId.Trim().ToLower() == reqModel.StaffId!.Trim().ToLower() &&
                                x.ReqWarehouseUserId != reqModel.UserId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (staffId)
             {
-                model = Result<ReqWarehouseUserModel>.Error("StaffId is already Requested!");
-                return model;
-            }
-
-            staffId = await _db.TblWarehouseUsers
-                .AsNoTracking()
-                .AnyAsync(x => x.StaffId.Trim().ToLower() == reqModel.StaffId!.Trim().ToLower());
-            if (staffId)
-            {
-                model = Result<ReqWarehouseUserModel>.Error("StaffId is already exist!");
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE007);
                 return model;
             }
 
@@ -195,14 +196,23 @@ public class ReqWarehouseUserService : AuthorizationService
 
             #region Check Duplicate PhoneNo
 
-            bool phoneNo = await _db.TblReqWarehouseUsers
+            bool phoneNo = await _db.TblWarehouseUsers
+                .AsNoTracking()
+                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.Phone!.Trim().ToLower());
+            if (phoneNo)
+            {
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE008);
+                return model;
+            }
+
+            phoneNo = await _db.TblReqWarehouseUsers
                 .AsNoTracking()
                 .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.Phone!.Trim().ToLower() &&
                                x.ReqWarehouseUserId != reqModel.UserId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (phoneNo)
             {
-                model = Result<ReqWarehouseUserModel>.Error("Phone Number is already Requested!");
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE009);
                 return model;
             }
 
@@ -212,30 +222,21 @@ public class ReqWarehouseUserService : AuthorizationService
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (phoneNo)
             {
-                model = Result<ReqWarehouseUserModel>.Error("Phone Number is already Requested!");
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE010);
                 return model;
             }
 
-            phoneNo = await _db.TblWarehouseUsers
-                .AsNoTracking()
-                .AnyAsync(x => x.Phone.Trim().ToLower() == reqModel.Phone!.Trim().ToLower());
-            if (phoneNo)
-            {
-                model = Result<ReqWarehouseUserModel>.Error("Phone Number is already exist!");
-                return model;
-            }
 
             #endregion
 
             #region Check Duplicate Email
 
-            bool email = await _db.TblReqWarehouseUserChanges
+            bool email = await _db.TblWarehouseUsers
                 .AsNoTracking()
-                .AnyAsync(x => x.Email.Trim().ToLower() == reqModel.Email!.Trim().ToLower() &&
-                               x.Status == EnumRequestedStatus.Pending.ToString());
+                .AnyAsync(x => x.Email.Trim().ToLower() == reqModel.Email!.Trim().ToLower());
             if (email)
             {
-                model = Result<ReqWarehouseUserModel>.Error("Email Number is already Change Requested!");
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE011);
                 return model;
             }
 
@@ -246,16 +247,17 @@ public class ReqWarehouseUserService : AuthorizationService
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (email)
             {
-                model = Result<ReqWarehouseUserModel>.Error("Email Number is already Requested!");
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE012);
                 return model;
             }
 
-            email = await _db.TblWarehouseUsers
+            email = await _db.TblReqWarehouseUserChanges
                 .AsNoTracking()
-                .AnyAsync(x => x.Email.Trim().ToLower() == reqModel.Email!.Trim().ToLower());
+                .AnyAsync(x => x.Email.Trim().ToLower() == reqModel.Email!.Trim().ToLower() &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
             if (email)
             {
-                model = Result<ReqWarehouseUserModel>.Error("Email Number is already exist!");
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE013);
                 return model;
             }
 
@@ -275,7 +277,7 @@ public class ReqWarehouseUserService : AuthorizationService
             _db.Entry(user).State = EntityState.Modified;
             _db.TblReqWarehouseUsers.Update(user);
             await _db.SaveChangesAsync();
-            model = Result<ReqWarehouseUserModel>.Success("Requested User is successfully updated");
+            model = Result<ReqWarehouseUserModel>.Success(JsonResource.WHS021);
 
             #endregion
         }
@@ -298,7 +300,7 @@ public class ReqWarehouseUserService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.ReqWarehouseUserId == reqModel.UserId);
             if (user is null)
             {
-                model = Result<ReqWarehouseUserModel>.Error("Requested User does not exist.");
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE019);
                 return model;
             }
 
@@ -308,7 +310,7 @@ public class ReqWarehouseUserService : AuthorizationService
                                x.Status != EnumRequestedStatus.Pending.ToString());
             if (reqUser)
             {
-                model = Result<ReqWarehouseUserModel>.Error("Requseted User is not pending status");
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE020);
                 return model;
             }
 
@@ -320,10 +322,10 @@ public class ReqWarehouseUserService : AuthorizationService
             var result = _db.SaveChanges();
             if (result <= 0)
             {
-                model = Result<ReqWarehouseUserModel>.Error("Requsted User delete fail!");
+                model = Result<ReqWarehouseUserModel>.Error(JsonResource.WHE022);
                 return model;
             }
-            model = Result<ReqWarehouseUserModel>.Success("Requsted User is successfully deteted");
+            model = Result<ReqWarehouseUserModel>.Success(JsonResource.WHS023);
 
             #endregion
         }
