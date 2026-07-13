@@ -21,7 +21,18 @@ public class JsonResource
     /// <summary>
     /// User does not exist.
     /// </summary>
-    public static readonly string WHS001 = "WH#S001";
+    public static readonly string WHE001 = "WH#S001";
+
+    /// <summary>
+    /// Your account is lock.
+    /// </summary>
+    public static readonly string WHE002 = "WH#S002";
+
+    /// <summary>
+    /// User Name or Password is wrong.
+    /// </summary>
+    public static readonly string WHE003 = "WH#S003";
+
 
     #endregion
 }

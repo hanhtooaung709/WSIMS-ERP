@@ -19,17 +19,17 @@ public class ResponseService : IResponseService
         {
             return translation;
         }
-        if (respCode.StartsWith("WH"))
-        {
-            translation = await GetWarehouseResponseCode(respCode);
-        }
-        if(respCode.StartsWith("S000"))
+        if (respCode.StartsWith("S000"))
         {
             translation = "Success";
         }
         if (respCode.StartsWith("E999"))
         {
             translation = "Fail";
+        }
+        if (respCode.StartsWith("WH"))
+        {
+            translation = await GetWarehouseResponseCode(respCode);
         }
         return translation;
     }

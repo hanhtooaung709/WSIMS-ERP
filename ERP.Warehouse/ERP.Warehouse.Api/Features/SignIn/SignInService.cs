@@ -45,12 +45,12 @@ public class SignInService : AuthorizationService
 
             if (user is null)
             {
-                return Result<SigninResModel>.Error(JsonResource.WHS001);
+                return Result<SigninResModel>.Error(JsonResource.WHE001);
             }
 
             if (user.LockFlag)
             {
-                return Result<SigninResModel>.Error("Your account is lock.");
+                return Result<SigninResModel>.Error(JsonResource.WHE002);
             }
 
             if (!user.LoginPassword.Equals(reqModel.Password))
@@ -62,12 +62,12 @@ public class SignInService : AuthorizationService
                     user.LockFlag = true;
                     _db.Entry(user).State = EntityState.Modified;
                     await _db.SaveChangesAsync();
-                    return Result<SigninResModel>.Error("Your account is lock.");
+                    return Result<SigninResModel>.Error(JsonResource.WHE002);
                 }
 
                 _db.Entry(user).State = EntityState.Modified;
                 await _db.SaveChangesAsync();
-                return Result<SigninResModel>.Error("User Name or Password is wrong.");
+                return Result<SigninResModel>.Error(JsonResource.WHE003);
             }
 
             #endregion
@@ -151,7 +151,7 @@ public class SignInService : AuthorizationService
                     x.WarehouseUserId == AuthorizedUserId);
             if (user is null)
             {
-                return Result<WarehouseUserInfoModel>.Error("User does't exist!");
+                return Result<WarehouseUserInfoModel>.Error(JsonResource.WHE001);
             }
 
             var lst = await _dapperService.GetDetailAsync<WarehouseUserInfoModel>(
