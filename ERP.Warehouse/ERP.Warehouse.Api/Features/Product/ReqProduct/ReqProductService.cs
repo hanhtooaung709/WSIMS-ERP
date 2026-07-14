@@ -134,7 +134,7 @@ public class ReqProductService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.ReqProductId == reqModel.ReqProductId);
             if (product is null)
             {
-                model = Result<ReqProductModel>.Error(JsonResource.WHE039);
+                model = Result<ReqProductModel>.Error(JsonResource.WHE038);
                 return model;
             }
 
@@ -144,7 +144,7 @@ public class ReqProductService : AuthorizationService
                                x.Status != EnumRequestedStatus.Pending.ToString());
             if (reqProduct)
             {
-                model = Result<ReqProductModel>.Error(JsonResource.WHE040);
+                model = Result<ReqProductModel>.Error(JsonResource.WHE039);
                 return model;
             }
             #endregion
@@ -227,7 +227,7 @@ public class ReqProductService : AuthorizationService
             _db.Entry(product).State = EntityState.Modified;
             _db.TblReqProducts.Update(product);
             await _db.SaveChangesAsync();
-            model = Result<ReqProductModel>.Success(JsonResource.WHS041);
+            model = Result<ReqProductModel>.Success(JsonResource.WHS040);
 
             #endregion
         }
@@ -250,7 +250,7 @@ public class ReqProductService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.ReqProductId == reqModel.ReqProductId);
             if (product is null)
             {
-                model = Result<ReqProductModel>.Error(JsonResource.WHE042);
+                model = Result<ReqProductModel>.Error(JsonResource.WHE038);
                 return model;
             }
 
@@ -260,7 +260,7 @@ public class ReqProductService : AuthorizationService
                                x.Status != EnumRequestedStatus.Pending.ToString());
             if (reqUser)
             {
-                model = Result<ReqProductModel>.Error(JsonResource.WHE043);
+                model = Result<ReqProductModel>.Error(JsonResource.WHE041);
                 return model;
             }
 
@@ -272,10 +272,10 @@ public class ReqProductService : AuthorizationService
             var result = _db.SaveChanges();
             if (result <= 0)
             {
-                model = Result<ReqProductModel>.Error(JsonResource.WHE044);
+                model = Result<ReqProductModel>.Error(JsonResource.WHE042);
                 return model;
             }
-            model = Result<ReqProductModel>.Success(JsonResource.WHS045);
+            model = Result<ReqProductModel>.Success(JsonResource.WHS043);
 
             #endregion
         }
