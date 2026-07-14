@@ -21,7 +21,7 @@ public class JsonResource
     /// <summary>
     /// Requested Product is successfully Rejected.
     /// </summary>
-    public static readonly string WHE066 = "WH#E066";
+    public static readonly string WHS066 = "WH#S066";
 
     /// <summary>
     /// Requested Product is successfully Approved.

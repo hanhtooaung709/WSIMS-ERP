@@ -186,7 +186,7 @@ public class ApproveReqProductService : AuthorizationService
             _db.Entry(product).State = EntityState.Modified;
             await _db.SaveChangesAsync();
 
-            model = Result<ReqProductModel>.Success(JsonResource.WHE066);
+            model = Result<ReqProductModel>.Success(JsonResource.WHS066);
 
             #endregion
         }
