@@ -19,6 +19,51 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// Product is already Change Requested!
+    /// </summary>
+    public static readonly string WHE037 = "WH#E037";
+
+    /// <summary>
+    /// Product is already Requested!
+    /// </summary>
+    public static readonly string WHE036 = "WH#E036";
+
+    /// <summary>
+    /// Product does not exist!
+    /// </summary>
+    public static readonly string WHE035 = "WH#E035";
+
+    /// <summary>
+    /// Product Code is already Change Requested!
+    /// </summary>
+    public static readonly string WHE034 = "WH#E034";
+
+    /// <summary>
+    /// Product Code is already Requested!
+    /// </summary>
+    public static readonly string WHE033 = "WH#E033";
+
+    /// <summary>
+    /// Product Code is already exist!
+    /// </summary>
+    public static readonly string WHE032 = "WH#E032";
+
+    /// <summary>
+    /// Product Name is already Change Requested!
+    /// </summary>
+    public static readonly string WHE031 = "WH#E031";
+
+    /// <summary>
+    /// Product Name is already Requested!
+    /// </summary>
+    public static readonly string WHE030 = "WH#E030";
+
+    /// <summary>
+    /// Product Name is already exist!
+    /// </summary>
+    public static readonly string WHE029 = "WH#E029";
+
+    /// <summary>
     /// Requsted Change User is successfully Deteted.
     /// </summary>
     public static readonly string WHS028 = "WH#S028";
