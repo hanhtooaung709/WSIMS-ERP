@@ -21,7 +21,7 @@ public class JsonResource
     /// <summary>
     /// Requsted Product is successfully Deteted.
     /// </summary>
-    public static readonly string WHS049 = "WH#S049";
+    public static readonly string WHS048 = "WH#S048";
 
     /// <summary>
     /// Requsted Change Product delete fail!

@@ -279,7 +279,7 @@ public class ReqProductChangesService : AuthorizationService
                 model = Result<ReqProductChangesModel>.Error(JsonResource.WHE047);
                 return model;
             }
-            model = Result<ReqProductChangesModel>.Success(JsonResource.WHS049s);
+            model = Result<ReqProductChangesModel>.Success(JsonResource.WHS048);
 
             #endregion
         }
