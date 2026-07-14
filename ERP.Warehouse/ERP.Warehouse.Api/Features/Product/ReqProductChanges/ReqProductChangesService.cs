@@ -100,7 +100,7 @@ public class ReqProductChangesService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.ReqProductChangesId == reqModel.ReqProductChangesId);
             if (product is null)
             {
-                model = Result<ReqProductChangesModel>.Error("Requested Product does not exist.");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE044);
                 return model;
             }
 
@@ -138,7 +138,7 @@ public class ReqProductChangesService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.ReqProductChangesId == reqModel.ReqProductChangesId);
             if (product is null)
             {
-                model = Result<ReqProductChangesModel>.Error("Requseted Product does not exist.");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE044);
                 return model;
             }
 
@@ -148,7 +148,7 @@ public class ReqProductChangesService : AuthorizationService
                                x.Status != EnumRequestedStatus.Pending.ToString());
             if (reqProduct)
             {
-                model = Result<ReqProductChangesModel>.Error("Requseted User is not pending status");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE045);
                 return model;
             }
             #endregion
@@ -160,7 +160,7 @@ public class ReqProductChangesService : AuthorizationService
                 .AnyAsync(x => x.ProductName.Trim().ToLower() == reqModel.ProductName!.Trim().ToLower());
             if (userName)
             {
-                model = Result<ReqProductChangesModel>.Error("Product Name is already exist!");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE029);
                 return model;
             }
 
@@ -170,7 +170,7 @@ public class ReqProductChangesService : AuthorizationService
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (userName)
             {
-                model = Result<ReqProductChangesModel>.Error("Product Name is already Requested!");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE030);
                 return model;
             }
 
@@ -181,7 +181,7 @@ public class ReqProductChangesService : AuthorizationService
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (userName)
             {
-                model = Result<ReqProductChangesModel>.Error("Product Name is already Requested!");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE031);
                 return model;
             }
 
@@ -194,7 +194,7 @@ public class ReqProductChangesService : AuthorizationService
                 .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower());
             if (code)
             {
-                model = Result<ReqProductChangesModel>.Error("Product Code is already exist!");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE032);
                 return model;
             }
 
@@ -204,7 +204,7 @@ public class ReqProductChangesService : AuthorizationService
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (code)
             {
-                model = Result<ReqProductChangesModel>.Error("Product Code is already Requested!");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE033);
                 return model;
             }
 
@@ -215,7 +215,7 @@ public class ReqProductChangesService : AuthorizationService
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (code)
             {
-                model = Result<ReqProductChangesModel>.Error("Product Code is already Requested!");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE034);
                 return model;
             }
 
@@ -231,7 +231,7 @@ public class ReqProductChangesService : AuthorizationService
             _db.Entry(product).State = EntityState.Modified;
             _db.TblReqProductChanges.Update(product);
             await _db.SaveChangesAsync();
-            model = Result<ReqProductChangesModel>.Success("Requested Product is successfully updated");
+            model = Result<ReqProductChangesModel>.Success(JsonResource.WHS046);
 
             #endregion
         }
@@ -254,7 +254,7 @@ public class ReqProductChangesService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.ReqProductChangesId == reqModel.ReqProductChangesId);
             if (product is null)
             {
-                model = Result<ReqProductChangesModel>.Error("Requested Product does not exist.");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE044);
                 return model;
             }
 
@@ -264,7 +264,7 @@ public class ReqProductChangesService : AuthorizationService
                                x.Status != EnumRequestedStatus.Pending.ToString());
             if (reqUser)
             {
-                model = Result<ReqProductChangesModel>.Error("Requseted Product is not pending status");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE045);
                 return model;
             }
 
@@ -276,10 +276,10 @@ public class ReqProductChangesService : AuthorizationService
             var result = _db.SaveChanges();
             if (result <= 0)
             {
-                model = Result<ReqProductChangesModel>.Error("Requsted Product delete fail!");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE047);
                 return model;
             }
-            model = Result<ReqProductChangesModel>.Success("Requsted Product is successfully deteted");
+            model = Result<ReqProductChangesModel>.Success(JsonResource.WHS049s);
 
             #endregion
         }

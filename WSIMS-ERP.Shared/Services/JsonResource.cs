@@ -21,6 +21,31 @@ public class JsonResource
     /// <summary>
     /// Requsted Product is successfully Deteted.
     /// </summary>
+    public static readonly string WHS049 = "WH#S049";
+
+    /// <summary>
+    /// Requsted Change Product delete fail!
+    /// </summary>
+    public static readonly string WHE047 = "WH#E047";
+
+    /// <summary>
+    /// Requested Change Product is successfully Updated.
+    /// </summary>
+    public static readonly string WHS046 = "WH#S046";
+
+    /// <summary>
+    /// Requseted Change Product is not pending status!
+    /// </summary>
+    public static readonly string WHE045 = "WH#E045";
+
+    /// <summary>
+    /// Requested Change Product does not exist!
+    /// </summary>
+    public static readonly string WHE044 = "WH#E044";
+
+    /// <summary>
+    /// Requsted Product is successfully Deteted.
+    /// </summary>
     public static readonly string WHS043 = "WH#S043";
 
     /// <summary>
