@@ -19,6 +19,31 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// Requested Product Change is successfully Reject.
+    /// </summary>
+    public static readonly string WHS071 = "WH#S71";
+
+    /// <summary>
+    /// Requested Product Change is successfully Approved.
+    /// </summary>
+    public static readonly string WHS070 = "WH#S070";
+
+    /// <summary>
+    /// Requseted Change Product is not pending status!
+    /// </summary>
+    public static readonly string WHE069 = "WH#E069";
+
+    /// <summary>
+    /// Requseted Change Product does not exist!
+    /// </summary>
+    public static readonly string WHE068 = "WH#E068";
+
+    /// <summary>
+    /// Product does not exist!
+    /// </summary>
+    public static readonly string WHE067 = "WH#E067";
+
+    /// <summary>
     /// Requested Product is successfully Rejected.
     /// </summary>
     public static readonly string WHS066 = "WH#S066";
@@ -154,7 +179,7 @@ public class JsonResource
     public static readonly string WHS040 = "WH#S040";
 
     /// <summary>
-    /// Requseted User is not pending status!
+    /// Requseted Product is not pending status!
     /// </summary>
     public static readonly string WHE039 = "WH#E039";
 

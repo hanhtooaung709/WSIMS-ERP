@@ -100,7 +100,7 @@ public class ApproveReqProductChangesService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.ProductId == reqModel.ProductId);
             if (product is null)
             {
-                model = Result<ReqProductChangesModel>.Error("Requseted Product does not exist.");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE067);
                 return model;
             }
 
@@ -109,7 +109,7 @@ public class ApproveReqProductChangesService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.ReqProductChangesId == reqModel.ReqProductChangesId);
             if (product is null)
             {
-                model = Result<ReqProductChangesModel>.Error("Requseted Product does not exist.");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE068);
                 return model;
             }
 
@@ -119,7 +119,7 @@ public class ApproveReqProductChangesService : AuthorizationService
                                x.Status != EnumRequestedStatus.Pending.ToString());
             if (reqProduct)
             {
-                model = Result<ReqProductChangesModel>.Error("Requseted User is not pending status");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE069);
                 return model;
             }
 
@@ -150,7 +150,7 @@ public class ApproveReqProductChangesService : AuthorizationService
             _db.Entry(productChanges).State = EntityState.Modified;
             await _db.SaveChangesAsync();
 
-            model = Result<ReqProductChangesModel>.Success("Requested Product Changes is successfully approved");
+            model = Result<ReqProductChangesModel>.Success(JsonResource.WHS070);
 
             #endregion
         }
@@ -174,7 +174,7 @@ public class ApproveReqProductChangesService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.ProductId == reqModel.ProductId);
             if (product is null)
             {
-                model = Result<ReqProductChangesModel>.Error("Requseted Product does not exist.");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE067);
                 return model;
             }
 
@@ -183,7 +183,7 @@ public class ApproveReqProductChangesService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.ReqProductChangesId == reqModel.ReqProductChangesId);
             if (product is null)
             {
-                model = Result<ReqProductChangesModel>.Error("Requseted Product does not exist.");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE068);
                 return model;
             }
 
@@ -193,7 +193,7 @@ public class ApproveReqProductChangesService : AuthorizationService
                                x.Status != EnumRequestedStatus.Pending.ToString());
             if (reqProduct)
             {
-                model = Result<ReqProductChangesModel>.Error("Requseted User is not pending status");
+                model = Result<ReqProductChangesModel>.Error(JsonResource.WHE069);
                 return model;
             }
 
@@ -208,7 +208,7 @@ public class ApproveReqProductChangesService : AuthorizationService
             _db.Entry(productChanges).State = EntityState.Modified;
             await _db.SaveChangesAsync();
 
-            model = Result<ReqProductChangesModel>.Success("Requested Product Changes is successfully Reject");
+            model = Result<ReqProductChangesModel>.Success(JsonResource.WHS071);
 
             #endregion
         }
