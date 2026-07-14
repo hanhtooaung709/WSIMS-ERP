@@ -87,7 +87,7 @@ public class CurrencyService : AuthorizationService
                 .AnyAsync(x => x.CurrencyCode.Trim().ToLower() == reqModel.CurrencyCode!.Trim().ToLower());
             if (code)
             {
-                model = Result<CurrencyModel>.Error("Currency Code is already exist!");
+                model = Result<CurrencyModel>.Error(JsonResource.WHE049);
                 return model;
             }
 
@@ -100,7 +100,7 @@ public class CurrencyService : AuthorizationService
                 .AnyAsync(x => x.CurrencyDescription.Trim().ToLower() == reqModel.CurrencyDes!.Trim().ToLower());
             if (type)
             {
-                model = Result<CurrencyModel>.Error("Currency Description is already exist!");
+                model = Result<CurrencyModel>.Error(JsonResource.WHE050);
                 return model;
             }
 
@@ -119,7 +119,7 @@ public class CurrencyService : AuthorizationService
             await _db.TblCurrencies.AddAsync(item);
             await _db.SaveChangesAsync();
 
-            model = Result<CurrencyModel>.Success("Currency is successfully created");
+            model = Result<CurrencyModel>.Success(JsonResource.WHS051);
 
             #endregion
         }
@@ -142,7 +142,7 @@ public class CurrencyService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.CurrencyId == reqModel.CurrencyId && x.DelFlag == 0);
             if (box is null)
             {
-                model = Result<CurrencyModel>.Error("Currency does not exist.");
+                model = Result<CurrencyModel>.Error(JsonResource.WHE052);
                 return model;
             }
 
@@ -178,7 +178,7 @@ public class CurrencyService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.CurrencyId == reqModel.CurrencyId && x.DelFlag == 0);
             if (currency is null)
             {
-                model = Result<CurrencyModel>.Error("Currency does not exist.");
+                model = Result<CurrencyModel>.Error(JsonResource.WHE052);
                 return model;
             }
 
@@ -192,7 +192,7 @@ public class CurrencyService : AuthorizationService
                           x.CurrencyId != reqModel.CurrencyId);
             if (code)
             {
-                model = Result<CurrencyModel>.Error("Box Code is already exist!");
+                model = Result<CurrencyModel>.Error(JsonResource.WHE049);
                 return model;
             }
 
@@ -206,7 +206,7 @@ public class CurrencyService : AuthorizationService
                           x.CurrencyId != reqModel.CurrencyId);
             if (type)
             {
-                model = Result<CurrencyModel>.Error("Currency Description is already exist!");
+                model = Result<CurrencyModel>.Error(JsonResource.WHE050);
                 return model;
             }
 
@@ -223,7 +223,7 @@ public class CurrencyService : AuthorizationService
             _db.Entry(currency).State = EntityState.Modified;
             _db.TblCurrencies.Update(currency);
             await _db.SaveChangesAsync();
-            model = Result<CurrencyModel>.Success("Currency is successfully updated");
+            model = Result<CurrencyModel>.Success(JsonResource.WHS053);
 
             #endregion
         }
@@ -246,7 +246,7 @@ public class CurrencyService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.CurrencyId == reqModel.CurrencyId);
             if (currency is null)
             {
-                model = Result<CurrencyModel>.Error("Currency does not exist.");
+                model = Result<CurrencyModel>.Error(JsonResource.WHE052);
                 return model;
             }
 
@@ -258,10 +258,10 @@ public class CurrencyService : AuthorizationService
             var result = _db.SaveChanges();
             if (result <= 0)
             {
-                model = Result<CurrencyModel>.Error("Currency delete fail!");
+                model = Result<CurrencyModel>.Error(JsonResource.WHE054);
                 return model;
             }
-            model = Result<CurrencyModel>.Success("Currency is successfully deteted");
+            model = Result<CurrencyModel>.Success(JsonResource.WHS055);
 
             #endregion
         }

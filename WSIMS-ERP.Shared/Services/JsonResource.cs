@@ -19,6 +19,41 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// Currency is successfully Deteted.
+    /// </summary>
+    public static readonly string WHS055 = "WH#S055";
+
+    /// <summary>
+    /// Currency delete fail!
+    /// </summary>
+    public static readonly string WHE054 = "WH#E054";
+
+    /// <summary>
+    /// Currency is successfully Updated.
+    /// </summary>
+    public static readonly string WHS053 = "WH#S053";
+
+    /// <summary>
+    /// Currency does not exist!
+    /// </summary>
+    public static readonly string WHE052 = "WH#E052";
+
+    /// <summary>
+    /// Currency is successfully Created.
+    /// </summary>
+    public static readonly string WHS051 = "WH#S051";
+
+    /// <summary>
+    /// Currency Description is already exist!
+    /// </summary>
+    public static readonly string WHE050 = "WH#E050";
+
+    /// <summary>
+    /// Currency Code is already exist!
+    /// </summary>
+    public static readonly string WHE049 = "WH#E049";
+
+    /// <summary>
     /// Requsted Product is successfully Deteted.
     /// </summary>
     public static readonly string WHS048 = "WH#S048";
