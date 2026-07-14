@@ -19,6 +19,46 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// Requsted Product is successfully deteted.
+    /// </summary>
+    public static readonly string WHS045 = "WH#S045";
+
+    /// <summary>
+    /// Requsted Product delete fail!
+    /// </summary>
+    public static readonly string WHE044 = "WH#E044";
+
+    /// <summary>
+    /// Requseted Product is not pending status!
+    /// </summary>
+    public static readonly string WHE043 = "WH#E043";
+
+    /// <summary>
+    /// Requested Product does not exist!
+    /// </summary>
+    public static readonly string WHE042 = "WH#E042";
+
+    /// <summary>
+    /// Requested Product is successfully updated.
+    /// </summary>
+    public static readonly string WHS041 = "WH#S041";
+
+    /// <summary>
+    /// Requseted User is not pending status!
+    /// </summary>
+    public static readonly string WHE040 = "WH#E040";
+
+    /// <summary>
+    /// Requseted Product does not exist!
+    /// </summary>
+    public static readonly string WHE039 = "WH#E039";
+
+    /// <summary>
+    /// Requested Product does not exist!
+    /// </summary>
+    public static readonly string WHE038 = "WH#E038";
+
+    /// <summary>
     /// Product is already Change Requested!
     /// </summary>
     public static readonly string WHE037 = "WH#E037";
