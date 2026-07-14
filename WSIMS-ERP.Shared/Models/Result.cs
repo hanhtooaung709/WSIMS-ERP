@@ -16,7 +16,7 @@ public class Result<T>
         return new Result<T>
         {
             Data = data,
-            RespDesp = respCode,
+            RespCode = respCode,
             RespType = EnumRespType.Success
         };
     }
