@@ -19,7 +19,27 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
-    ///Box is successfully Deteted.
+    /// Requested Product is successfully Rejected.
+    /// </summary>
+    public static readonly string WHE066 = "WH#E066";
+
+    /// <summary>
+    /// Requested Product is successfully Approved.
+    /// </summary>
+    public static readonly string WHS065 = "WH#S065";
+
+    /// <summary>
+    /// Requseted User is not pending status!
+    /// </summary>
+    public static readonly string WHE064 = "WH#E064";
+
+    /// <summary>
+    /// Requseted Product does not exist!
+    /// </summary>
+    public static readonly string WHE063 = "WH#E063";
+
+    /// <summary>
+    /// Box is successfully Deteted.
     /// </summary>
     public static readonly string WHS062 = "WH#S062";
 

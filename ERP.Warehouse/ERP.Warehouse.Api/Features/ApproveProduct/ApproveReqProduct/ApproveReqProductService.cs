@@ -97,7 +97,7 @@ public class ApproveReqProductService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.ReqProductId == reqModel.ReqProductId);
             if (product is null)
             {
-                model = Result<ReqProductModel>.Error("Requseted Product does not exist.");
+                model = Result<ReqProductModel>.Error(JsonResource.WHE063);
                 return model;
             }
 
@@ -107,7 +107,7 @@ public class ApproveReqProductService : AuthorizationService
                                x.Status != EnumRequestedStatus.Pending.ToString());
             if (reqProduct)
             {
-                model = Result<ReqProductModel>.Error("Requseted User is not pending status");
+                model = Result<ReqProductModel>.Error(JsonResource.WHE064);
                 return model;
             }
 
@@ -137,7 +137,7 @@ public class ApproveReqProductService : AuthorizationService
             _db.Entry(product).State = EntityState.Modified;
             await _db.SaveChangesAsync();
 
-            model = Result<ReqProductModel>.Success("Requested Product is successfully approved");
+            model = Result<ReqProductModel>.Success(JsonResource.WHS065);
 
             #endregion
         }
@@ -161,7 +161,7 @@ public class ApproveReqProductService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.ReqProductId == reqModel.ReqProductId);
             if (product is null)
             {
-                model = Result<ReqProductModel>.Error("Requseted Product does not exist.");
+                model = Result<ReqProductModel>.Error(JsonResource.WHE063);
                 return model;
             }
 
@@ -171,7 +171,7 @@ public class ApproveReqProductService : AuthorizationService
                                x.Status != EnumRequestedStatus.Pending.ToString());
             if (reqProduct)
             {
-                model = Result<ReqProductModel>.Error("Requseted User is not pending status");
+                model = Result<ReqProductModel>.Error(JsonResource.WHE064);
                 return model;
             }
 
@@ -186,7 +186,7 @@ public class ApproveReqProductService : AuthorizationService
             _db.Entry(product).State = EntityState.Modified;
             await _db.SaveChangesAsync();
 
-            model = Result<ReqProductModel>.Success("Requested Product is successfully rejected");
+            model = Result<ReqProductModel>.Success(JsonResource.WHE066);
 
             #endregion
         }
