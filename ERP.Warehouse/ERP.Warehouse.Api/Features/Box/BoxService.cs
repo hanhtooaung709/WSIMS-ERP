@@ -63,7 +63,7 @@ public class BoxService : AuthorizationService
                 .AnyAsync(x => x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower());
             if (code)
             {
-                model = Result<BoxModel>.Error("Box Code is already exist!");
+                model = Result<BoxModel>.Error(JsonResource.WHE056);
                 return model;
             }
 
@@ -76,7 +76,7 @@ public class BoxService : AuthorizationService
                 .AnyAsync(x => x.Type.Trim().ToLower() == reqModel.Type!.Trim().ToLower());
             if (type)
             {
-                model = Result<BoxModel>.Error("Box Type is already exist!");
+                model = Result<BoxModel>.Error(JsonResource.WHE057);
                 return model;
             }
 
@@ -98,7 +98,7 @@ public class BoxService : AuthorizationService
             await _db.TblBoxes.AddAsync(item);
             await _db.SaveChangesAsync();
 
-            model = Result<BoxModel>.Success("Box is successfully created");
+            model = Result<BoxModel>.Success(JsonResource.WHES058);
 
             #endregion
         }
@@ -121,7 +121,7 @@ public class BoxService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.BoxId == reqModel.BoxId && x.DelFlag == 0);
             if (box is null)
             {
-                model = Result<BoxModel>.Error("Box does not exist.");
+                model = Result<BoxModel>.Error(JsonResource.WHE059);
                 return model;
             }
 
@@ -161,7 +161,7 @@ public class BoxService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.BoxId == reqModel.BoxId && x.DelFlag == 0);
             if (box is null)
             {
-                model = Result<BoxModel>.Error("Box does not exist.");
+                model = Result<BoxModel>.Error(JsonResource.WHE059);
                 return model;
             }
 
@@ -175,7 +175,7 @@ public class BoxService : AuthorizationService
                           x.BoxId != reqModel.BoxId);
             if (code)
             {
-                model = Result<BoxModel>.Error("Box Code is already exist!");
+                model = Result<BoxModel>.Error(JsonResource.WHE056);
                 return model;
             }
 
@@ -189,7 +189,7 @@ public class BoxService : AuthorizationService
                           x.BoxId != reqModel.BoxId);
             if (type)
             {
-                model = Result<BoxModel>.Error("Box Type is already exist!");
+                model = Result<BoxModel>.Error(JsonResource.WHE057);
                 return model;
             }
 
@@ -209,7 +209,7 @@ public class BoxService : AuthorizationService
             _db.Entry(box).State = EntityState.Modified;
             _db.TblBoxes.Update(box);
             await _db.SaveChangesAsync();
-            model = Result<BoxModel>.Success("Box is successfully updated");
+            model = Result<BoxModel>.Success(JsonResource.WHS060);
 
             #endregion
         }
@@ -232,7 +232,7 @@ public class BoxService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.BoxId == reqModel.BoxId);
             if (box is null)
             {
-                model = Result<BoxModel>.Error("Box does not exist.");
+                model = Result<BoxModel>.Error(JsonResource.WHE059);
                 return model;
             }
 
@@ -244,10 +244,10 @@ public class BoxService : AuthorizationService
             var result = _db.SaveChanges();
             if (result <= 0)
             {
-                model = Result<BoxModel>.Error("Box delete fail!");
+                model = Result<BoxModel>.Error(JsonResource.WHE061);
                 return model;
             }
-            model = Result<BoxModel>.Success("Box is successfully deteted");
+            model = Result<BoxModel>.Success(JsonResource.WHS062);
 
             #endregion
         }

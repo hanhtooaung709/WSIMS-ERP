@@ -19,6 +19,41 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    ///Box is successfully Deteted.
+    /// </summary>
+    public static readonly string WHS062 = "WH#S062";
+
+    /// <summary>
+    /// Box delete fail!
+    /// </summary>
+    public static readonly string WHE061 = "WH#E061";
+
+    /// <summary>
+    /// Box is successfully Updated.
+    /// </summary>
+    public static readonly string WHS060 = "WH#S060";
+
+    /// <summary>
+    /// Box does not exist!
+    /// </summary>
+    public static readonly string WHE059 = "WH#E059";
+
+    /// <summary>
+    /// Box is successfully Created.
+    /// </summary>
+    public static readonly string WHS058 = "WH#S058";
+
+    /// <summary>
+    /// Box Type is already exist!
+    /// </summary>
+    public static readonly string WHE057 = "WH#E057";
+
+    /// <summary>
+    /// Box Code is already exist!
+    /// </summary>
+    public static readonly string WHE056 = "WH#E056";
+
+    /// <summary>
     /// Currency is successfully Deteted.
     /// </summary>
     public static readonly string WHS055 = "WH#S055";
