@@ -98,7 +98,7 @@ public class BoxService : AuthorizationService
             await _db.TblBoxes.AddAsync(item);
             await _db.SaveChangesAsync();
 
-            model = Result<BoxModel>.Success(JsonResource.WHES058);
+            model = Result<BoxModel>.Success(JsonResource.WHS058);
 
             #endregion
         }

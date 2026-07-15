@@ -32,11 +32,20 @@ public static class FeatureManager
     {
         #region Add Db Services
 
-        builder.Services.AddDbContext<AppDbContext>(opt =>
+        //MSSql Server
+        /*builder.Services.AddDbContext<AppDbContext>(opt =>
         {
             var connectionString = builder.Configuration.GetSection("DbConnection").Value;
             opt.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             opt.UseSqlServer(connectionString);
+        }, ServiceLifetime.Transient, ServiceLifetime.Transient);*/
+
+        //Postgre Server
+        builder.Services.AddDbContext<AppDbContext>(opt =>
+        {
+            var connectionString = builder.Configuration.GetSection("DbConnection").Value;
+            opt.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            opt.UseNpgsql(connectionString);
         }, ServiceLifetime.Transient, ServiceLifetime.Transient);
 
         #endregion
