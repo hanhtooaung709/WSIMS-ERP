@@ -1,7 +1,7 @@
 ﻿global using WSIMS_ERP.Shared.Enums;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;
-global using System.Data.SqlClient;
+global using Npgsql;
 global using System.Data;
 global using WSIMS_ERP.Shared.Models.ConfigModel;
 global using Dapper;

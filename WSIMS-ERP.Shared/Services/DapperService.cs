@@ -13,7 +13,7 @@ public class DapperService
 
     public async Task<List<T>> GetListAsync<T>(string query, object? parameter = null)
     {
-        using IDbConnection dbConnection = new SqlConnection(_setting.DbConnection);
+        using IDbConnection dbConnection = new NpgsqlConnection(_setting.DbConnection);
         dbConnection.Open();
         var lst = await dbConnection.QueryAsync<T>(query, parameter);
         List<T> result = lst.ToList();
@@ -24,7 +24,7 @@ public class DapperService
     public async Task<DapperResponseModel<T>> GetListExecute<T>(string query, object parameters)
     {
         DapperResponseModel<T> model = new();
-        using IDbConnection dbConnection = new SqlConnection(_setting.DbConnection);
+        using IDbConnection dbConnection = new NpgsqlConnection(_setting.DbConnection);
         dbConnection.Open();
         var result = await dbConnection.QueryAsync<T>(query, parameters);
         model.TotalRowCount = result.Count();
@@ -35,7 +35,7 @@ public class DapperService
 
     public async Task<T> QueryFirstAsync<T>(string query, object parameter)
     {
-        using IDbConnection dbConnection = new SqlConnection(_setting.DbConnection);
+        using IDbConnection dbConnection = new NpgsqlConnection(_setting.DbConnection);
         dbConnection.Open();
         var result = await dbConnection.QueryFirstOrDefaultAsync<T>(query, parameter);
 
@@ -44,33 +44,51 @@ public class DapperService
 
     public async Task<int> ExecuteAsync(string query, object? parameters = null)
     {
-        using IDbConnection dbConnection = new SqlConnection(_setting.DbConnection);
+        using IDbConnection dbConnection = new NpgsqlConnection(_setting.DbConnection);
         dbConnection.Open();
         var result = await dbConnection.ExecuteAsync(query, parameters);
 
         return result;
     }
 
+    private (string sql, DynamicParameters dp) PrepareStoredProcedure(string query, object parameters)
+    {
+        var dp = new DynamicParameters();
+        dp.AddDynamicParams(parameters);
+
+        var paramNames = new List<string>();
+        foreach (var prop in parameters.GetType().GetProperties())
+        {
+            paramNames.Add($"@{prop.Name}");
+        }
+
+        var sql = $"SELECT * FROM \"{query}\"({string.Join(", ", paramNames)})";
+        return (sql, dp);
+    }
+
     public async Task<dynamic> QueryStoredProcedure(string query, object parameters)
     {
-        using IDbConnection dbConnection = new SqlConnection(_setting.DbConnection);
+        using IDbConnection dbConnection = new NpgsqlConnection(_setting.DbConnection);
         dbConnection.Open();
-        dynamic result = await dbConnection.QueryAsync(query, parameters, commandType: CommandType.StoredProcedure);
+        var (sql, dp) = PrepareStoredProcedure(query, parameters);
+        dynamic result = await dbConnection.QueryAsync(sql, dp, commandType: CommandType.Text);
         return result;
     }
 
     public async Task<List<T>> QueryStoredProcedureAsync<T>(string query, object parameters)
     {
-        return await Query<T>(query, parameters, CommandType.StoredProcedure);
+        var (sql, dp) = PrepareStoredProcedure(query, parameters);
+        return await Query<T>(sql, dp, CommandType.Text);
     }
 
     public List<T> QueryStoredProcedure<T>(string query, object parameters)
     {
         try
         {
-            using IDbConnection dbConnection = new SqlConnection(_setting.DbConnection);
+            var (sql, dp) = PrepareStoredProcedure(query, parameters);
+            using IDbConnection dbConnection = new NpgsqlConnection(_setting.DbConnection);
             dbConnection.Open();
-            var lst = dbConnection.Query<T>(query, parameters, commandType: CommandType.StoredProcedure);
+            var lst = dbConnection.Query<T>(sql, dp, commandType: CommandType.Text);
             List<T> result = lst.ToList();
 
             return result;
@@ -87,13 +105,14 @@ public class DapperService
     {
         try
         {
-            using IDbConnection dbConnection = new SqlConnection(_setting.DbConnection);
+            var (sql, dp) = PrepareStoredProcedure(query, parameters);
+            using IDbConnection dbConnection = new NpgsqlConnection(_setting.DbConnection);
             dbConnection.Open();
             var lst = await dbConnection.QueryAsync<T>(
-                query,
-                parameters,
+                sql,
+                dp,
                 commandTimeout: 0,
-                commandType: CommandType.StoredProcedure);
+                commandType: CommandType.Text);
             var result = lst.FirstOrDefault()!;
 
             return result;
@@ -111,10 +130,19 @@ public class DapperService
     {
         try
         {
-            using IDbConnection dbConnection = new SqlConnection(_setting.DbConnection);
-            dbConnection.Open();
-            var lst = await dbConnection.QueryAsync<T>(query, parameters, commandType: commandType);
-            List<T> result = lst.ToList();
+            if (commandType == CommandType.StoredProcedure)
+            {
+                var (sql, dp) = PrepareStoredProcedure(query, parameters!);
+                using IDbConnection conn = new NpgsqlConnection(_setting.DbConnection);
+                conn.Open();
+                var items = await conn.QueryAsync<T>(sql, dp, commandType: CommandType.Text);
+                return items.ToList();
+            }
+
+            using IDbConnection connection = new NpgsqlConnection(_setting.DbConnection);
+            connection.Open();
+            var list = await connection.QueryAsync<T>(query, parameters, commandType: commandType);
+            List<T> result = list.ToList();
 
             return result;
         }
@@ -128,7 +156,7 @@ public class DapperService
 
     public async Task<T> GetDetailAsync<T>(string query, object parameters)
     {
-        using IDbConnection dbConnection = new SqlConnection(_setting.DbConnection);
+        using IDbConnection dbConnection = new NpgsqlConnection(_setting.DbConnection);
         dbConnection.Open();
         var result = await dbConnection.QueryAsync<T>(query, parameters);
         return result.FirstOrDefault()!;
@@ -136,7 +164,7 @@ public class DapperService
 
     public async Task<int> ExecuteCountAsync(string query, object parameters)
     {
-        using IDbConnection dbConnection = new SqlConnection(_setting.DbConnection);
+        using IDbConnection dbConnection = new NpgsqlConnection(_setting.DbConnection);
         dbConnection.Open();
         var result = await dbConnection.QuerySingleAsync<int>(query, parameters);
         return result;
@@ -147,18 +175,25 @@ public class DapperService
         object parameters,
         CommandType commandType = CommandType.Text)
     {
-        using (IDbConnection dbConnection = new SqlConnection(_setting.DbConnection))
+        using (IDbConnection dbConnection = new NpgsqlConnection(_setting.DbConnection))
         {
-            var result = await dbConnection.QueryAsync<T>(query, parameters, commandType: commandType);
-            return result.FirstOrDefault()!;
+            if (commandType == CommandType.StoredProcedure)
+            {
+                var (sql, dp) = PrepareStoredProcedure(query, parameters);
+                var result = await dbConnection.QueryAsync<T>(sql, dp, commandType: CommandType.Text);
+                return result.FirstOrDefault()!;
+            }
+
+            var rst = await dbConnection.QueryAsync<T>(query, parameters, commandType: commandType);
+            return rst.FirstOrDefault()!;
         }
     }
 
     public async Task<(R, List<T>)> GetMultipleListAsync<R, T>(string query, object? parameters = null)
     {
-        using (IDbConnection dbConnection = new SqlConnection(_setting.DbConnection))
+        using (IDbConnection dbConnection = new NpgsqlConnection(_setting.DbConnection))
         {
-            using (var result = dbConnection.QueryMultiple(query, parameters, commandType: CommandType.StoredProcedure))
+            using (var result = dbConnection.QueryMultiple(query, parameters, commandType: CommandType.Text))
             {
                 var pageSetting = await result.ReadFirstAsync<R>();
                 var lstResult = await result.ReadAsync<T>();
@@ -170,12 +205,12 @@ public class DapperService
 
     public async Task<(R, List<T>)> GetMultipleList<R, T>(string query, object? parameters = null)
     {
-        using (IDbConnection db = new SqlConnection(_setting.DbConnection))
+        using (IDbConnection db = new NpgsqlConnection(_setting.DbConnection))
         {
             using (var multi = await db.QueryMultipleAsync(
                        query,
                        parameters,
-                       commandType: CommandType.StoredProcedure))
+                       commandType: CommandType.Text))
             {
                 var data = (await multi.ReadAsync<T>()).ToList();
                 var pageInfo = await multi.ReadFirstOrDefaultAsync<R>();
@@ -186,12 +221,12 @@ public class DapperService
 
     public async Task<(R, List<T>)> GetVoucherMultipleList<R, T>(string query, object? parameters = null)
     {
-        using (IDbConnection db = new SqlConnection(_setting.DbConnection))
+        using (IDbConnection db = new NpgsqlConnection(_setting.DbConnection))
         {
             using (var multi = await db.QueryMultipleAsync(
                        query,
                        parameters,
-                       commandType: CommandType.StoredProcedure))
+                       commandType: CommandType.Text))
             {
                 var data = await multi.ReadFirstOrDefaultAsync<R>();
                 var dataDetail = (await multi.ReadAsync<T>()).ToList();
@@ -202,9 +237,9 @@ public class DapperService
 
     public async Task<(List<T>, R)> GetListWithSingleData<T, R>(string query, object? parameters = null)
     {
-        using (IDbConnection db = new SqlConnection(_setting.DbConnection))
+        using (IDbConnection db = new NpgsqlConnection(_setting.DbConnection))
         {
-            using (var multi = await db.QueryMultipleAsync(query, parameters, commandType: CommandType.StoredProcedure))
+            using (var multi = await db.QueryMultipleAsync(query, parameters, commandType: CommandType.Text))
             {
                 var data = await multi.ReadFirstOrDefaultAsync<R>();
                 var dataDetail = (await multi.ReadAsync<T>()).ToList();
@@ -218,12 +253,12 @@ public class DapperService
         string query,
         object? parameters = null)
     {
-        using (IDbConnection dbConnection = new SqlConnection(_setting.DbConnection))
+        using (IDbConnection dbConnection = new NpgsqlConnection(_setting.DbConnection))
         {
             using (var reader = await dbConnection.QueryMultipleAsync(
                        query,
                        parameters,
-                       commandType: CommandType.StoredProcedure))
+                       commandType: CommandType.Text))
             {
                 var totalCount = await reader.ReadFirstAsync<int>();
                 var readCount = await reader.ReadFirstAsync<int>();
@@ -238,20 +273,18 @@ public class DapperService
         string procedureName,
         object? inputParams = null,
         Dictionary<string, DbType>? outputParams = null,
-        Dictionary<string, int>? outputSizes = null, // New parameter for individual sizes
-        CommandType commandType = CommandType.StoredProcedure
+        Dictionary<string, int>? outputSizes = null,
+        CommandType commandType = CommandType.Text
     ) where T : class, new()
     {
-        using IDbConnection dbConnection = new SqlConnection(_setting.DbConnection);
+        using IDbConnection dbConnection = new NpgsqlConnection(_setting.DbConnection);
         var dynamicParams = new DynamicParameters();
 
-        // Add input parameters
         if (inputParams != null)
         {
             dynamicParams.AddDynamicParams(inputParams);
         }
 
-        // Add output parameters with specific sizes
         if (outputParams != null)
         {
             foreach (var kvp in outputParams)
@@ -269,14 +302,13 @@ public class DapperService
                 commandType: commandType
             );
 
-            // Collect output values
             var outputs = new Dictionary<string, object>();
             if (outputParams != null)
             {
                 foreach (var kvp in outputParams)
                 {
                     var outputValue = dynamicParams.Get<object>(kvp.Key);
-                    if (outputValue != null) // Safer check
+                    if (outputValue != null)
                     {
                         outputs[kvp.Key] = outputValue;
                     }
@@ -285,10 +317,8 @@ public class DapperService
 
             return (result, outputs);
         }
-        catch (SqlException ex)
+        catch (NpgsqlException ex)
         {
-            // Log the exception
-            // Rethrow or return a failure state
             throw new ApplicationException($"An error occurred while executing the stored procedure: {procedureName}",
                 ex);
         }
@@ -296,9 +326,9 @@ public class DapperService
 
     public async Task<(R, List<T1>, List<T2>)> GetThreeListAsync<R, T1, T2>(string query, object? parameters = null)
     {
-        using (IDbConnection dbConnection = new SqlConnection(_setting.DbConnection))
+        using (IDbConnection dbConnection = new NpgsqlConnection(_setting.DbConnection))
         {
-            using (var result = dbConnection.QueryMultiple(query, parameters, commandType: CommandType.StoredProcedure))
+            using (var result = dbConnection.QueryMultiple(query, parameters, commandType: CommandType.Text))
             {
                 var pageSetting = await result.ReadFirstAsync<R>();
                 var list1 = (await result.ReadAsync<T1>()).ToList();
@@ -316,12 +346,12 @@ public class DapperService
             throw new ArgumentException("Parameters must be a Dapper DynamicParameters instance for stored procedures with output.");
         }
 
-        using IDbConnection dbConnection = new SqlConnection(_setting.DbConnection);
+        using IDbConnection dbConnection = new NpgsqlConnection(_setting.DbConnection);
         dbConnection.Open();
         _ = await dbConnection.ExecuteAsync(
             sql: storedProcedureName,
             param: dynamicParameters,
-            commandType: CommandType.StoredProcedure
+            commandType: CommandType.Text
         );
         return dynamicParameters.Get<string>(outputParameterName);
     }
