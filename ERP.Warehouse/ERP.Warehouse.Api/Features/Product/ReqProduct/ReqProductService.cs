@@ -110,6 +110,7 @@ public class ReqProductService : AuthorizationService
                 ProductName = product.ProductName,
                 ProductCode = product.ProductCode,
                 SupplierName = product.SupplierName,
+                ImagePath = product.ImagePath,
             };
             model = Result<ReqProductModel>.Success(response);
 
@@ -219,6 +220,20 @@ public class ReqProductService : AuthorizationService
 
             #region Prepare Data
 
+            if (!reqModel.ImageData.IsNullOrEmpty())
+            {
+                if (!product.ImagePath.IsNullOrEmpty() && File.Exists(product.ImagePath))
+                {
+                    File.Delete(product.ImagePath);
+                }
+                var imgFolder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\Product";
+                Directory.CreateDirectory(imgFolder);
+                var fileName = DevCode.GenerateUlid() + ".jpg";
+                var imagePath = Path.Combine(imgFolder, fileName);
+                await DevCode.WriteBase64ToFileAsync(reqModel.ImageData, imagePath);
+                product.ImagePath = imagePath;
+            }
+
             product.ProductName = reqModel.ProductName!;
             product.ProductCode = reqModel.ProductCode!;
             product.SupplierName = reqModel.SupplierName!;
@@ -268,6 +283,11 @@ public class ReqProductService : AuthorizationService
 
             #region Prepare Data
 
+            if (!product.ImagePath.IsNullOrEmpty() && File.Exists(product.ImagePath))
+            {
+                File.Delete(product.ImagePath);
+            }
+
             _db.TblReqProducts.Remove(product);
             var result = _db.SaveChanges();
             if (result <= 0)
@@ -302,6 +322,7 @@ public class ReqProductService : AuthorizationService
             productInfo.Add("Product Code", detail.ProductCode!);
             productInfo.Add("Supplier Name", detail.SupplierName!);
             model.ProductInfo = productInfo;
+            model.ItemImagePath = detail.ImagePath;
 
             List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();
             makerChecker.Add("Requested User", detail.ReqUser!);

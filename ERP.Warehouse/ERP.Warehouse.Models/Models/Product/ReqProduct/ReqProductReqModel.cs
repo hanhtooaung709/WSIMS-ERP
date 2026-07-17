@@ -7,4 +7,5 @@ public class ReqProductReqModel
     public string? ProductCode { get; set; }
     public string? SupplierName { get; set; }
     public string? Status { get; set; }
+    public string? ImageData { get; set; }
 }

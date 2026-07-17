@@ -150,12 +150,23 @@ public class ProductListService : AuthorizationService
 
             #region Prepare Data
 
+            var imagePath = "";
+            if (!reqModel.ImageData.IsNullOrEmpty())
+            {
+                var imgFolder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\Product";
+                Directory.CreateDirectory(imgFolder);
+                var fileName = DevCode.GenerateUlid() + ".jpg";
+                imagePath = Path.Combine(imgFolder, fileName);
+                await DevCode.WriteBase64ToFileAsync(reqModel.ImageData, imagePath);
+            }
+
             TblReqProduct item = new TblReqProduct
             {
                 ReqProductId = DevCode.GenerateUlid(),
                 ProductName = reqModel.ProductName!,
                 ProductCode = reqModel.ProductCode!,
                 SupplierName = reqModel.SupplierName!,
+                ImagePath = imagePath,
                 Status = EnumRequestedStatus.Pending.ToString(),
                 ReqUserId = AuthorizedUserId,
                 ReqDateTime = DevCode.GetServerDateTime()

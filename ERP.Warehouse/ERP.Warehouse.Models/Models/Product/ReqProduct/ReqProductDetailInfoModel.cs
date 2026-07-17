@@ -11,4 +11,5 @@ public class ReqProductDetailInfoModel
     public string? ReqDateTime { get; set; }
     public string? ApprovedUser { get; set; }
     public string? ApprovedDateTime { get; set; }
+    public string? ImagePath { get; set; }
 }

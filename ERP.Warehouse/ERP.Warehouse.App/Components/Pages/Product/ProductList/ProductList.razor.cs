@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Drawing.Diagrams;
 using ERP.Warehouse.Models.Models.Product.ProductList;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
+using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
@@ -18,6 +19,9 @@ public partial class ProductList
     private EnumFormType _formType = EnumFormType.List;
     private bool hover = true;
     private bool _readOnly;
+
+    private IList<IBrowserFile> _selectedFiles = new List<IBrowserFile>();
+    private string? _imagePreviewUrl;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -119,6 +123,8 @@ public partial class ProductList
             #endregion
 
             _reqModel = new();
+            _selectedFiles.Clear();
+            _imagePreviewUrl = null;
             await List();
         }
 
@@ -173,6 +179,8 @@ public partial class ProductList
         try
         {
             _reqModel = new();
+            _selectedFiles.Clear();
+            _imagePreviewUrl = null;
             StateHasChanged();
             List();
             _formType = EnumFormType.List;
@@ -245,6 +253,20 @@ public partial class ProductList
             await _injectService.DisableLoading();
             _logger.LogCustomError(ex);
             await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private async Task OnImageUpload(IBrowserFile file)
+    {
+        _selectedFiles.Clear();
+        if (file is not null)
+        {
+            _selectedFiles.Add(file);
+            using var ms = new MemoryStream();
+            await file.OpenReadStream(10 * 1024 * 1024).CopyToAsync(ms);
+            var bytes = ms.ToArray();
+            _reqModel.ImageData = Convert.ToBase64String(bytes);
+            _imagePreviewUrl = $"data:{file.ContentType};base64,{_reqModel.ImageData}";
         }
     }
 

@@ -123,6 +123,7 @@ public class ApproveReqProductService : AuthorizationService
                 ProductName = product.ProductName,
                 ProductCode = product.ProductCode,
                 SupplierName = product.SupplierName,
+                ImagePath = product.ImagePath,
                 CreatedUserId = AuthorizedUserId,
                 CreatedDateTime = DevCode.GetServerDateTime()
             };
@@ -213,6 +214,7 @@ public class ApproveReqProductService : AuthorizationService
             productInfo.Add("Product Code", detail.ProductCode!);
             productInfo.Add("Supplier Name", detail.SupplierName!);
             model.ProductInfo = productInfo;
+            model.ItemImagePath = detail.ImagePath;
 
             List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();
             makerChecker.Add("Requested User", detail.ReqUser!);

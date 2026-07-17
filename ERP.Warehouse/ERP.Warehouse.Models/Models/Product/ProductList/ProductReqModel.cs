@@ -6,4 +6,5 @@ public class ProductReqModel
     public string? ProductName { get; set; }
     public string? ProductCode { get; set; }
     public string? SupplierName { get; set;}
+    public string? ImageData { get; set; }
 }

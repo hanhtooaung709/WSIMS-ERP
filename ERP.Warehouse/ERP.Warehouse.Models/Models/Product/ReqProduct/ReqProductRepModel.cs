@@ -12,4 +12,5 @@ public class ReqProductModel
     public string? ProductCode { get; set; }
     public string? SupplierName { get; set; }
     public string? Status { get; set; }
+    public string? ImagePath { get; set; }
 }
