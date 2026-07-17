@@ -1,11 +1,14 @@
 {
   "IsDevelopment": true,
 
-  //MSSql Server
+  //MSSql Local Server
   //"DbConnection": "server=.;database=WSIMS-ERP;user id=sa;password=sasa@123;TrustServerCertificate=true;MultipleActiveResultSets=True;Connect Timeout=60;",
 
-  //Postgre Server
-  "DbConnection": "Host=localhost;Database=WSIMS-ERP;Username=postgres;Password=sasa@123;Port=5432;Timeout=60;",
+  //Postgre Local Server
+  //"DbConnection": "Host=localhost;Database=WSIMS-ERP;Username=postgres;Password=sasa@123;Port=5432;Timeout=60;",
+
+  //Postgre Neno Server
+  "DbConnection": "Host=ep-bold-bonus-azbxwgr9.c-3.ap-southeast-1.aws.neon.tech;Database=WSIMS-ERP;Username=neondb_owner;Password=npg_94yTctfwHjEB;Port=5432;Timeout=60; SSL Mode=Require;Pooling=true;",
 
   "WarehouseApp": {
     "WarehouseApiBaseUrl": "https://localhost:7157"

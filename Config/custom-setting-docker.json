@@ -1,6 +1,11 @@
 {
   "IsDevelopment": false,
-  "DbConnection": "server=host.docker.internal;database=WSIMS-ERP;user id=sa;password=sasa@123;TrustServerCertificate=true;MultipleActiveResultSets=True;Connect Timeout=60;",
+
+  //MSSql Local Server
+  //"DbConnection": "server=.;database=WSIMS-ERP;user id=sa;password=sasa@123;TrustServerCertificate=true;MultipleActiveResultSets=True;Connect Timeout=60;",
+
+  //Postgre Local Server
+  "DbConnection": "Host=localhost;Database=WSIMS-ERP;Username=postgres;Password=sasa@123;Port=5432;Timeout=60;",
 
   "WarehouseApp": {
     "WarehouseApiBaseUrl": "http://host.docker.internal:5066"
