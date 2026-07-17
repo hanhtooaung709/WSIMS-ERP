@@ -54,12 +54,15 @@ public class DapperService
     private (string sql, DynamicParameters dp) PrepareStoredProcedure(string query, object parameters)
     {
         var dp = new DynamicParameters();
-        dp.AddDynamicParams(parameters);
-
         var paramNames = new List<string>();
-        foreach (var prop in parameters.GetType().GetProperties())
+
+        if (parameters is not null)
         {
-            paramNames.Add($"@{prop.Name}");
+            dp.AddDynamicParams(parameters);
+            foreach (var prop in parameters.GetType().GetProperties())
+            {
+                paramNames.Add($"@{prop.Name}");
+            }
         }
 
         var sql = $"SELECT * FROM \"{query}\"({string.Join(", ", paramNames)})";
