@@ -129,6 +129,20 @@ public class ApproveReqProductChangesService : AuthorizationService
 
             if(productChanges!.ChangesType == EnumRequestedType.Update.ToString())
             {
+                if (!productChanges.ImagePath.IsNullOrEmpty())
+                {
+                    if (!product.ImagePath.IsNullOrEmpty() && File.Exists(product.ImagePath))
+                    {
+                        File.Delete(product.ImagePath);
+                    }
+                    var imgFolder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\Product";
+                    Directory.CreateDirectory(imgFolder);
+                    var fileName = DevCode.GenerateUlid() + ".jpg";
+                    var imagePath = Path.Combine(imgFolder, fileName);
+                    await DevCode.WriteBase64ToFileAsync(productChanges.ImagePath, imagePath);
+                    product.ImagePath = imagePath;
+                }
+
                 product.ProductName = productChanges.ProductName!;
                 product.ProductCode = productChanges.ProductCode!;
                 product.SupplierName = productChanges.SupplierName!;
@@ -235,14 +249,9 @@ public class ApproveReqProductChangesService : AuthorizationService
             productInfo.Add("Product Name", detail.ProductName!);
             productInfo.Add("Product Code", detail.ProductCode!);
             productInfo.Add("Supplier Name", detail.SupplierName!);
+            productInfo.Add("Changes Type", detail.ChangesType!);
             model.ProductInfo = productInfo;
-
-            List<DynamicReportModel> oldInfo = new List<DynamicReportModel>();
-            oldInfo.Add("Product Name", detail.OldName!);
-            oldInfo.Add("Product Code", detail.OldCode!);
-            oldInfo.Add("Supplier Name", detail.OldSupplierName!);
-            oldInfo.Add("Changes Type", detail.ChangesType!);
-            model.OldInfo = oldInfo;
+            model.ItemImagePath = detail.ImagePath;
 
             List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();
             makerChecker.Add("Requested User", detail.ReqUser!);

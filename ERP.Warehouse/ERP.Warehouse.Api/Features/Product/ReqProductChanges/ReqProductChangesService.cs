@@ -325,16 +325,9 @@ public class ReqProductChangesService : AuthorizationService
             productInfo.Add("Product Name", detail.ProductName!);
             productInfo.Add("Product Code", detail.ProductCode!);
             productInfo.Add("Supplier Name", detail.SupplierName!);
+            productInfo.Add("Changes Type", detail.ChangesType!);
             model.ProductInfo = productInfo;
             model.ItemImagePath = detail.ImagePath;
-
-            List<DynamicReportModel> oldInfo = new List<DynamicReportModel>();
-            oldInfo.Add("Product Name", detail.OldName!);
-            oldInfo.Add("Product Code", detail.OldCode!);
-            oldInfo.Add("Supplier Name", detail.OldSupplierName!);
-            oldInfo.Add("Changes Type", detail.ChangesType!);
-            model.OldInfo = oldInfo;
-            model.OldItemImage = detail.OldImage;
 
             List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();
             makerChecker.Add("Requested User", detail.ReqUser!);

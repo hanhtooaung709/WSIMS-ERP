@@ -198,5 +198,13 @@ public partial class ApproveReqProductChanges
         return statusStr;
     }
 
+    private string GetImageUrl(string? imagePath)
+    {
+        if (string.IsNullOrEmpty(imagePath)) return "";
+        var fileName = Path.GetFileName(imagePath);
+        var baseUrl = _configuration.GetSection("WarehouseApp")["WarehouseApiBaseUrl"]?.TrimEnd('/');
+        return $"{baseUrl}/api/image/product/{fileName}";
+    }
+
     #endregion
 }
