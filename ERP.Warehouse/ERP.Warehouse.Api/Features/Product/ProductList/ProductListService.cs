@@ -155,19 +155,20 @@ public class ProductListService : AuthorizationService
 
             #region Prepare Data
 
+            var reqProductId = DevCode.GenerateUlid();
             var imagePath = "";
             if (!reqModel.ImageData.IsNullOrEmpty())
             {
                 var imgFolder = _setting.Image.ReqProduct;
                 Directory.CreateDirectory(imgFolder);
-                var fileName = DevCode.GenerateUlid() + ".jpg";
+                var fileName = reqProductId + ".jpg";
                 imagePath = Path.Combine(imgFolder, fileName);
                 await DevCode.WriteBase64ToFileAsync(reqModel.ImageData, imagePath);
             }
 
             TblReqProduct item = new TblReqProduct
             {
-                ReqProductId = DevCode.GenerateUlid(),
+                ReqProductId = reqProductId,
                 ProductName = reqModel.ProductName!,
                 ProductCode = reqModel.ProductCode!,
                 SupplierName = reqModel.SupplierName!,
@@ -335,19 +336,20 @@ public class ProductListService : AuthorizationService
 
             #region Prepare Data
 
+            var reqProductChangesId = DevCode.GenerateUlid();
             var imagePath = "";
             if (!reqModel.ImageData.IsNullOrEmpty())
             {
                 var imgFolder = _setting.Image.ReqProductChange;
                 Directory.CreateDirectory(imgFolder);
-                var fileName = DevCode.GenerateUlid() + ".jpg";
+                var fileName = reqProductChangesId + ".jpg";
                 imagePath = Path.Combine(imgFolder, fileName);
                 await DevCode.WriteBase64ToFileAsync(reqModel.ImageData, imagePath);
             }
 
             TblReqProductChange item = new TblReqProductChange
             {
-                ReqProductChangesId = DevCode.GenerateUlid(),
+                ReqProductChangesId = reqProductChangesId,
                 ProductId = reqModel.ProductId!,
                 ProductName = reqModel.ProductName!,
                 ProductCode = reqModel.ProductCode!,

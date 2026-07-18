@@ -232,6 +232,7 @@ public class ReqProductChangesService : AuthorizationService
 
             #region Prepare Data
 
+            var imagePath = "";
             if (!reqModel.ImageData.IsNullOrEmpty())
             {
                 if (!product.ImagePath.IsNullOrEmpty() && File.Exists(product.ImagePath))
@@ -240,8 +241,8 @@ public class ReqProductChangesService : AuthorizationService
                 }
                 var imgFolder = _setting.Image.ReqProductChange;
                 Directory.CreateDirectory(imgFolder);
-                var fileName = DevCode.GenerateUlid() + ".jpg";
-                var imagePath = Path.Combine(imgFolder, fileName);
+                var fileName = product.ReqProductChangesId + ".jpg";
+                imagePath = Path.Combine(imgFolder, fileName);
                 await DevCode.WriteBase64ToFileAsync(reqModel.ImageData, imagePath);
                 product.ImagePath = imagePath;
             }

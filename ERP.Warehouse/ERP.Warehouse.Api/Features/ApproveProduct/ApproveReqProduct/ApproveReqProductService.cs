@@ -119,21 +119,20 @@ public class ApproveReqProductService : AuthorizationService
 
             #region Prepare Data
 
+            var productId = DevCode.GenerateUlid();
             var imagePath = "";
             if (!product.ImagePath.IsNullOrEmpty() && File.Exists(product.ImagePath))
             {
                 var imgFolder = _setting.Image.Product;
                 Directory.CreateDirectory(imgFolder);
-                var fileName = DevCode.GenerateUlid() + ".jpg";
+                var fileName = productId + ".jpg";
                 imagePath = Path.Combine(imgFolder, fileName);
                 File.Copy(product.ImagePath, imagePath);
             }
 
-            var productid = DevCode.GenerateUlid();
-
             TblProduct item = new TblProduct
             {
-                ProductId = productid,
+                ProductId = productId,
                 ProductName = product.ProductName,
                 ProductCode = product.ProductCode,
                 SupplierName = product.SupplierName,
@@ -146,7 +145,7 @@ public class ApproveReqProductService : AuthorizationService
             await _db.SaveChangesAsync();
 
             product.Status = EnumRequestedStatus.Approved.ToString();
-            product.ProductId = productid;
+            product.ProductId = productId;
             product.ApprovedUserId = AuthorizedUserId;
             product.ApprovedDateTime = DevCode.GetServerDateTime();
             _db.Entry(product).State = EntityState.Modified;

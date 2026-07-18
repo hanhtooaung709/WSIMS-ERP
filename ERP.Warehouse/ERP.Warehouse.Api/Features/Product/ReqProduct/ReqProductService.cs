@@ -224,6 +224,7 @@ public class ReqProductService : AuthorizationService
 
             #region Prepare Data
 
+            var imagePath = "";
             if (!reqModel.ImageData.IsNullOrEmpty())
             {
                 if (!product.ImagePath.IsNullOrEmpty() && File.Exists(product.ImagePath))
@@ -232,15 +233,15 @@ public class ReqProductService : AuthorizationService
                 }
                 var imgFolder = _setting.Image.ReqProduct;
                 Directory.CreateDirectory(imgFolder);
-                var fileName = DevCode.GenerateUlid() + ".jpg";
-                var imagePath = Path.Combine(imgFolder, fileName);
+                var fileName = product.ReqProductId + ".jpg";
+                imagePath = Path.Combine(imgFolder, fileName);
                 await DevCode.WriteBase64ToFileAsync(reqModel.ImageData, imagePath);
-                product.ImagePath = imagePath;
             }
 
             product.ProductName = reqModel.ProductName!;
             product.ProductCode = reqModel.ProductCode!;
             product.SupplierName = reqModel.SupplierName!;
+            product.ImagePath = imagePath;
             product.ReqDateTime = DevCode.GetServerDateTime();
 
             _db.Entry(product).State = EntityState.Modified;

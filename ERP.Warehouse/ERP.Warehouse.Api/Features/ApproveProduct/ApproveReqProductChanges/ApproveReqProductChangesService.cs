@@ -131,7 +131,8 @@ public class ApproveReqProductChangesService : AuthorizationService
 
             #region Prepare Data
 
-            if(productChanges!.ChangesType == EnumRequestedType.Update.ToString())
+            var imagePath = "";
+            if (productChanges!.ChangesType == EnumRequestedType.Update.ToString())
             {
                 if (!productChanges.ImagePath.IsNullOrEmpty() && File.Exists(productChanges.ImagePath))
                 {
@@ -141,8 +142,8 @@ public class ApproveReqProductChangesService : AuthorizationService
                     }
                     var imgFolder = _setting.Image.Product;
                     Directory.CreateDirectory(imgFolder);
-                    var fileName = DevCode.GenerateUlid() + ".jpg";
-                    var imagePath = Path.Combine(imgFolder, fileName);
+                    var fileName = product.ProductId + ".jpg";
+                    imagePath = Path.Combine(imgFolder, fileName);
                     File.Copy(productChanges.ImagePath, imagePath);
                     product.ImagePath = imagePath;
                 }
