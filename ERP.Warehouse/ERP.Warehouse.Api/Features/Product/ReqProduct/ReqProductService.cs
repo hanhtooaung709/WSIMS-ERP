@@ -226,7 +226,7 @@ public class ReqProductService : AuthorizationService
                 {
                     File.Delete(product.ImagePath);
                 }
-                var imgFolder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\Product";
+                var imgFolder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\ReqProduct";
                 Directory.CreateDirectory(imgFolder);
                 var fileName = DevCode.GenerateUlid() + ".jpg";
                 var imagePath = Path.Combine(imgFolder, fileName);

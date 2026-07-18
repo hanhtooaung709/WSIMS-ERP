@@ -152,7 +152,7 @@ public class ProductListService : AuthorizationService
             var imagePath = "";
             if (!reqModel.ImageData.IsNullOrEmpty())
             {
-                var imgFolder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\Product";
+                var imgFolder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\ReqProduct";
                 Directory.CreateDirectory(imgFolder);
                 var fileName = DevCode.GenerateUlid() + ".jpg";
                 imagePath = Path.Combine(imgFolder, fileName);
@@ -332,7 +332,7 @@ public class ProductListService : AuthorizationService
             var imagePath = "";
             if (!reqModel.ImageData.IsNullOrEmpty())
             {
-                var imgFolder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\Product";
+                var imgFolder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\ReqProductChange";
                 Directory.CreateDirectory(imgFolder);
                 var fileName = DevCode.GenerateUlid() + ".jpg";
                 imagePath = Path.Combine(imgFolder, fileName);
