@@ -3,15 +3,23 @@ using System.Collections.Generic;
 
 namespace Module.CommonDbService.EfAppDbContextModels;
 
-public partial class TblPackage
+public partial class TblPackageInfo
 {
-    public string PackageId { get; set; } = null!;
+    public string PackageInfoId { get; set; } = null!;
+
+    public string PackageName { get; set; } = null!;
 
     public string PackageInfoCode { get; set; } = null!;
 
-    public int Quanity { get; set; }
+    public string ProductCode { get; set; } = null!;
 
-    public string BranchCode { get; set; } = null!;
+    public int Price { get; set; }
+
+    public string CurrencyCode { get; set; } = null!;
+
+    public int Weight { get; set; }
+
+    public string BoxCode { get; set; } = null!;
 
     public string CreatedUserId { get; set; } = null!;
 
@@ -20,6 +28,8 @@ public partial class TblPackage
     public string? ModifiedUserId { get; set; }
 
     public DateTime? ModifiedDateTime { get; set; }
+
+    public int DispatchFlag { get; set; }
 
     public int DelFlag { get; set; }
 }

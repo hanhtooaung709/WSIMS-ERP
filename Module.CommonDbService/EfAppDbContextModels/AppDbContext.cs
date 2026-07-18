@@ -25,11 +25,15 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<TblPackage> TblPackages { get; set; }
 
+    public virtual DbSet<TblPackageInfo> TblPackageInfos { get; set; }
+
     public virtual DbSet<TblProduct> TblProducts { get; set; }
 
     public virtual DbSet<TblReqPackage> TblReqPackages { get; set; }
 
-    public virtual DbSet<TblReqPackageChange> TblReqPackageChanges { get; set; }
+    public virtual DbSet<TblReqPackageInfo> TblReqPackageInfos { get; set; }
+
+    public virtual DbSet<TblReqPackageInfoChange> TblReqPackageInfoChanges { get; set; }
 
     public virtual DbSet<TblReqProduct> TblReqProducts { get; set; }
 
@@ -52,10 +56,6 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<TblWarehouseUser> TblWarehouseUsers { get; set; }
 
     public virtual DbSet<TblWarehouseUserSession> TblWarehouseUserSessions { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host=ep-bold-bonus-azbxwgr9.c-3.ap-southeast-1.aws.neon.tech;Database=WSIMS-ERP;Username=neondb_owner;Password=npg_94yTctfwHjEB;Port=5432;SSL Mode=Require;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -131,13 +131,28 @@ public partial class AppDbContext : DbContext
             entity.ToTable("Tbl_Package");
 
             entity.Property(e => e.PackageId).HasMaxLength(50);
-            entity.Property(e => e.BoxCode).HasMaxLength(20);
             entity.Property(e => e.BranchCode).HasMaxLength(20);
+            entity.Property(e => e.CreatedDateTime).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.CreatedUserId).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDateTime).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.ModifiedUserId).HasMaxLength(50);
+            entity.Property(e => e.PackageInfoCode).HasMaxLength(20);
+        });
+
+        modelBuilder.Entity<TblPackageInfo>(entity =>
+        {
+            entity.HasKey(e => e.PackageInfoId);
+
+            entity.ToTable("Tbl_PackageInfo");
+
+            entity.Property(e => e.PackageInfoId).HasMaxLength(50);
+            entity.Property(e => e.BoxCode).HasMaxLength(20);
             entity.Property(e => e.CreatedDateTime).HasColumnType("timestamp without time zone");
             entity.Property(e => e.CreatedUserId).HasMaxLength(50);
             entity.Property(e => e.CurrencyCode).HasMaxLength(20);
             entity.Property(e => e.ModifiedDateTime).HasColumnType("timestamp without time zone");
             entity.Property(e => e.ModifiedUserId).HasMaxLength(50);
+            entity.Property(e => e.PackageInfoCode).HasMaxLength(20);
             entity.Property(e => e.PackageName).HasMaxLength(100);
             entity.Property(e => e.ProductCode).HasMaxLength(20);
         });
@@ -160,17 +175,34 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<TblReqPackage>(entity =>
         {
-            entity.HasKey(e => e.ReqPackageId);
+            entity.HasKey(e => e.ReqPackageId).HasName("Tbl_ReqPackage_pkey");
 
             entity.ToTable("Tbl_ReqPackage");
 
             entity.Property(e => e.ReqPackageId).HasMaxLength(50);
             entity.Property(e => e.ApprovedDateTime).HasColumnType("timestamp without time zone");
             entity.Property(e => e.ApprovedUserId).HasMaxLength(50);
-            entity.Property(e => e.BoxCode).HasMaxLength(20);
             entity.Property(e => e.BranchCode).HasMaxLength(20);
-            entity.Property(e => e.CurrencyCode).HasMaxLength(20);
             entity.Property(e => e.PackageId).HasMaxLength(50);
+            entity.Property(e => e.PackageInfoCode).HasMaxLength(20);
+            entity.Property(e => e.RejectReason).HasMaxLength(100);
+            entity.Property(e => e.ReqDateTime).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.ReqUserId).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<TblReqPackageInfo>(entity =>
+        {
+            entity.HasKey(e => e.ReqPackageInfoId).HasName("PK_Tbl_ReqPackage");
+
+            entity.ToTable("Tbl_ReqPackageInfo");
+
+            entity.Property(e => e.ReqPackageInfoId).HasMaxLength(50);
+            entity.Property(e => e.ApprovedDateTime).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.ApprovedUserId).HasMaxLength(50);
+            entity.Property(e => e.BoxCode).HasMaxLength(20);
+            entity.Property(e => e.CurrencyCode).HasMaxLength(20);
+            entity.Property(e => e.PackageInfoCode).HasMaxLength(20);
+            entity.Property(e => e.PackageInfoId).HasMaxLength(50);
             entity.Property(e => e.PackageName).HasMaxLength(100);
             entity.Property(e => e.ProductCode).HasMaxLength(20);
             entity.Property(e => e.RejectReason).HasMaxLength(100);
@@ -178,18 +210,19 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.ReqUserId).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<TblReqPackageChange>(entity =>
+        modelBuilder.Entity<TblReqPackageInfoChange>(entity =>
         {
-            entity.HasKey(e => e.ReqPackageChangesId);
+            entity.HasKey(e => e.ReqPackageInfoChangesId);
 
-            entity.ToTable("Tbl_ReqPackageChanges");
+            entity.ToTable("Tbl_ReqPackageInfoChanges");
 
-            entity.Property(e => e.ReqPackageChangesId).HasMaxLength(50);
+            entity.Property(e => e.ReqPackageInfoChangesId).HasMaxLength(50);
             entity.Property(e => e.ApprovedDateTime).HasColumnType("timestamp without time zone");
             entity.Property(e => e.ApprovedUserId).HasMaxLength(50);
             entity.Property(e => e.BoxCode).HasMaxLength(20);
             entity.Property(e => e.CurrencyCode).HasMaxLength(20);
-            entity.Property(e => e.PackageId).HasMaxLength(50);
+            entity.Property(e => e.PackageInfoCode).HasMaxLength(20);
+            entity.Property(e => e.PackageInfoId).HasMaxLength(50);
             entity.Property(e => e.PackageName).HasMaxLength(100);
             entity.Property(e => e.ProductCode).HasMaxLength(20);
             entity.Property(e => e.RejectReason).HasMaxLength(100);
