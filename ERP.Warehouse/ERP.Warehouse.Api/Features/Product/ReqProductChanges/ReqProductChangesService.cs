@@ -113,7 +113,8 @@ public class ReqProductChangesService : AuthorizationService
                 ReqProductChangesId = product.ReqProductChangesId,
                 ProductName = product.ProductName,
                 ProductCode = product.ProductCode,
-                SupplierName = product.SupplierName
+                SupplierName = product.SupplierName,
+                ImagePath = product.ImagePath
             };
             model = Result<ReqProductChangesModel>.Success(response);
 
@@ -223,9 +224,23 @@ public class ReqProductChangesService : AuthorizationService
 
             #region Prepare Data
 
+            if (!reqModel.ImageData.IsNullOrEmpty())
+            {
+                if (!product.ImagePath.IsNullOrEmpty() && File.Exists(product.ImagePath))
+                {
+                    File.Delete(product.ImagePath);
+                }
+                var imgFolder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\Product";
+                Directory.CreateDirectory(imgFolder);
+                var fileName = DevCode.GenerateUlid() + ".jpg";
+                var imagePath = Path.Combine(imgFolder, fileName);
+                await DevCode.WriteBase64ToFileAsync(reqModel.ImageData, imagePath);
+                product.ImagePath = imagePath;
+            }
+
             product.ProductName = reqModel.ProductName!;
             product.ProductCode = reqModel.ProductCode!;
-            product.SupplierName = reqModel.SupplierName;
+            product.SupplierName = reqModel.SupplierName!;
             product.ReqDateTime = DevCode.GetServerDateTime();
 
             _db.Entry(product).State = EntityState.Modified;
@@ -272,6 +287,11 @@ public class ReqProductChangesService : AuthorizationService
 
             #region Prepare Data
 
+            if (!product.ImagePath.IsNullOrEmpty() && File.Exists(product.ImagePath))
+            {
+                File.Delete(product.ImagePath);
+            }
+
             _db.TblReqProductChanges.Remove(product);
             var result = _db.SaveChanges();
             if (result <= 0)
@@ -306,6 +326,7 @@ public class ReqProductChangesService : AuthorizationService
             productInfo.Add("Product Code", detail.ProductCode!);
             productInfo.Add("Supplier Name", detail.SupplierName!);
             model.ProductInfo = productInfo;
+            model.ItemImagePath = detail.ImagePath;
 
             List<DynamicReportModel> oldInfo = new List<DynamicReportModel>();
             oldInfo.Add("Product Name", detail.OldName!);
@@ -313,6 +334,7 @@ public class ReqProductChangesService : AuthorizationService
             oldInfo.Add("Supplier Name", detail.OldSupplierName!);
             oldInfo.Add("Changes Type", detail.ChangesType!);
             model.OldInfo = oldInfo;
+            model.OldItemImage = detail.OldImage;
 
             List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();
             makerChecker.Add("Requested User", detail.ReqUser!);

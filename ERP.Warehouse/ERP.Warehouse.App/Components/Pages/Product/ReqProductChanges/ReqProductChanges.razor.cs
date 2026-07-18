@@ -1,6 +1,8 @@
 ﻿using ERP.Warehouse.App.Common;
 using ERP.Warehouse.Models.Models.Product.ReqProduct;
 using ERP.Warehouse.Models.Models.Product.ReqProductChanges;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
@@ -21,6 +23,10 @@ public partial class ReqProductChanges
     private EnumFormType _formType = EnumFormType.List;
     private bool hover = true;
     private bool _readOnly;
+
+    private IList<IBrowserFile> _selectedFiles = new List<IBrowserFile>();
+    private string? _imagePreviewUrl;
+    private string? _existingImagePath;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -123,6 +129,8 @@ public partial class ReqProductChanges
             _reqModel.ProductName = result.Data.ProductName;
             _reqModel.ProductCode = result.Data.ProductCode;
             _reqModel.SupplierName = result.Data.SupplierName;
+            _existingImagePath = result.Data.ImagePath;
+            _imagePreviewUrl = null;
 
             _formType = EnumFormType.Edit;
             StateHasChanged();
@@ -229,6 +237,28 @@ public partial class ReqProductChanges
         }
 
         return statusStr;
+    }
+
+    private async Task OnImageUpload(InputFileChangeEventArgs args)
+    {
+        var file = args.File;
+        if (file is null) return;
+
+        _selectedFiles.Clear();
+        _selectedFiles.Add(file);
+        using var ms = new MemoryStream();
+        await file.OpenReadStream(10 * 1024 * 1024).CopyToAsync(ms);
+        var bytes = ms.ToArray();
+        _reqModel.ImageData = Convert.ToBase64String(bytes);
+        _imagePreviewUrl = $"data:{file.ContentType};base64,{_reqModel.ImageData}";
+    }
+
+    private string GetImageUrl(string? imagePath)
+    {
+        if (string.IsNullOrEmpty(imagePath)) return "";
+        var fileName = Path.GetFileName(imagePath);
+        var baseUrl = _navigationManager.BaseUri.TrimEnd('/');
+        return $"{baseUrl}/api/image/product/{fileName}";
     }
 
     #endregion

@@ -164,6 +164,8 @@ public partial class ProductList
             _reqModel.ProductName = result.Data.ProductName;
             _reqModel.ProductCode = result.Data.ProductCode;
             _reqModel.SupplierName = result.Data.SupplierName;
+            _existingImagePath = result.Data.ImagePath;
+            _imagePreviewUrl = null;
 
             _formType = EnumFormType.Edit;
             StateHasChanged();

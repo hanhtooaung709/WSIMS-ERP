@@ -7,11 +7,13 @@ public class ReqProductChangesDetailInfoModel
     public string? ProductCode { get; set; }
     public string? ChangesType { get; set; }
     public string? SupplierName { get; set; }
+    public string? ImagePath { get; set; }
 
     // -- Old data --
     public string? OldName { get; set; }
     public string? OldCode { get; set; }
     public string? OldSupplierName { get; set; }
+    public string? OldImage { get; set; }
 
     // -- Maker/Chacker --
     public string? Status { get; set; }

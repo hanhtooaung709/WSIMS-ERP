@@ -6,5 +6,6 @@ public class ReqProductChangesReqModel
     public string? ProductName { get; set; }
     public string? ProductCode { get; set; }
     public string? SupplierName { get; set; }
+    public string? ImageData { get; set; }
     public string? Status { get; set; }
 }

@@ -5,4 +5,6 @@ public class ReqProductChangesDetailModel
     public List<DynamicReportModel> OldInfo { get; set; }
     public List<DynamicReportModel> ProductInfo { get; set; }
     public List<DynamicReportModel> MakerChecker { get; set; }
+    public string? ItemImagePath { get; set; }
+    public string? OldItemImage { get; set; }
 }

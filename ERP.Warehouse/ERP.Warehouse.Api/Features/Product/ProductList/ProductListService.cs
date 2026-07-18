@@ -450,6 +450,7 @@ public class ProductListService : AuthorizationService
             productInfo.Add("Product Code", detail.ProductCode!);
             productInfo.Add("Supplier Name", detail.SupplierName!);
             model.ProductInfo = productInfo;
+            model.ItemImagePath = detail.ImagePath;
 
             List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();
             makerChecker.Add("CreatedUser", detail.CreatedUser!);
