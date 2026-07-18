@@ -1,10 +1,8 @@
 ﻿using ERP.Warehouse.Models.Models.Product.ProductList;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
-using WSIMS_ERP.Shared.Models;
 
 namespace ERP.Warehouse.App.Components.Pages.Product.ProductList;
 
@@ -277,7 +275,7 @@ public partial class ProductList
     {
         if (string.IsNullOrEmpty(imagePath)) return "";
         var fileName = Path.GetFileName(imagePath);
-        var baseUrl = _configuration.GetSection("WarehouseApp")["WarehouseApiBaseUrl"]?.TrimEnd('/');
+        var baseUrl = _setting.CurrentValue.WarehouseApp.WarehouseApiBaseUrl.TrimEnd('/');
         return $"{baseUrl}/api/image/product/{fileName}";
     }
 

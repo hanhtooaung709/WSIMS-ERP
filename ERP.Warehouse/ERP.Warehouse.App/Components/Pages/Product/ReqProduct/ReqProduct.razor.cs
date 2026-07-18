@@ -1,6 +1,5 @@
 ﻿using ERP.Warehouse.App.Common;
 using ERP.Warehouse.Models.Models.Product.ReqProduct;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using WSIMS_ERP.Shared;
@@ -262,7 +261,7 @@ public partial class ReqProduct
     {
         if (string.IsNullOrEmpty(imagePath)) return "";
         var fileName = Path.GetFileName(imagePath);
-        var baseUrl = _configuration.GetSection("WarehouseApp")["WarehouseApiBaseUrl"]?.TrimEnd('/');
+        var baseUrl = _setting.CurrentValue.WarehouseApp.WarehouseApiBaseUrl.TrimEnd('/');
         return $"{baseUrl}/api/image/product/{fileName}";
     }
 

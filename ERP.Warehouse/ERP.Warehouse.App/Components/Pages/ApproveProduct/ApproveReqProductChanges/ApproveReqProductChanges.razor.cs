@@ -1,5 +1,4 @@
 ﻿using ERP.Warehouse.App.Common;
-using ERP.Warehouse.Models.Models.Product.ReqProduct;
 using ERP.Warehouse.Models.Models.Product.ReqProductChanges;
 using MudBlazor;
 using WSIMS_ERP.Shared;
@@ -202,7 +201,7 @@ public partial class ApproveReqProductChanges
     {
         if (string.IsNullOrEmpty(imagePath)) return "";
         var fileName = Path.GetFileName(imagePath);
-        var baseUrl = _configuration.GetSection("WarehouseApp")["WarehouseApiBaseUrl"]?.TrimEnd('/');
+        var baseUrl = _setting.CurrentValue.WarehouseApp.WarehouseApiBaseUrl.TrimEnd('/');
         return $"{baseUrl}/api/image/product/{fileName}";
     }
 
