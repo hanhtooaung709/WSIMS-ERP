@@ -12,7 +12,6 @@ namespace ERP.Warehouse.App.Components.Pages.ApproveProduct.ApproveReqProduct;
 
 public partial class ApproveReqProduct
 {
-    [Inject] private IConfiguration _configuration { get; set; } = default!;
     private ReqProductReqModel _reqModel = new();
     private IEnumerable<ReqProductModel> _model = new List<ReqProductModel>();
     private ReqProductEditModel _edit = new();

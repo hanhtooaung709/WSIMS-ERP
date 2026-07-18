@@ -11,7 +11,6 @@ namespace ERP.Warehouse.App.Components.Pages.Product.ReqProduct;
 
 public partial class ReqProduct
 {
-    [Inject] private IConfiguration _configuration { get; set; } = default!;
     private ReqProductReqModel _reqModel = new();
     private IEnumerable<ReqProductModel> _model = new List<ReqProductModel>();
     private ReqProductEditModel _edit = new();

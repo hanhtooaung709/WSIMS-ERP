@@ -10,7 +10,6 @@ namespace ERP.Warehouse.App.Components.Pages.Product.ProductList;
 
 public partial class ProductList
 {
-    [Inject] private IConfiguration _configuration { get; set; } = default!;
     private ProductReqModel _reqModel = new();
     private IEnumerable<ProductModel> _model = new List<ProductModel>();
     private ProductEditModel _edit = new();
