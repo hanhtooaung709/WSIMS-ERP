@@ -121,8 +121,11 @@
                                     <img src="@GetImageUrl(_existingImagePath)" style="max-width: 200px; max-height: 200px; border: 1px solid #ddd; border-radius: 4px;" />
                                 </div>
                             }
-                            <div>
-                                <InputFile OnChange="@OnImageUpload" accept="image/jpeg,image/png,image/gif" />
+                            <div class="custom-file-upload d-flex align-items-center gap-2 mb-3">
+                                <label for="Photo" class="btn btn-outline-primary">
+                                    <i class="ri-image-line me-1"></i> Choose Photo
+                                </label>
+                                <InputFile id="Photo" OnChange="@OnImageUpload" accept="image/jpeg,image/png,image/gif" class="d-none" />
                             </div>
                             @if (_imagePreviewUrl is not null)
                             {
