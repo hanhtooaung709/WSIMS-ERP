@@ -259,20 +259,6 @@ public partial class ProductList
         }
     }
 
-    private async Task OnImageUpload(IBrowserFile file)
-    {
-        _selectedFiles.Clear();
-        if (file is not null)
-        {
-            _selectedFiles.Add(file);
-            using var ms = new MemoryStream();
-            await file.OpenReadStream(10 * 1024 * 1024).CopyToAsync(ms);
-            var bytes = ms.ToArray();
-            _reqModel.ImageData = Convert.ToBase64String(bytes);
-            _imagePreviewUrl = $"data:{file.ContentType};base64,{_reqModel.ImageData}";
-        }
-    }
-
     private async Task OnImageUpload(InputFileChangeEventArgs args)
     {
         var file = args.File;
