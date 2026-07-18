@@ -129,7 +129,7 @@ public class ApproveReqProductChangesService : AuthorizationService
 
             if(productChanges!.ChangesType == EnumRequestedType.Update.ToString())
             {
-                if (!productChanges.ImagePath.IsNullOrEmpty())
+                if (!productChanges.ImagePath.IsNullOrEmpty() && File.Exists(productChanges.ImagePath))
                 {
                     if (!product.ImagePath.IsNullOrEmpty() && File.Exists(product.ImagePath))
                     {
@@ -139,7 +139,7 @@ public class ApproveReqProductChangesService : AuthorizationService
                     Directory.CreateDirectory(imgFolder);
                     var fileName = DevCode.GenerateUlid() + ".jpg";
                     var imagePath = Path.Combine(imgFolder, fileName);
-                    await DevCode.WriteBase64ToFileAsync(productChanges.ImagePath, imagePath);
+                    File.Copy(productChanges.ImagePath, imagePath);
                     product.ImagePath = imagePath;
                 }
 

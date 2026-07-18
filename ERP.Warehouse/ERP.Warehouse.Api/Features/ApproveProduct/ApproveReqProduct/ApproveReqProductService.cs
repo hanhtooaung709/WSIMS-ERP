@@ -116,13 +116,13 @@ public class ApproveReqProductService : AuthorizationService
             #region Prepare Data
 
             var imagePath = "";
-            if (!product.ImagePath.IsNullOrEmpty())
+            if (!product.ImagePath.IsNullOrEmpty() && File.Exists(product.ImagePath))
             {
                 var imgFolder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\Product";
                 Directory.CreateDirectory(imgFolder);
                 var fileName = DevCode.GenerateUlid() + ".jpg";
                 imagePath = Path.Combine(imgFolder, fileName);
-                await DevCode.WriteBase64ToFileAsync(product.ImagePath, imagePath);
+                File.Copy(product.ImagePath, imagePath);
             }
 
             var productid = DevCode.GenerateUlid();

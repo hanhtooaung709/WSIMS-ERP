@@ -68,6 +68,7 @@ public class ReqProductChangesService : AuthorizationService
                     .Select(x => new ReqProductChangesModel
                     {
                         ReqProductChangesId = x.ReqProductChangesId,
+                        ProductId = x.ProductId,
                         ProductName = x.ProductName,
                         ProductCode = x.ProductCode,
                         SupplierName = x.SupplierName,
@@ -111,6 +112,7 @@ public class ReqProductChangesService : AuthorizationService
             var response = new ReqProductChangesModel
             {
                 ReqProductChangesId = product.ReqProductChangesId,
+                ProductId = product.ProductId,
                 ProductName = product.ProductName,
                 ProductCode = product.ProductCode,
                 SupplierName = product.SupplierName,
@@ -158,7 +160,8 @@ public class ReqProductChangesService : AuthorizationService
 
             bool userName = await _db.TblProducts
                 .AsNoTracking()
-                .AnyAsync(x => x.ProductName.Trim().ToLower() == reqModel.ProductName!.Trim().ToLower());
+                .AnyAsync(x => x.ProductName.Trim().ToLower() == reqModel.ProductName!.Trim().ToLower() &&
+                          x.ProductId.Trim().ToLower() == reqModel.ProductId);
             if (userName)
             {
                 model = Result<ReqProductChangesModel>.Error(JsonResource.WHE029);
@@ -192,7 +195,8 @@ public class ReqProductChangesService : AuthorizationService
 
             bool code = await _db.TblProducts
                 .AsNoTracking()
-                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower());
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
+                          x.ProductId.Trim().ToLower() == reqModel.ProductId);
             if (code)
             {
                 model = Result<ReqProductChangesModel>.Error(JsonResource.WHE032);
