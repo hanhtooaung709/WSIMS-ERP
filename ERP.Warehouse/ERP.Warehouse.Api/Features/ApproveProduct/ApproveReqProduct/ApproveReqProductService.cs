@@ -115,6 +115,16 @@ public class ApproveReqProductService : AuthorizationService
 
             #region Prepare Data
 
+            var imagePath = "";
+            if (!product.ImagePath.IsNullOrEmpty())
+            {
+                var imgFolder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\Product";
+                Directory.CreateDirectory(imgFolder);
+                var fileName = DevCode.GenerateUlid() + ".jpg";
+                imagePath = Path.Combine(imgFolder, fileName);
+                await DevCode.WriteBase64ToFileAsync(product.ImagePath, imagePath);
+            }
+
             var productid = DevCode.GenerateUlid();
 
             TblProduct item = new TblProduct
@@ -123,7 +133,7 @@ public class ApproveReqProductService : AuthorizationService
                 ProductName = product.ProductName,
                 ProductCode = product.ProductCode,
                 SupplierName = product.SupplierName,
-                ImagePath = product.ImagePath,
+                ImagePath = imagePath,
                 CreatedUserId = AuthorizedUserId,
                 CreatedDateTime = DevCode.GetServerDateTime()
             };
