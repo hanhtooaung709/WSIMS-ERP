@@ -111,6 +111,17 @@
                                     </li>
                                 </ul>
                             }
+                            @if (!string.IsNullOrEmpty(_details.ItemImagePath))
+                            {
+                                <ul class="list-unstyled mb-4">
+                                    <li class="d-flex align-items-center mb-3">
+                                        <MudText Typo="Typo.body2">
+                                            <span Style="font-weight: 600; color: #555; min-width: 120px; display: inline-block;">Image :</span>
+                                            <img src="@GetImageUrl(_details.ItemImagePath)" style="max-width: 200px; max-height: 200px; border: 1px solid #ddd; border-radius: 4px;" />
+                                        </MudText>
+                                    </li>
+                                </ul>
+                            }
                         </MudItem>
                     </MudPaper>
                 </MudItem>

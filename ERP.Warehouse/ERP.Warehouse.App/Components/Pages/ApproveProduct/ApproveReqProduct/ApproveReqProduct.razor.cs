@@ -1,6 +1,8 @@
 ﻿using DocumentFormat.OpenXml.Office2010.Excel;
 using ERP.Warehouse.App.Common;
 using ERP.Warehouse.Models.Models.Product.ReqProduct;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Configuration;
 using MudBlazor;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
@@ -10,6 +12,7 @@ namespace ERP.Warehouse.App.Components.Pages.ApproveProduct.ApproveReqProduct;
 
 public partial class ApproveReqProduct
 {
+    [Inject] private IConfiguration _configuration { get; set; } = default!;
     private ReqProductReqModel _reqModel = new();
     private IEnumerable<ReqProductModel> _model = new List<ReqProductModel>();
     private ReqProductEditModel _edit = new();
@@ -194,6 +197,14 @@ public partial class ApproveReqProduct
         }
 
         return statusStr;
+    }
+
+    private string GetImageUrl(string? imagePath)
+    {
+        if (string.IsNullOrEmpty(imagePath)) return "";
+        var fileName = Path.GetFileName(imagePath);
+        var baseUrl = _configuration.GetSection("WarehouseApp")["WarehouseApiBaseUrl"]?.TrimEnd('/');
+        return $"{baseUrl}/api/image/product/{fileName}";
     }
 
     #endregion
