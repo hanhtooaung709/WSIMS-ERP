@@ -2,6 +2,7 @@
 @using ERP.Warehouse.Models.Models.Product.ProductList
 @using Microsoft.AspNetCore.Authorization
 @inject ILogger<ProductList> _logger
+@inject NavigationManager _navigationManager
 @attribute [Authorize]
 @using System.Net.Http.Json
 @using WSIMS_ERP.Shared.Enums
@@ -96,6 +97,30 @@
                     </EditTemplate>
                 </PropertyColumn>
 
+                <PropertyColumn Property="x => x.ImagePath" Title="ImagePath" HeaderStyle="min-width: 180px;" Hidden="true">
+                    <EditTemplate>
+                        <MudPaper Class="pa-4 mt-4">
+                            <MudText Typo="Typo.subtitle1" Style="font-weight: 600; color: #333; margin-bottom: 12px;">Product Image</MudText>
+                            @if (!string.IsNullOrEmpty(_existingImagePath))
+                            {
+                                <div style="margin-bottom: 12px;">
+                                    <img src="@GetImageUrl(_existingImagePath)" style="max-width: 200px; max-height: 200px; border: 1px solid #ddd; border-radius: 4px;" />
+                                </div>
+                            }
+                            <div>
+                                <InputFile OnChange="@OnImageUpload" accept="image/jpeg,image/png,image/gif" />
+                            </div>
+                            @if (_imagePreviewUrl is not null)
+                            {
+                                <div style="margin-top: 12px;">
+                                    <img src="@_imagePreviewUrl" style="max-width: 200px; max-height: 200px; border: 1px solid #ddd; border-radius: 4px;" />
+                                    <MudText Style="font-size: 12px; color: #888;">New image preview</MudText>
+                                </div>
+                            }
+                        </MudPaper>
+                    </EditTemplate>
+                </PropertyColumn>
+
                 <TemplateColumn Hidden="@_readOnly" Title="Actions" HeaderStyle="width: 140px; min-width: 140px;" Style="width: 140px; min-width: 140px; white-space: nowrap;">
                     <CellTemplate>
                         <div style="display: inline-block; white-space: nowrap;">
@@ -150,6 +175,17 @@
                                         <MudText Typo="Typo.body2">
                                             <span Style="font-weight: 600; color: #555; min-width: 120px; display: inline-block;">@(item.Key) :</span>
                                             <span Style="color: #333;">@item.Value</span>
+                                        </MudText>
+                                    </li>
+                                </ul>
+                            }
+                            @if (!string.IsNullOrEmpty(_details.ItemImagePath))
+                            {
+                                <ul class="list-unstyled mb-4">
+                                    <li class="d-flex align-items-center mb-3">
+                                        <MudText Typo="Typo.body2">
+                                            <span Style="font-weight: 600; color: #555; min-width: 120px; display: inline-block;">Image :</span>
+                                            <img src="@GetImageUrl(_details.ItemImagePath)" style="max-width: 200px; max-height: 200px; border: 1px solid #ddd; border-radius: 4px;" />
                                         </MudText>
                                     </li>
                                 </ul>

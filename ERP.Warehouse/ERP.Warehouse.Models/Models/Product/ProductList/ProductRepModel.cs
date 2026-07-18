@@ -11,4 +11,5 @@ public class ProductModel
     public string? ProductName { get; set;}
     public string? ProductCode { get; set;}
     public string? SupplierName { get; set;}
+    public string? ImagePath { get; set;}
 }

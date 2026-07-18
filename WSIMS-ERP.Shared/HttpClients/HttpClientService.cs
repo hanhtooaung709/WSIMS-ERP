@@ -80,7 +80,12 @@ public class HttpClientService
                     }
 
                     var data = System.Text.Json.JsonSerializer.Deserialize<TResponse>(dataElement.GetRawText(), _jsonOptions);
-                    return Result<TResponse>.Success(data, respDesp);
+                    return new Result<TResponse>
+                    {
+                        RespDesp = respDesp,
+                        RespType = EnumRespType.Success,
+                        Data = data!
+                    };
                 }
             }
 

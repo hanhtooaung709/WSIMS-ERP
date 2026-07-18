@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Drawing.Diagrams;
 using ERP.Warehouse.Models.Models.Product.ProductList;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using WSIMS_ERP.Shared;
@@ -22,6 +23,7 @@ public partial class ProductList
 
     private IList<IBrowserFile> _selectedFiles = new List<IBrowserFile>();
     private string? _imagePreviewUrl;
+    private string? _existingImagePath;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -268,6 +270,28 @@ public partial class ProductList
             _reqModel.ImageData = Convert.ToBase64String(bytes);
             _imagePreviewUrl = $"data:{file.ContentType};base64,{_reqModel.ImageData}";
         }
+    }
+
+    private async Task OnImageUpload(InputFileChangeEventArgs args)
+    {
+        var file = args.File;
+        if (file is null) return;
+
+        _selectedFiles.Clear();
+        _selectedFiles.Add(file);
+        using var ms = new MemoryStream();
+        await file.OpenReadStream(10 * 1024 * 1024).CopyToAsync(ms);
+        var bytes = ms.ToArray();
+        _reqModel.ImageData = Convert.ToBase64String(bytes);
+        _imagePreviewUrl = $"data:{file.ContentType};base64,{_reqModel.ImageData}";
+    }
+
+    private string GetImageUrl(string? imagePath)
+    {
+        if (string.IsNullOrEmpty(imagePath)) return "";
+        var fileName = Path.GetFileName(imagePath);
+        var baseUrl = _navigationManager.BaseUri.TrimEnd('/');
+        return $"{baseUrl}/api/image/product/{fileName}";
     }
 
     #endregion

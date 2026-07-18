@@ -66,7 +66,6 @@ public class ProductListService : AuthorizationService
                     ProductName = x.ProductName,
                     ProductCode = x.ProductCode,
                     SupplierName = x.SupplierName
-                    
                 })
                 .ToListAsync();
 
@@ -210,7 +209,8 @@ public class ProductListService : AuthorizationService
                 ProductId = product.ProductId,
                 ProductName = product.ProductName,
                 ProductCode = product.ProductCode,
-                SupplierName = product.SupplierName
+                SupplierName = product.SupplierName,
+                ImagePath = product.ImagePath,
             };
             model = Result<ProductModel>.Success(response);
 
@@ -230,10 +230,10 @@ public class ProductListService : AuthorizationService
         {
             #region Check Prodcut
 
-            var user = await _db.TblProducts
+            var product = await _db.TblProducts
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.ProductId == reqModel.ProductId && x.DelFlag == 0);
-            if (user is null)
+            if (product is null)
             {
                 model = Result<ProductModel>.Error(JsonResource.WHE035);
                 return model;
@@ -329,6 +329,16 @@ public class ProductListService : AuthorizationService
 
             #region Prepare Data
 
+            var imagePath = "";
+            if (!reqModel.ImageData.IsNullOrEmpty())
+            {
+                var imgFolder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\Product";
+                Directory.CreateDirectory(imgFolder);
+                var fileName = DevCode.GenerateUlid() + ".jpg";
+                imagePath = Path.Combine(imgFolder, fileName);
+                await DevCode.WriteBase64ToFileAsync(reqModel.ImageData, imagePath);
+            }
+
             TblReqProductChange item = new TblReqProductChange
             {
                 ReqProductChangesId = DevCode.GenerateUlid(),
@@ -336,6 +346,7 @@ public class ProductListService : AuthorizationService
                 ProductName = reqModel.ProductName!,
                 ProductCode = reqModel.ProductCode!,
                 SupplierName = reqModel.SupplierName!,
+                ImagePath = imagePath,
                 ChangesType = EnumRequestedType.Update.ToString(),
                 Status = EnumRequestedStatus.Pending.ToString(),
                 ReqUserId = AuthorizedUserId,
