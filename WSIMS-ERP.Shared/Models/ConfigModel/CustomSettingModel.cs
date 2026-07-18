@@ -6,4 +6,5 @@ public class CustomSettingModel
     public WarehouseAppSetting WarehouseApp { get; set; }
     public WarehouseApiSetting WarehouseApi { get; set; }
     public JwtModel Jwt { get; set; }
+    public ImageModel Image { get; set; }
 }

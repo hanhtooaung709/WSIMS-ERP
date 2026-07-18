@@ -1,4 +1,7 @@
-﻿namespace WSIMS_ERP.Shared;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+
+namespace WSIMS_ERP.Shared;
 
 public static class ConfigurationExtension
 {
@@ -26,6 +29,8 @@ public static class ConfigurationExtension
 
         builder.Services.AddOptions();
         builder.Services.Configure<CustomSettingModel>(builder.Configuration);
+        builder.Services.AddSingleton<CustomSettingModel>(sp =>
+            sp.GetRequiredService<IOptions<CustomSettingModel>>().Value);
 
         return builder;
     }

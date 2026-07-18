@@ -12,6 +12,7 @@ using WSIMS_ERP.Shared.Services;
 using ERP.Warehouse.Models;
 using System.Data;
 using WSIMS_ERP.Shared.Queries;
+using WSIMS_ERP.Shared.Models.ConfigModel;
 
 namespace ERP.Warehouse.Api.Features.Product.ReqProductChanges;
 
@@ -19,14 +20,17 @@ public class ReqProductChangesService : AuthorizationService
 {
     private readonly AppDbContext _db;
     private readonly DapperService _dapperService;
+    private readonly CustomSettingModel _setting;
 
     public ReqProductChangesService(IHttpContextAccessor httpContextAccessor,
         AppDbContext db,
         DapperService dapperService,
-        ILogger<AuthorizationService> logger) : base(httpContextAccessor, logger)
+        ILogger<AuthorizationService> logger,
+        CustomSettingModel setting) : base(httpContextAccessor, logger)
     {
         _db = db;
         _dapperService = dapperService;
+        _setting = setting;
     }
 
     #region Get/Create/Edit/Update/Delete/Details
@@ -234,7 +238,7 @@ public class ReqProductChangesService : AuthorizationService
                 {
                     File.Delete(product.ImagePath);
                 }
-                var imgFolder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\ReqProductChange";
+                var imgFolder = _setting.Image.ReqProductChange;
                 Directory.CreateDirectory(imgFolder);
                 var fileName = DevCode.GenerateUlid() + ".jpg";
                 var imagePath = Path.Combine(imgFolder, fileName);

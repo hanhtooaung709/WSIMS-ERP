@@ -11,6 +11,7 @@ using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
 using ERP.Warehouse.Models.Models.Product.ReqProduct;
 using WSIMS_ERP.Shared.Enums;
+using WSIMS_ERP.Shared.Models.ConfigModel;
 
 namespace ERP.Warehouse.Api.Features.ApproveProduct.ApproveReqProductChanges;
 
@@ -18,14 +19,17 @@ public class ApproveReqProductChangesService : AuthorizationService
 {
     private readonly AppDbContext _db;
     private readonly DapperService _dapperService;
+    private readonly CustomSettingModel _setting;
 
     public ApproveReqProductChangesService(IHttpContextAccessor httpContextAccessor,
         AppDbContext db,
         DapperService dapperService,
-        ILogger<AuthorizationService> logger) : base(httpContextAccessor, logger)
+        ILogger<AuthorizationService> logger,
+        CustomSettingModel setting) : base(httpContextAccessor, logger)
     {
         _db = db;
         _dapperService = dapperService;
+        _setting = setting;
     }
 
     #region Get/Approve/Reject/Details
@@ -135,7 +139,7 @@ public class ApproveReqProductChangesService : AuthorizationService
                     {
                         File.Delete(product.ImagePath);
                     }
-                    var imgFolder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\Product";
+                    var imgFolder = _setting.Image.Product;
                     Directory.CreateDirectory(imgFolder);
                     var fileName = DevCode.GenerateUlid() + ".jpg";
                     var imagePath = Path.Combine(imgFolder, fileName);

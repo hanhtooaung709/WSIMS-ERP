@@ -11,6 +11,9 @@ using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
+using Microsoft.Extensions.Options;
+using System.Runtime.InteropServices.JavaScript;
+using WSIMS_ERP.Shared.Models.ConfigModel;
 
 namespace ERP.Warehouse.Api.Features.Product.ProductList;
 
@@ -18,14 +21,17 @@ public class ProductListService : AuthorizationService
 {
     private readonly AppDbContext _db;
     private readonly DapperService _dapperService;
+    private readonly CustomSettingModel _setting;
 
     public ProductListService(IHttpContextAccessor httpContextAccessor,
         AppDbContext db,
         DapperService dapperService,
-        ILogger<AuthorizationService> logger) : base(httpContextAccessor, logger)
+        ILogger<AuthorizationService> logger,
+        CustomSettingModel setting) : base(httpContextAccessor, logger)
     {
         _db = db;
         _dapperService = dapperService;
+        _setting = setting;
     }
 
     #region Get/Create/Edit/Update/Delete/Details
@@ -152,7 +158,7 @@ public class ProductListService : AuthorizationService
             var imagePath = "";
             if (!reqModel.ImageData.IsNullOrEmpty())
             {
-                var imgFolder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\ReqProduct";
+                var imgFolder = _setting.Image.ReqProduct;
                 Directory.CreateDirectory(imgFolder);
                 var fileName = DevCode.GenerateUlid() + ".jpg";
                 imagePath = Path.Combine(imgFolder, fileName);
@@ -332,7 +338,7 @@ public class ProductListService : AuthorizationService
             var imagePath = "";
             if (!reqModel.ImageData.IsNullOrEmpty())
             {
-                var imgFolder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\ReqProductChange";
+                var imgFolder = _setting.Image.ReqProductChange;
                 Directory.CreateDirectory(imgFolder);
                 var fileName = DevCode.GenerateUlid() + ".jpg";
                 imagePath = Path.Combine(imgFolder, fileName);

@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using WSIMS_ERP.Shared.Models.ConfigModel;
 
 namespace ERP.Warehouse.Api.Features.Common;
 
@@ -6,7 +8,12 @@ namespace ERP.Warehouse.Api.Features.Common;
 [ApiController]
 public class ImageController : ControllerBase
 {
-    static readonly string BasePath = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image";
+    private readonly CustomSettingModel _setting;
+
+    public ImageController(IOptionsMonitor<CustomSettingModel> setting)
+    {
+        _setting = setting.CurrentValue;
+    }
 
     [HttpGet]
     [Route("{folder}/{fileName}")]
@@ -16,7 +23,18 @@ public class ImageController : ControllerBase
         if (!allowedFolders.Contains(folder))
             return NotFound();
 
-        var filePath = Path.Combine(BasePath, folder, fileName);
+        var basePath = folder switch
+        {
+            "Product" => _setting.Image.Product,
+            "ReqProduct" => _setting.Image.ReqProduct,
+            "ReqProductChange" => _setting.Image.ReqProductChange,
+            _ => null
+        };
+
+        if (basePath is null)
+            return NotFound();
+
+        var filePath = Path.Combine(basePath, fileName);
 
         if (!System.IO.File.Exists(filePath))
         {
