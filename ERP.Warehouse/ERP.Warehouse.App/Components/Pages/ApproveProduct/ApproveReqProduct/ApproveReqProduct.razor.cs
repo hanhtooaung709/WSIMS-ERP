@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using ERP.Warehouse.App.Common;
+﻿using ERP.Warehouse.App.Common;
 using ERP.Warehouse.Models.Models.Product.ReqProduct;
 using MudBlazor;
 using WSIMS_ERP.Shared;
@@ -199,9 +198,11 @@ public partial class ApproveReqProduct
     private string GetImageUrl(string? imagePath)
     {
         if (string.IsNullOrEmpty(imagePath)) return "";
+        var folder = Path.GetFileName(Path.GetDirectoryName(imagePath));
         var fileName = Path.GetFileName(imagePath);
-        var baseUrl = _setting.CurrentValue.WarehouseApp.WarehouseApiBaseUrl.TrimEnd('/');
-        return $"{baseUrl}/api/image/product/{fileName}";
+        var apiUrl = _setting?.CurrentValue?.WarehouseApp?.WarehouseApiBaseUrl;
+        var baseUrl = string.IsNullOrEmpty(apiUrl) ? _nav.BaseUri.TrimEnd('/') : apiUrl.TrimEnd('/');
+        return $"{baseUrl}/api/image/{folder}/{fileName}";
     }
 
     #endregion

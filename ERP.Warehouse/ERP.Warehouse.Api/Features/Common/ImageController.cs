@@ -6,12 +6,17 @@ namespace ERP.Warehouse.Api.Features.Common;
 [ApiController]
 public class ImageController : ControllerBase
 {
+    static readonly string BasePath = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image";
+
     [HttpGet]
-    [Route("product/{fileName}")]
-    public IActionResult GetProductImage(string fileName)
+    [Route("{folder}/{fileName}")]
+    public IActionResult GetImage(string folder, string fileName)
     {
-        var folder = @"D:\Website Portfolio\Wholesale & Inventory Management System\Image\Product";
-        var filePath = Path.Combine(folder, fileName);
+        var allowedFolders = new[] { "Product", "ReqProduct", "ReqProductChange" };
+        if (!allowedFolders.Contains(folder))
+            return NotFound();
+
+        var filePath = Path.Combine(BasePath, folder, fileName);
 
         if (!System.IO.File.Exists(filePath))
         {
