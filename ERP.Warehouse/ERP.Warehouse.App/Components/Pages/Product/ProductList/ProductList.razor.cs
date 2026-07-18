@@ -1,16 +1,16 @@
-﻿using DocumentFormat.OpenXml.Drawing.Diagrams;
-using ERP.Warehouse.Models.Models.Product.ProductList;
-using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
+﻿using ERP.Warehouse.Models.Models.Product.ProductList;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
+using WSIMS_ERP.Shared.Models;
 
 namespace ERP.Warehouse.App.Components.Pages.Product.ProductList;
 
 public partial class ProductList
 {
+    [Inject] private IConfiguration _configuration { get; set; } = default!;
     private ProductReqModel _reqModel = new();
     private IEnumerable<ProductModel> _model = new List<ProductModel>();
     private ProductEditModel _edit = new();
@@ -292,7 +292,7 @@ public partial class ProductList
     {
         if (string.IsNullOrEmpty(imagePath)) return "";
         var fileName = Path.GetFileName(imagePath);
-        var baseUrl = _navigationManager.BaseUri.TrimEnd('/');
+        var baseUrl = _configuration.GetSection("WarehouseApp")["WarehouseApiBaseUrl"]?.TrimEnd('/');
         return $"{baseUrl}/api/image/product/{fileName}";
     }
 

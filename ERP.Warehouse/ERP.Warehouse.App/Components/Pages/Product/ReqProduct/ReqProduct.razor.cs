@@ -1,5 +1,6 @@
 ﻿using ERP.Warehouse.App.Common;
 using ERP.Warehouse.Models.Models.Product.ReqProduct;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using WSIMS_ERP.Shared;
@@ -10,6 +11,7 @@ namespace ERP.Warehouse.App.Components.Pages.Product.ReqProduct;
 
 public partial class ReqProduct
 {
+    [Inject] private IConfiguration _configuration { get; set; } = default!;
     private ReqProductReqModel _reqModel = new();
     private IEnumerable<ReqProductModel> _model = new List<ReqProductModel>();
     private ReqProductEditModel _edit = new();
@@ -261,7 +263,7 @@ public partial class ReqProduct
     {
         if (string.IsNullOrEmpty(imagePath)) return "";
         var fileName = Path.GetFileName(imagePath);
-        var baseUrl = _navigationManager.BaseUri.TrimEnd('/');
+        var baseUrl = _configuration.GetSection("WarehouseApp")["WarehouseApiBaseUrl"]?.TrimEnd('/');
         return $"{baseUrl}/api/image/product/{fileName}";
     }
 

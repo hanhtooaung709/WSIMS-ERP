@@ -1,5 +1,4 @@
 ﻿using ERP.Warehouse.App.Common;
-using ERP.Warehouse.Models.Models.Product.ReqProduct;
 using ERP.Warehouse.Models.Models.Product.ReqProductChanges;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -12,6 +11,7 @@ namespace ERP.Warehouse.App.Components.Pages.Product.ReqProductChanges;
 
 public partial class ReqProductChanges
 {
+    [Inject] private IConfiguration _configuration { get; set; } = default!;
     private ReqProductChangesReqModel _reqModel = new();
     private IEnumerable<ReqProductChangesModel> _model = new List<ReqProductChangesModel>();
     private ReqProductChangesEditModel _edit = new();
@@ -92,6 +92,9 @@ public partial class ReqProductChanges
             await _injectService.ShowDialog(result);
 
             _reqModel = new();
+            _selectedFiles.Clear();
+            _imagePreviewUrl = null;
+            _existingImagePath = null;
             await List();
         }
 
@@ -148,6 +151,9 @@ public partial class ReqProductChanges
         try
         {
             _reqModel = new();
+            _selectedFiles.Clear();
+            _imagePreviewUrl = null;
+            _existingImagePath = null;
             StateHasChanged();
             List();
             _formType = EnumFormType.List;
@@ -257,7 +263,7 @@ public partial class ReqProductChanges
     {
         if (string.IsNullOrEmpty(imagePath)) return "";
         var fileName = Path.GetFileName(imagePath);
-        var baseUrl = _navigationManager.BaseUri.TrimEnd('/');
+        var baseUrl = _configuration.GetSection("WarehouseApp")["WarehouseApiBaseUrl"]?.TrimEnd('/');
         return $"{baseUrl}/api/image/product/{fileName}";
     }
 
