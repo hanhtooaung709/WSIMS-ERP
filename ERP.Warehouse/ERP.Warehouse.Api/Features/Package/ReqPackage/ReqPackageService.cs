@@ -11,7 +11,6 @@ using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Models.ConfigModel;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
-using ERP.Warehouse.Models.Models.Product.ReqProduct;
 
 namespace ERP.Warehouse.Api.Features.Package.ReqPackage;
 
