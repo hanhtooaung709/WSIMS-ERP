@@ -201,6 +201,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.ApprovedDateTime).HasColumnType("timestamp without time zone");
             entity.Property(e => e.ApprovedUserId).HasMaxLength(50);
             entity.Property(e => e.BoxCode).HasMaxLength(20);
+            entity.Property(e => e.BranchCode).HasMaxLength(20);
             entity.Property(e => e.CurrencyCode).HasMaxLength(20);
             entity.Property(e => e.PackageInfoCode).HasMaxLength(20);
             entity.Property(e => e.PackageInfoId).HasMaxLength(50);
@@ -209,6 +210,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.RejectReason).HasMaxLength(100);
             entity.Property(e => e.ReqDateTime).HasColumnType("timestamp without time zone");
             entity.Property(e => e.ReqUserId).HasMaxLength(50);
+            entity.Property(e => e.Status).HasMaxLength(10);
         });
 
         modelBuilder.Entity<TblReqPackageInfoChange>(entity =>

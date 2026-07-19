@@ -11,6 +11,10 @@ public partial class TblReqPackageInfo
 
     public string PackageInfoCode { get; set; } = null!;
 
+    public int Quanity { get; set; }
+
+    public string BranchCode { get; set; } = null!;
+
     public string ProductCode { get; set; } = null!;
 
     public int Price { get; set; }
@@ -21,7 +25,7 @@ public partial class TblReqPackageInfo
 
     public string BoxCode { get; set; } = null!;
 
-    public byte[] Status { get; set; } = null!;
+    public string Status { get; set; } = null!;
 
     public string? PackageInfoId { get; set; }
 
