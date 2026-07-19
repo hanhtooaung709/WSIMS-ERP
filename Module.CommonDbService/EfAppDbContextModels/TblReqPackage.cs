@@ -15,6 +15,8 @@ public partial class TblReqPackage
 
     public string BranchCode { get; set; } = null!;
 
+    public string ChangesType { get; set; } = null!;
+
     public byte[] Status { get; set; } = null!;
 
     public string ReqUserId { get; set; } = null!;
