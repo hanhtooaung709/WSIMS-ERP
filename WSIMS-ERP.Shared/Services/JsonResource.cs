@@ -19,6 +19,41 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// Requsted Package is successfully Deteted.
+    /// </summary>
+    public static readonly string WHS080 = "WH#S080";
+
+    /// <summary>
+    /// Requsted Package delete fail!
+    /// </summary>
+    public static readonly string WHE079 = "WH#E079";
+
+    /// <summary>
+    /// Requested Package is successfully Updated.
+    /// </summary>
+    public static readonly string WHS078 = "WH#S078";
+
+    /// <summary>
+    /// Package name is already Change Requested!
+    /// </summary>
+    public static readonly string WHE076 = "WH#E076";
+
+    /// <summary>
+    /// Package name is already Requested!
+    /// </summary>
+    public static readonly string WHE075 = "WH#E075";
+
+    /// <summary>
+    /// Package name is already exist!
+    /// </summary>
+    public static readonly string WHE074 = "WH#E074";
+
+    /// <summary>
+    /// Requseted Package is not pending status!
+    /// </summary>
+    public static readonly string WHE073 = "WH#E073";
+
+    /// <summary>
     /// Requested Package does not exist!
     /// </summary>
     public static readonly string WHE072 = "WH#E072";

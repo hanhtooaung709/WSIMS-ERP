@@ -37,5 +37,29 @@ public class ReqPackageController : BaseController
         return await Execute(result);
     }
 
+    [HttpPost]
+    [Route("Update")]
+    public async Task<IActionResult> Update(ReqPackageReqModel reqModel)
+    {
+        var result = await _reqPackageService.Update(reqModel);
+        return await Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Delete")]
+    public async Task<IActionResult> Delete(ReqPackageEditModel reqModel)
+    {
+        var result = await _reqPackageService.Delete(reqModel);
+        return await Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Details")]
+    public async Task<IActionResult> Details(ReqPackageEditModel reqModel)
+    {
+        var result = await _reqPackageService.Details(reqModel);
+        return await Execute(result);
+    }
+
     #endregion
 }
