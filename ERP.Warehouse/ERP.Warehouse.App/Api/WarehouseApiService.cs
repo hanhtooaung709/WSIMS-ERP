@@ -2,12 +2,14 @@
 using ERP.Warehouse.App.Api.Endpoints.Box;
 using ERP.Warehouse.App.Api.Endpoints.Branch;
 using ERP.Warehouse.App.Api.Endpoints.Currency;
+using ERP.Warehouse.App.Api.Endpoints.Package;
 using ERP.Warehouse.App.Api.Endpoints.Product;
 using ERP.Warehouse.App.Api.Endpoints.SignIn;
 using ERP.Warehouse.App.Api.Endpoints.WarehouseUser;
 using ERP.Warehouse.Models.Models.Box;
 using ERP.Warehouse.Models.Models.Branch;
 using ERP.Warehouse.Models.Models.Currency;
+using ERP.Warehouse.Models.Models.Package.ReqPackage;
 using ERP.Warehouse.Models.Models.Product.ProductList;
 using ERP.Warehouse.Models.Models.Product.ReqProduct;
 using ERP.Warehouse.Models.Models.Product.ReqProductChanges;
@@ -310,6 +312,30 @@ public class WarehouseApiService
     public async Task<Result<ReqProductChangesDetailModel>> ApproveReqProductDetails(ReqProductChangesEditModel reqModel)
        => await _httpClientService.ExecuteAsync<ReqProductChangesEditModel, ReqProductChangesDetailModel>
        (ApproveReqProductChangesEndpoints.Details, reqModel);
+
+    #endregion
+
+    #region ReqPackage
+
+    public async Task<Result<ReqPackageRepModel>> Get(ReqPackageReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<ReqPackageReqModel, ReqPackageRepModel>
+        (ReqPackageEndpoints.Get, reqModel);
+
+    public async Task<Result<ReqPackageModel>> Edit(ReqPackageEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqPackageEditModel, ReqPackageModel>
+       (ReqPackageEndpoints.Edit, reqModel);
+
+    public async Task<Result<ReqPackageModel>> Update(ReqPackageReqModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqPackageReqModel, ReqPackageModel>
+       (ReqPackageEndpoints.Update, reqModel);
+
+    public async Task<Result<ReqPackageModel>> Delete(ReqPackageEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqPackageEditModel, ReqPackageModel>
+       (ReqPackageEndpoints.Delete, reqModel);
+
+    public async Task<Result<ReqPackageDetailModel>> Details(ReqPackageEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqPackageEditModel, ReqPackageDetailModel>
+       (ReqPackageEndpoints.Details, reqModel);
 
     #endregion
 }
