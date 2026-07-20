@@ -230,7 +230,7 @@ public class ReqPackageService : AuthorizationService
             _db.Entry(reqPackage).State = EntityState.Modified;
             _db.TblReqPackageInfos.Update(reqPackage);
             await _db.SaveChangesAsync();
-            model = Result<ReqPackageModel>.Success(JsonResource.WHS078);
+            model = Result<ReqPackageModel>.Success(JsonResource.WHS077);
 
             #endregion
         }
@@ -275,10 +275,10 @@ public class ReqPackageService : AuthorizationService
             var result = _db.SaveChanges();
             if (result <= 0)
             {
-                model = Result<ReqPackageModel>.Error(JsonResource.WHE079);
+                model = Result<ReqPackageModel>.Error(JsonResource.WHE078);
                 return model;
             }
-            model = Result<ReqPackageModel>.Success(JsonResource.WHS080);
+            model = Result<ReqPackageModel>.Success(JsonResource.WHS079);
 
             #endregion
         }

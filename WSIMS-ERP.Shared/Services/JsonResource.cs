@@ -21,17 +21,17 @@ public class JsonResource
     /// <summary>
     /// Requsted Package is successfully Deteted.
     /// </summary>
-    public static readonly string WHS080 = "WH#S080";
+    public static readonly string WHS079 = "WH#S079";
 
     /// <summary>
     /// Requsted Package delete fail!
     /// </summary>
-    public static readonly string WHE079 = "WH#E079";
+    public static readonly string WHE078 = "WH#E078";
 
     /// <summary>
     /// Requested Package is successfully Updated.
     /// </summary>
-    public static readonly string WHS078 = "WH#S078";
+    public static readonly string WHS077 = "WH#S077";
 
     /// <summary>
     /// Package name is already Change Requested!
