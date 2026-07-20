@@ -255,6 +255,16 @@ public partial class ReqPackage
         return statusStr;
     }
 
+    private string GetImageUrl(string? imagePath)
+    {
+        if (string.IsNullOrEmpty(imagePath)) return "";
+        var folder = Path.GetFileName(Path.GetDirectoryName(imagePath));
+        var fileName = Path.GetFileName(imagePath);
+        var apiUrl = _setting?.CurrentValue?.WarehouseApp?.WarehouseApiBaseUrl;
+        var baseUrl = string.IsNullOrEmpty(apiUrl) ? _nav.BaseUri.TrimEnd('/') : apiUrl.TrimEnd('/');
+        return $"{baseUrl}/api/image/{folder}/{fileName}";
+    }
+
     #endregion
 
     #region DropDown

@@ -10,7 +10,7 @@
 @if (_formType is EnumFormType.List or EnumFormType.Edit or EnumFormType.Create)
 {
     <MudPaper Class="pa-4 mb-4">
-        <MudText Typo="Typo.h6" Style="font-weight: 600; color: #333; margin-bottom: 12px;">Requested Products</MudText>
+        <MudText Typo="Typo.h6" Style="font-weight: 600; color: #333; margin-bottom: 12px;">Requested Packages</MudText>
         <MudGrid>
             <MudItem xs="12" sm="6" md="4" lg="3">
                 <MudTextField @bind-Value="_reqModel.PackageName" Label="Package Name" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable />
@@ -260,4 +260,86 @@
             </PagerContent>
         </MudDataGrid>
     </div>
+}
+
+@if (_formType is EnumFormType.Detail)
+{
+    <MudPaper Elevation="2" Class="pa-0 mt-4" Style="border-radius: 12px; overflow: hidden;">
+        <div Style="background-color: #3f7375; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
+            <MudText Typo="Typo.h5" Style="color: #fff; font-weight: 600; margin: 0;">
+                Requested Package Details
+            </MudText>
+            <MudFab Size="@Size.Small" Color="Color.Default" StartIcon="@Icons.Material.Filled.ArrowBack" Style="background-color: rgba(255,255,255,0.2); color: #fff;" OnClick="@(() => { _formType = EnumFormType.List; StateHasChanged(); })" />
+        </div>
+        <div Class="pa-6">
+            <MudGrid>
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-center justify-center mud-width-full pa-4" Elevation="0" Style="background-color: #e8e8e8; border-radius: 8px;">
+                        <MudItem xs="12" sm="11">
+                            <MudText Typo="Typo.subtitle1" Style="font-weight: 600; color: #333; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #3f7375;">
+                                Requested Product Information
+                            </MudText>
+                            @foreach (var item in _details.PackageInfo)
+                            {
+                                <ul class="list-unstyled mb-4">
+                                    <li class="d-flex align-items-center mb-3">
+                                        <MudText Typo="Typo.body2">
+                                            <span Style="font-weight: 600; color: #555; min-width: 120px; display: inline-block;">@(item.Key) :</span>
+                                            <span Style="color: #333;">@item.Value</span>
+                                        </MudText>
+                                    </li>
+                                </ul>
+                            }
+                            @if (!string.IsNullOrEmpty(_details.ItemImagePath))
+                            {
+                                <ul class="list-unstyled mb-4">
+                                    <li class="d-flex align-items-center mb-3">
+                                        <MudText Typo="Typo.body2">
+                                            <span Style="font-weight: 600; color: #555; min-width: 120px; display: inline-block;">Image :</span>
+                                            <img src="@GetImageUrl(_details.ItemImagePath)" style="max-width: 200px; max-height: 200px; border: 1px solid #ddd; border-radius: 4px;" />
+                                        </MudText>
+                                    </li>
+                                </ul>
+                            }
+                        </MudItem>
+                    </MudPaper>
+                </MudItem>
+
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-center justify-center mud-width-full pa-4" Elevation="0" Style="background-color: #e8e8e8; border-radius: 8px;">
+                        <MudItem xs="12" sm="11">
+                            <MudText Typo="Typo.subtitle1" Style="font-weight: 600; color: #333; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #3f7375;">
+                                Maker / Checker
+                            </MudText>
+                            @foreach (var item in _details.MakerChecker)
+                            {
+                                if (item.Key.Contains("Status"))
+                                {
+                                    <ul class="list-unstyled mb-4">
+                                        <li class="d-flex align-items-center mb-3">
+                                            <MudText Typo="Typo.body2">
+                                                <span Style="font-weight: 600; color: #555; min-width: 150px; display: inline-block;">@(item.Key) :</span>
+                                                <span class="@GetBadgeClass(item.Value)" Style="color: #333;">@item.Value</span>
+                                            </MudText>
+                                        </li>
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <ul class="list-unstyled mb-4">
+                                        <li class="d-flex align-items-center mb-3">
+                                            <MudText Typo="Typo.body2">
+                                                <span Style="font-weight: 600; color: #555; min-width: 150px; display: inline-block;">@(item.Key) :</span>
+                                                <span Style="color: #333;">@item.Value</span>
+                                            </MudText>
+                                        </li>
+                                    </ul>
+                                }
+                            }
+                        </MudItem>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+        </div>
+    </MudPaper>
 }
