@@ -62,4 +62,32 @@ public class ReqPackageController : BaseController
     }
 
     #endregion
+
+    #region DropDown
+
+    [HttpPost]
+    [Route("GetProduct")]
+    public async Task<IActionResult> GetProduct()
+    {
+        var result = await _reqPackageService.GetProduct();
+        return await Execute(result);
+    }
+
+    [HttpPost]
+    [Route("GetCurrency")]
+    public async Task<IActionResult> GetCurrency()
+    {
+        var result = await _reqPackageService.GetCurrency();
+        return await Execute(result);
+    }
+
+    [HttpPost]
+    [Route("GetBox")]
+    public async Task<IActionResult> GetBox()
+    {
+        var result = await _reqPackageService.GetBox();
+        return await Execute(result);
+    }
+
+    #endregion
 }

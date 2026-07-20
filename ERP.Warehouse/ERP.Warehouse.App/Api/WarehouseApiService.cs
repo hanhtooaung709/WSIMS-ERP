@@ -337,5 +337,17 @@ public class WarehouseApiService
        => await _httpClientService.ExecuteAsync<ReqPackageEditModel, ReqPackageDetailModel>
        (ReqPackageEndpoints.Details, reqModel);
 
+    public async Task<Result<List<ProductResponseModel>>> GetProduct()
+       => await _httpClientService.ExecuteAsync<object, List<ProductResponseModel>>
+       (ReqPackageEndpoints.GetProduct, null!);
+
+    public async Task<Result<List<CurrencyResponseModel>>> GetCurrency()
+       => await _httpClientService.ExecuteAsync<object, List<CurrencyResponseModel>>
+       (ReqPackageEndpoints.GetCurrency, null!);
+
+    public async Task<Result<List<BoxResponseModel>>> GetBox()
+       => await _httpClientService.ExecuteAsync<object, List<BoxResponseModel>>
+       (ReqPackageEndpoints.GetBox, null!);
+
     #endregion
 }

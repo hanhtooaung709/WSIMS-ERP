@@ -1,6 +1,7 @@
 ﻿using ERP.Warehouse.App.Common;
 using ERP.Warehouse.Models.Models.Package.ReqPackage;
 using ERP.Warehouse.Models.Models.Product.ReqProduct;
+using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using WSIMS_ERP.Shared;
@@ -15,6 +16,11 @@ public partial class ReqPackage
     private IEnumerable<ReqPackageModel> _model = new List<ReqPackageModel>();
     private ReqPackageEditModel _edit = new();
     private ReqPackageDetailModel _details = new();
+
+    private List<BranchResponseModel> _banchList = new();
+    private List<ProductResponseModel> _productList = new();
+    private List<CurrencyResponseModel> _currencyList = new();
+    private List<BoxResponseModel> _boxList = new();
 
     private List<SelectListModel> _lstStatus = Commons.GetStatusList();
 
@@ -49,6 +55,9 @@ public partial class ReqPackage
     {
         try
         {
+            await GetProduct();
+            await GetBox();
+
             await _injectService.EnableLoading();
             var result = await _apiService.Get(_reqModel);
             await _injectService.DisableLoading();
@@ -112,6 +121,10 @@ public partial class ReqPackage
                 return;
             }
 
+            await GetBranch();
+            await GetProduct();
+            await GetCurrency();
+            await GetBox();
             _edit.ReqPackageId = reqModel.ReqPackageId!;
 
             await _injectService.EnableLoading();
@@ -151,7 +164,6 @@ public partial class ReqPackage
         try
         {
             _reqModel = new();
-            _selectedFiles.Clear();
             StateHasChanged();
             List();
             _formType = EnumFormType.List;
@@ -241,6 +253,106 @@ public partial class ReqPackage
         }
 
         return statusStr;
+    }
+
+    #endregion
+
+    #region DropDown
+
+    private async Task GetBranch()
+    {
+        try
+        {
+            await _injectService.EnableLoading();
+            var result = await _apiService.GetBranch();
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            _banchList = result.Data;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private async Task GetProduct()
+    {
+        try
+        {
+            await _injectService.EnableLoading();
+            var result = await _apiService.GetProduct();
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            _productList = result.Data;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private async Task GetCurrency()
+    {
+        try
+        {
+            await _injectService.EnableLoading();
+            var result = await _apiService.GetCurrency();
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            _currencyList = result.Data;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private async Task GetBox()
+    {
+        try
+        {
+            await _injectService.EnableLoading();
+            var result = await _apiService.GetBox();
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            _boxList = result.Data;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
     }
 
     #endregion

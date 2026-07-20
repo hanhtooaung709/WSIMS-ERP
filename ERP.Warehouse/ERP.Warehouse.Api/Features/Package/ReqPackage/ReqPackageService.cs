@@ -11,6 +11,7 @@ using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Models.ConfigModel;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
+using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 
 namespace ERP.Warehouse.Api.Features.Package.ReqPackage;
 
@@ -327,6 +328,75 @@ public class ReqPackageService : AuthorizationService
         catch(Exception ex)
         {
             return Result<ReqPackageDetailModel>.Error(ex);
+        }
+    }
+
+    #endregion
+
+    #region DropDown
+
+    public async Task<Result<List<ProductResponseModel>>> GetProduct()
+    {
+        try
+        {
+            var result = await _db.TblProducts
+                .AsNoTracking()
+                .Where(x => x.DelFlag == 0)
+                .Select(x => new ProductResponseModel
+                {
+                    ProductCode = x.ProductCode,
+                    ProductName = x.ProductName
+                })
+                .ToListAsync();
+
+            return Result<List<ProductResponseModel>>.Success(result);
+        }
+        catch (Exception ex)
+        {
+            return Result<List<ProductResponseModel>>.Error(ex);
+        }
+    }
+
+    public async Task<Result<List<CurrencyResponseModel>>> GetCurrency()
+    {
+        try
+        {
+            var result = await _db.TblCurrencies
+                .AsNoTracking()
+                .Where(x => x.DelFlag == 0)
+                .Select(x => new CurrencyResponseModel
+                {
+                    CurrencyCode = x.CurrencyCode
+                })
+                .ToListAsync();
+
+            return Result<List<CurrencyResponseModel>>.Success(result);
+        }
+        catch (Exception ex)
+        {
+            return Result<List<CurrencyResponseModel>>.Error(ex);
+        }
+    }
+
+    public async Task<Result<List<BoxResponseModel>>> GetBox()
+    {
+        try
+        {
+            var result = await _db.TblBoxes
+                .AsNoTracking()
+                .Where(x => x.DelFlag == 0)
+                .Select(x => new BoxResponseModel
+                {
+                    BoxCode = x.BoxCode,
+                    Box = x.Size
+                })
+                .ToListAsync();
+
+            return Result<List<BoxResponseModel>>.Success(result);
+        }
+        catch (Exception ex)
+        {
+            return Result<List<BoxResponseModel>>.Error(ex);
         }
     }
 

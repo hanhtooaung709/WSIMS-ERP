@@ -16,10 +16,26 @@
                 <MudTextField @bind-Value="_reqModel.PackageName" Label="Package Name" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable />
             </MudItem>
             <MudItem xs="12" sm="6" md="4" lg="3">
-                <MudTextField @bind-Value="_reqModel.ProductCode" Label="Product Name" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable />
+                <MudSelect @bind-Value="_reqModel.ProductCode" Label="Product Name" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable>
+                    @if (_productList != null)
+                    {
+                        @foreach (var item in _productList)
+                        {
+                            <MudSelectItem Value="@item.ProductCode">@item.ProductName</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
             </MudItem>
             <MudItem xs="12" sm="6" md="4" lg="3">
-                <MudTextField @bind-Value="_reqModel.BoxCode" Label="Box" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable />
+                <MudSelect @bind-Value="_reqModel.BoxCode" Label="Box" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable>
+                    @if (_boxList != null)
+                    {
+                        @foreach (var item in _boxList)
+                        {
+                            <MudSelectItem Value="@item.BoxCode">@item.Box</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
             </MudItem>
             <MudItem xs="12" sm="6" md="4" lg="3">
                 <MudSelect @bind-Value="_reqModel.Status" Label="Status" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable>
@@ -88,37 +104,62 @@
 
                 <PropertyColumn Property="x => x.ProductCode" Title="Product Name" HeaderStyle="min-width: 200px;">
                     <EditTemplate>
-                        <MudTextField @bind-Value="_reqModel.ProductCode"
+                        <MudSelect @bind-Value="_reqModel.ProductCode"
                                       Label="Product Name"
                                       Margin="Margin.Dense"
                                       Style="width: 100%; min-width: 500px;"
                                       Variant="MudBlazor.Variant.Outlined"
                                       Required="true"
-                                      RequiredError="Product Name is required!" />
+                                      RequiredError="Product Name is required!">
+                            @if (_productList != null)
+                            {
+                                @foreach (var role in _productList)
+                                {
+                                    <MudSelectItem Value="@role.ProductCode">@role.ProductName</MudSelectItem>
+                                }
+                            }
+                        </MudSelect>
                     </EditTemplate>
                 </PropertyColumn>
 
                 <PropertyColumn Property="x => x.BoxCode" Title="Box" HeaderStyle="min-width: 250px;">
                     <EditTemplate>
-                        <MudTextField @bind-Value="_reqModel.BoxCode"
+                        <MudSelect @bind-Value="_reqModel.BoxCode"
                                       Label="Box"
                                       Margin="Margin.Dense"
                                       Style="width: 100%; min-width: 500px;"
                                       Variant="MudBlazor.Variant.Outlined"
                                       Required="true"
-                                      RequiredError="Box is required!" />
+                                      RequiredError="Box is required!">
+                            @if (_boxList != null)
+                            {
+                                @foreach (var role in _boxList)
+                                {
+                                    <MudSelectItem Value="@role.BoxCode">@role.Box</MudSelectItem>
+                                }
+                            }
+                        </MudSelect>
                     </EditTemplate>
                 </PropertyColumn>
 
                 <PropertyColumn Property="x => x.BranchCode" Title="Branch Name" HeaderStyle="min-width: 180px;" Hidden="true">
                     <EditTemplate>
-                        <MudTextField @bind-Value="_reqModel.BranchCode"
+                        <MudSelect @bind-Value="_reqModel.BranchCode"
                                       Label="Branch Name"
                                       Margin="Margin.Dense"
                                       Style="width: 100%; min-width: 500px;"
                                       Variant="MudBlazor.Variant.Outlined"
                                       Required="true"
-                                      RequiredError="Branch Name is required!" />
+                                      RequiredError="Branch Name is required!"
+                                      Disabled="true">
+                            @if (_banchList != null)
+                            {
+                                @foreach (var role in _banchList)
+                                {
+                                    <MudSelectItem Value="@role.BranchCode">@role.Address</MudSelectItem>
+                                }
+                            }
+                        </MudSelect>
                     </EditTemplate>
                 </PropertyColumn>
 
@@ -148,13 +189,22 @@
 
                 <PropertyColumn Property="x => x.CurrencyCode" Title="Currency Code" HeaderStyle="min-width: 180px;" Hidden="true">
                     <EditTemplate>
-                        <MudTextField @bind-Value="_reqModel.CurrencyCode"
+                        <MudSelect @bind-Value="_reqModel.CurrencyCode"
                                       Label="Currency Code"
                                       Margin="Margin.Dense"
                                       Style="width: 100%; min-width: 500px;"
                                       Variant="MudBlazor.Variant.Outlined"
                                       Required="true"
-                                      RequiredError="Currency Code is required!" />
+                                      RequiredError="Currency Code is required!">
+
+                            @if (_currencyList != null)
+                            {
+                                @foreach (var role in _currencyList)
+                                {
+                                    <MudSelectItem Value="@role.CurrencyCode">@role.CurrencyCode</MudSelectItem>
+                                }
+                            }
+                        </MudSelect>
                     </EditTemplate>
                 </PropertyColumn>
 
