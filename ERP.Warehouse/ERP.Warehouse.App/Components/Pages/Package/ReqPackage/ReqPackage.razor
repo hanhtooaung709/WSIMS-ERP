@@ -1,0 +1,213 @@
+﻿@page "/req-package"
+@using ERP.Warehouse.Models.Models.Package.ReqPackage
+@using Microsoft.AspNetCore.Authorization
+@inject ILogger<ReqPackage> _logger
+@attribute [Authorize]
+@using System.Net.Http.Json
+@using WSIMS_ERP.Shared.Enums
+@inject HttpClient httpClient
+
+@if (_formType is EnumFormType.List or EnumFormType.Edit or EnumFormType.Create)
+{
+    <MudPaper Class="pa-4 mb-4">
+        <MudText Typo="Typo.h6" Style="font-weight: 600; color: #333; margin-bottom: 12px;">Requested Products</MudText>
+        <MudGrid>
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudTextField @bind-Value="_reqModel.PackageName" Label="Package Name" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable />
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudTextField @bind-Value="_reqModel.ProductCode" Label="Product Name" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable />
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudTextField @bind-Value="_reqModel.BoxCode" Label="Box" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable />
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudSelect @bind-Value="_reqModel.Status" Label="Status" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable>
+                    @if (_lstStatus != null)
+                    {
+                        @foreach (var item in _lstStatus)
+                        {
+                            <MudSelectItem Value="@item.Value">@item.Text</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" Style="display: flex; align-items: flex-end; justify-content: flex-end; gap: 8px;">
+                <MudButton ButtonType="MudBlazor.ButtonType.Button" Variant="MudBlazor.Variant.Outlined" Color="Color.Default" StartIcon="@Icons.Material.Filled.Close" OnClick="@Cancel">Cancel</MudButton>
+                <MudButton ButtonType="MudBlazor.ButtonType.Button" Variant="MudBlazor.Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Search" OnClick="@List">Search</MudButton>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+
+    <div style="width: 100%; overflow-x: auto;">
+        <MudDataGrid @ref="_elementGrid"
+                     T="ReqPackageModel"
+                     Items="@_model"
+                     Hover="@hover"
+                     ReadOnly="@_readOnly"
+                     Breakpoint="Breakpoint.None"
+                     EditMode="MudBlazor.DataGridEditMode.Form"
+                     StartedEditingItem="@Edit"
+                     CanceledEditingItem="@Cancel"
+                     CommittedItemChanges="@Save">
+
+            <Columns>
+                <TemplateColumn Title="No" Sortable="false" Filterable="false" HeaderStyle="width: 70px;" Style="width: 70px;">
+                    <CellTemplate>
+                        @(_model.ToList().IndexOf(context.Item) + 1)
+                    </CellTemplate>
+                </TemplateColumn>
+
+                <PropertyColumn Property="x => x.PackageName" Title="Package Name" HeaderStyle="min-width: 200px;">
+                    <EditTemplate>
+                        <MudText Typo="Typo.h6" Style="padding: 16px 16px 0 16px; font-weight: bold;">
+                            @_formType.ToString() Package Name
+                        </MudText>
+                        <MudTextField @bind-Value="_reqModel.PackageName"
+                                      Label="Package Name"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Required="true"
+                                      RequiredError="Package Name is required!" />
+                    </EditTemplate>
+                </PropertyColumn>
+
+                <PropertyColumn Property="x => x.PackageInfoCode" Title="PackageInfo Code" HeaderStyle="min-width: 230px;">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.PackageInfoCode"
+                                      Label="PackageInfo Code"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Required="true"
+                                      RequiredError="PackageInfo Code is required!" />
+                    </EditTemplate>
+                </PropertyColumn>
+
+                <PropertyColumn Property="x => x.ProductCode" Title="Product Name" HeaderStyle="min-width: 200px;">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.ProductCode"
+                                      Label="Product Name"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Required="true"
+                                      RequiredError="Product Name is required!" />
+                    </EditTemplate>
+                </PropertyColumn>
+
+                <PropertyColumn Property="x => x.BoxCode" Title="Box" HeaderStyle="min-width: 250px;">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.BoxCode"
+                                      Label="Box"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Required="true"
+                                      RequiredError="Box is required!" />
+                    </EditTemplate>
+                </PropertyColumn>
+
+                <PropertyColumn Property="x => x.BranchCode" Title="Branch Name" HeaderStyle="min-width: 180px;" Hidden="true">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.BranchCode"
+                                      Label="Branch Name"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Required="true"
+                                      RequiredError="Branch Name is required!" />
+                    </EditTemplate>
+                </PropertyColumn>
+
+                <PropertyColumn Property="x => x.Price" Title="Price" HeaderStyle="min-width: 180px;">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.Price"
+                                      Label="Price"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Required="true"
+                                      RequiredError="Price is required!" />
+                    </EditTemplate>
+                </PropertyColumn>
+
+                <PropertyColumn Property="x => x.Quanity" Title="Quanity" HeaderStyle="min-width: 150px;">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.Quanity"
+                                      Label="Quanity"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Required="true"
+                                      RequiredError="Quanity is required!" />
+                    </EditTemplate>
+                </PropertyColumn>
+
+                <PropertyColumn Property="x => x.CurrencyCode" Title="Currency Code" HeaderStyle="min-width: 180px;" Hidden="true">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.CurrencyCode"
+                                      Label="Currency Code"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Required="true"
+                                      RequiredError="Currency Code is required!" />
+                    </EditTemplate>
+                </PropertyColumn>
+
+                <PropertyColumn Property="x => x.Weight" Title="Weight" HeaderStyle="min-width: 180px;" Hidden="true">
+                    <EditTemplate>
+                        <MudTextField @bind-Value="_reqModel.Weight"
+                                      Label="Weight"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Required="true"
+                                      RequiredError="Weight is required!" />
+                    </EditTemplate>
+                </PropertyColumn>
+
+                <TemplateColumn Title="Status" HeaderStyle="min-width: 100px;">
+                    <CellTemplate>
+                        <MudText Class="@GetBadgeClass(context.Item.Status!)">@context.Item.Status</MudText>
+                    </CellTemplate>
+                </TemplateColumn>
+
+                <TemplateColumn Hidden="@_readOnly" Title="Actions" HeaderStyle="width: 140px; min-width: 140px;" Style="width: 140px; min-width: 140px; white-space: nowrap;">
+                    <CellTemplate>
+                        <div style="display: inline-block; white-space: nowrap;">
+                            @{
+                                var _isDisable = context.Item.Status != EnumRequestedStatus.Pending.ToString();
+                            }
+                            <MudFab Size="@Size.Small"
+                                    Class="mr-2"
+                                    StartIcon="@Icons.Material.Filled.Edit"
+                                    Color="Color.Warning"
+                                    OnClick="@context.Actions.StartEditingItemAsync"
+                                    Disabled="_isDisable" />
+
+                            <MudFab Size="@Size.Small"
+                                    Class="mr-2"
+                                    StartIcon="@Icons.Material.Outlined.Delete"
+                                    Color="Color.Error"
+                                    OnClick="@(() => Delete(context.Item))"
+                                    Disabled="_isDisable" />
+
+                            <MudFab Size="@Size.Small"
+                                    StartIcon="@Icons.Material.Outlined.Details"
+                                    Color="Color.Primary"
+                                    OnClick="@(() => Details(context.Item))" />
+                        </div>
+                    </CellTemplate>
+                </TemplateColumn>
+            </Columns>
+            <PagerContent>
+                <MudDataGridPager T="ReqPackageModel" />
+
+            </PagerContent>
+        </MudDataGrid>
+    </div>
+}

@@ -1,0 +1,247 @@
+﻿using ERP.Warehouse.App.Common;
+using ERP.Warehouse.Models.Models.Package.ReqPackage;
+using ERP.Warehouse.Models.Models.Product.ReqProduct;
+using Microsoft.AspNetCore.Components.Forms;
+using MudBlazor;
+using WSIMS_ERP.Shared;
+using WSIMS_ERP.Shared.Enums;
+using WSIMS_ERP.Shared.Models;
+
+namespace ERP.Warehouse.App.Components.Pages.Package.ReqPackage;
+
+public partial class ReqPackage
+{
+    private ReqPackageReqModel _reqModel = new();
+    private IEnumerable<ReqPackageModel> _model = new List<ReqPackageModel>();
+    private ReqPackageEditModel _edit = new();
+    private ReqPackageDetailModel _details = new();
+
+    private List<SelectListModel> _lstStatus = Commons.GetStatusList();
+
+    private MudDataGrid<ReqPackageModel> _elementGrid = default!;
+    private EnumFormType _formType = EnumFormType.List;
+    private bool hover = true;
+    private bool _readOnly;
+
+    private IList<IBrowserFile> _selectedFiles = new List<IBrowserFile>();
+    private string? _imagePreviewUrl;
+    private string? _existingImagePath;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        try
+        {
+            if (firstRender)
+            {
+                await List();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    #region Get/Create/Edit/Update/Delete/Details
+
+    private async Task List()
+    {
+        try
+        {
+            await _injectService.EnableLoading();
+            var result = await _apiService.Get(_reqModel);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                _reqModel = new();
+                return;
+            }
+
+            _model = result.Data!.list!;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private async Task Save(ReqPackageModel reqModel)
+    {
+        try
+        {
+            bool confirm = await _injectService.ShowUpdateDialog();
+            if (!confirm) return;
+
+            await _injectService.EnableLoading();
+            var result = await _apiService.Update(_reqModel);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                _reqModel = new();
+                return;
+            }
+            await _injectService.ShowDialog(result);
+
+            _reqModel = new();
+            await List();
+        }
+
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private async Task Edit(ReqPackageModel reqModel)
+    {
+        try
+        {
+            if (reqModel is null || string.IsNullOrEmpty(reqModel.ReqPackageId))
+            {
+                _formType = EnumFormType.Create;
+                return;
+            }
+
+            _edit.ReqPackageId = reqModel.ReqPackageId!;
+
+            await _injectService.EnableLoading();
+            var result = await _apiService.Edit(_edit);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+
+            _reqModel.ReqPackageId = result.Data.ReqPackageId;
+            _reqModel.PackageName = result.Data.PackageName;
+            _reqModel.PackageInfoCode = result.Data.PackageInfoCode;
+            _reqModel.BranchCode = result.Data.BranchCode;
+            _reqModel.Quanity = result.Data.Quanity;
+            _reqModel.ProductCode = result.Data.ProductCode;
+            _reqModel.Price = result.Data.Price;
+            _reqModel.CurrencyCode = result.Data.CurrencyCode;
+            _reqModel.Weight = result.Data.Weight;
+            _reqModel.BoxCode = result.Data.BoxCode;
+
+            _formType = EnumFormType.Edit;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private void Cancel()
+    {
+        try
+        {
+            _reqModel = new();
+            _selectedFiles.Clear();
+            StateHasChanged();
+            List();
+            _formType = EnumFormType.List;
+        }
+        catch (Exception ex)
+        {
+            _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private async Task Delete(ReqPackageModel reqModel)
+    {
+        try
+        {
+            bool confirm = await _injectService.Confirm();
+            if (!confirm)
+            {
+                return;
+            }
+
+            _edit.ReqPackageId = reqModel.ReqPackageId!;
+
+            await _injectService.EnableLoading();
+            var result = await _apiService.Delete(_edit);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            await _injectService.ShowDialog(result);
+
+            await List();
+            _formType = EnumFormType.List;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private async Task Details(ReqPackageModel reqModel)
+    {
+        try
+        {
+            _edit.ReqPackageId = reqModel.ReqPackageId!;
+
+            await _injectService.EnableLoading();
+            var result = await _apiService.Details(_edit);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+
+            _details = result.Data!;
+            _formType = EnumFormType.Detail;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private string GetBadgeClass(string status)
+    {
+        var statusStr = "";
+        try
+        {
+            statusStr = _injectService.GetBadgeClass(status.ToEnum<EnumRequestedStatus>());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCustomError(ex);
+            _ = _injectService.ErrorDialogMessage(ex.Message);
+        }
+
+        return statusStr;
+    }
+
+    #endregion
+}
