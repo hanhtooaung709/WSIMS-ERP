@@ -19,6 +19,21 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// Package Name and Box is already Change Requested!
+    /// </summary>
+    public static readonly string WHE082 = "WH#E082";
+
+    /// <summary>
+    /// Package Name and Box is already Requested!
+    /// </summary>
+    public static readonly string WHE081 = "WH#E081";
+
+    /// <summary>
+    /// Product Name and Box is already exist!
+    /// </summary>
+    public static readonly string WHE080 = "WH#E080";
+
+    /// <summary>
     /// Requsted Package is successfully Deteted.
     /// </summary>
     public static readonly string WHS079 = "WH#S079";

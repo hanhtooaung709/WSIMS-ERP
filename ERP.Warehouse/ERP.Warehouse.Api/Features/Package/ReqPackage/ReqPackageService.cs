@@ -215,6 +215,43 @@ public class ReqPackageService : AuthorizationService
 
             #endregion
 
+            #region Check Duplicate Product and Box
+
+            bool item = await _db.TblPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
+                          x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower());
+            if (item)
+            {
+                model = Result<ReqPackageModel>.Error(JsonResource.WHE080);
+                return model;
+            }
+
+            item = await _db.TblReqPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
+                          x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
+                          x.ReqPackageInfoId != reqModel.ReqPackageId &&
+                          x.Status == EnumRequestedStatus.Pending.ToString());
+            if (item)
+            {
+                model = Result<ReqPackageModel>.Error(JsonResource.WHE081);
+                return model;
+            }
+
+            item = await _db.TblReqPackageInfoChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
+                          x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
+                          x.Status == EnumRequestedStatus.Pending.ToString());
+            if (item)
+            {
+                model = Result<ReqPackageModel>.Error(JsonResource.WHE082);
+                return model;
+            }
+
+            #endregion
+
             #region Prepare Data
 
             reqPackage.PackageName = reqModel.PackageName!;
