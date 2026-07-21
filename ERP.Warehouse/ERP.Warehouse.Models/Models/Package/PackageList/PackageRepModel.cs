@@ -1,10 +1,11 @@
 ﻿namespace ERP.Warehouse.Models.Models.Package.PackageList;
 
-public class PackagRepModel
+public class PackageRepModel
 {
+    public List<PackageModel> list { get; set; }
 }
 
-public class PackagModel
+public class PackageModel
 {
     public string? PackageId { get; set; }
     public string? PackageName { get; set; }

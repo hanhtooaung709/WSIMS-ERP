@@ -1,0 +1,32 @@
+﻿using ERP.Warehouse.Api.Controller;
+using ERP.Warehouse.Api.Features.Package.ReqPackage;
+using ERP.Warehouse.Models.Models.Package.PackageList;
+using ERP.Warehouse.Models.Models.Package.ReqPackage;
+using Microsoft.AspNetCore.Mvc;
+using WSIMS_ERP.Shared.Services;
+
+namespace ERP.Warehouse.Api.Features.Package.PackageList;
+
+[Route("api/package")]
+[ApiController]
+public class PackageListController : BaseController
+{
+    private readonly PackageListSerivce _packageListSerivce;
+
+    public PackageListController(PackageListSerivce packageListSerivce, ResponseService responseService) : base(responseService)
+    {
+        _packageListSerivce = packageListSerivce;
+    }
+
+    #region Get/Create/Edit/Update/Delete/Details
+
+    [HttpPost]
+    [Route("Get")]
+    public async Task<IActionResult> Get(PackageReqModel reqModel)
+    {
+        var result = await _packageListSerivce.Get(reqModel);
+        return await Execute(result);
+    }
+
+    #endregion
+}
