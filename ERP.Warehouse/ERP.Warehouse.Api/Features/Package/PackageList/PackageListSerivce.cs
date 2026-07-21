@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
 using System.IO.Packaging;
 using WSIMS_ERP.Shared;
+using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Models.ConfigModel;
 using WSIMS_ERP.Shared.Queries;
@@ -154,6 +155,124 @@ public class PackageListSerivce : AuthorizationService
                 ImagePath = product.ImagePath
             };
             model = Result<PackageModel>.Success(response);
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<PackageModel>.Error(ex);
+        }
+        return model;
+    }
+
+    public async Task<Result<PackageModel>> Update(PackageReqModel reqModel)
+    {
+        var model = new Result<PackageModel>();
+        try
+        {
+            #region Check Package
+
+            var packageInfo = await _db.TblPackageInfos
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId);
+            if (packageInfo is null)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE083);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate PackageName
+
+            bool name = await _db.TblPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.PackageName.Trim().ToLower() == reqModel.PackageName!.Trim().ToLower() &&
+                          x.PackageInfoId != reqModel.PackageId);
+            if (name)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE074);
+                return model;
+            }
+
+            name = await _db.TblReqPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.PackageName.Trim().ToLower() == reqModel.PackageName!.Trim().ToLower() &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (name)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE075);
+                return model;
+            }
+
+            name = await _db.TblReqPackageInfoChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.PackageName.Trim().ToLower() == reqModel.PackageName!.Trim().ToLower() &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (name)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE076);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate Product and Box
+
+            bool item = await _db.TblPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
+                          x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
+                          x.PackageInfoId != reqModel.PackageId);
+            if (item)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE080);
+                return model;
+            }
+
+            item = await _db.TblReqPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
+                          x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
+                          x.Status == EnumRequestedStatus.Pending.ToString());
+            if (item)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE081);
+                return model;
+            }
+
+            item = await _db.TblReqPackageInfoChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
+                          x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
+                          x.Status == EnumRequestedStatus.Pending.ToString());
+            if (item)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE082);
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            TblReqPackageInfoChange result = new TblReqPackageInfoChange
+            {
+                ReqPackageInfoChangesId = DevCode.GenerateUlid(),
+                PackageName = reqModel.PackageName!,
+                ProductCode = reqModel.ProductCode!,
+                Price = reqModel.Price!.ToInt32(),
+                CurrencyCode = reqModel.CurrencyCode!,
+                Weight = reqModel.Weight!.ToInt32(),
+                BoxCode = reqModel.BoxCode!,
+                ChangesType = EnumRequestedType.Update.ToString(),
+                Status = EnumRequestedStatus.Pending.ToString(),
+                ReqUserId = AuthorizedUserId,
+                ReqDateTime = DevCode.GetServerDateTime()
+            };
+            await _db.TblReqPackageInfoChanges.AddAsync(result);
+            await _db.SaveChangesAsync();
+            model = Result<PackageModel>.Success(JsonResource.WHS014);
 
             #endregion
         }
