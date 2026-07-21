@@ -1,20 +1,17 @@
-﻿using DocumentFormat.OpenXml.Office.CustomUI;
-using DocumentFormat.OpenXml.VariantTypes;
-using ERP.Warehouse.Api.Common;
-using ERP.Warehouse.Models.Models.Currency;
+﻿using ERP.Warehouse.Api.Common;
+using ERP.Warehouse.Models;
 using ERP.Warehouse.Models.Models.Package.PackageList;
-using ERP.Warehouse.Models.Models.Package.ReqPackage;
-using ERP.Warehouse.Models.Models.Product.ProductList;
-using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
+using WSIMS_ERP.Shared.Models.DynamicModel;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
-using System.IO.Packaging;
+using System.Data;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Models.ConfigModel;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
+using ERP.Warehouse.Models.Models.Package.ReqPackage;
 
 namespace ERP.Warehouse.Api.Features.Package.PackageList;
 
@@ -57,6 +54,125 @@ public class PackageListSerivce : AuthorizationService
         {
             return Result<PackageRepModel>.Error(ex);
         }
+    }
+
+    public async Task<Result<PackageModel>> Create(PackageReqModel reqModel)
+    {
+        var model = new Result<PackageModel>();
+        try
+        {
+            #region Check User
+
+            var user = await _db.TblWarehouseUsers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.WarehouseUserId == AuthorizedUserId);
+            if (user is null)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE001);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate PackageName
+
+            bool name = await _db.TblPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.PackageName.Trim().ToLower() == reqModel.PackageName!.Trim().ToLower());
+            if (name)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE074);
+                return model;
+            }
+
+            name = await _db.TblReqPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.PackageName.Trim().ToLower() == reqModel.PackageName!.Trim().ToLower() &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (name)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE075);
+                return model;
+            }
+
+            name = await _db.TblReqPackageInfoChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.PackageName.Trim().ToLower() == reqModel.PackageName!.Trim().ToLower() &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (name)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE076);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate Product and Box
+
+            bool item = await _db.TblPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
+                               x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower());
+            if (item)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE080);
+                return model;
+            }
+
+            item = await _db.TblReqPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
+                               x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (item)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE081);
+                return model;
+            }
+
+            item = await _db.TblReqPackageInfoChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
+                          x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
+                          x.Status == EnumRequestedStatus.Pending.ToString());
+            if (item)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE082);
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            TblReqPackageInfo result = new TblReqPackageInfo
+            {
+                ReqPackageInfoId = DevCode.GenerateUlid(),
+                PackageName = reqModel.PackageName!,
+                PackageInfoCode = reqModel.PackageInfoCode!,
+                Quanity = reqModel.Quanity!.ToInt32(),
+                BranchCode = reqModel.BranchCode!,
+                ProductCode = reqModel.ProductCode!,
+                Price = reqModel.Price!.ToInt32(),
+                CurrencyCode = reqModel.CurrencyCode!,
+                Weight = reqModel.Weight!.ToInt32(),
+                BoxCode = reqModel.BoxCode!,
+                Status = EnumRequestedStatus.Pending.ToString(),
+                ReqUserId = AuthorizedUserId,
+                ReqDateTime = DevCode.GetServerDateTime()
+            };
+            await _db.TblReqPackageInfos.AddAsync(result);
+            await _db.SaveChangesAsync();
+
+            model = Result<PackageModel>.Success(JsonResource.WHS014);
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<PackageModel>.Error(ex);
+        }
+        return model;
     }
 
     public async Task<Result<PackageModel>> Edit(PackageEditModel reqModel)
@@ -222,8 +338,8 @@ public class PackageListSerivce : AuthorizationService
             bool item = await _db.TblPackageInfos
                 .AsNoTracking()
                 .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
-                          x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
-                          x.PackageInfoId != reqModel.PackageId);
+                               x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
+                               x.PackageInfoId != reqModel.PackageId);
             if (item)
             {
                 model = Result<PackageModel>.Error(JsonResource.WHE080);
@@ -233,8 +349,8 @@ public class PackageListSerivce : AuthorizationService
             item = await _db.TblReqPackageInfos
                 .AsNoTracking()
                 .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
-                          x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
-                          x.Status == EnumRequestedStatus.Pending.ToString());
+                               x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
             if (item)
             {
                 model = Result<PackageModel>.Error(JsonResource.WHE081);
@@ -244,8 +360,8 @@ public class PackageListSerivce : AuthorizationService
             item = await _db.TblReqPackageInfoChanges
                 .AsNoTracking()
                 .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
-                          x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
-                          x.Status == EnumRequestedStatus.Pending.ToString());
+                               x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
             if (item)
             {
                 model = Result<PackageModel>.Error(JsonResource.WHE082);
@@ -281,6 +397,116 @@ public class PackageListSerivce : AuthorizationService
             return Result<PackageModel>.Error(ex);
         }
         return model;
+    }
+
+    public async Task<Result<PackageModel>> Delete(PackageEditModel reqModel)
+    {
+        var model = new Result<PackageModel>();
+        try
+        {
+            #region Check Package
+
+            var packageInfo = await _db.TblPackageInfos
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId);
+            if (packageInfo is null)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE083);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate
+
+            bool package = await _db.TblReqPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.PackageInfoId == reqModel.PackageId &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (package)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE075);
+            }
+
+            package = await _db.TblReqPackageInfoChanges
+                    .AsNoTracking()
+                    .AnyAsync(x => x.PackageInfoId == reqModel.PackageId &&
+                                   x.Status == EnumRequestedStatus.Pending.ToString());
+            if (package)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE076);
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            TblReqPackageInfoChange item = new TblReqPackageInfoChange
+            {
+                ReqPackageInfoChangesId = DevCode.GenerateUlid(),
+                PackageInfoId = packageInfo.PackageInfoId,
+                PackageName = packageInfo.PackageName,
+                PackageInfoCode = packageInfo.PackageInfoCode,
+                ProductCode = packageInfo.ProductCode,
+                Price = packageInfo.Price,
+                CurrencyCode = packageInfo.CurrencyCode,
+                Weight = packageInfo.Weight,
+                BoxCode = packageInfo.BoxCode,
+                ChangesType = EnumRequestedType.Delete.ToString(),
+                Status = EnumRequestedStatus.Pending.ToString(),
+                ReqUserId = AuthorizedUserId,
+                ReqDateTime = DevCode.GetServerDateTime()
+            };
+            await _db.TblReqPackageInfoChanges.AddAsync(item);
+            await _db.SaveChangesAsync();
+            model = Result<PackageModel>.Success(JsonResource.WHS014);
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<PackageModel>.Error(ex);
+        }
+        return model;
+    }
+
+    public async Task<Result<PackageDetailModel>> Details(PackageEditModel reqModel)
+    {
+        PackageDetailModel model = new PackageDetailModel();
+        try
+        {
+            var detail = await _dapperService.GetDetailAsync<PackageDetailInfoModel>(
+               SqlQueries.Sp_GetPackageDetail, new
+               {
+                   PackageId = reqModel.PackageId
+               }, CommandType.StoredProcedure);
+
+            List<DynamicReportModel> packageInfo = new List<DynamicReportModel>();
+            packageInfo.Add("Product Name", detail.ProductName!);
+            packageInfo.Add("Package Name", detail.PackageName!);
+            packageInfo.Add("PackageInfo Code", detail.PackageInfoCode!);
+            packageInfo.Add("Quanity", detail.Quanity!);
+            packageInfo.Add("Price", detail.Price!);
+            packageInfo.Add("Currency Code", detail.CurrencyCode!);
+            packageInfo.Add("Weight", detail.Weight!);
+            packageInfo.Add("Box", detail.Box!);
+            model.PackageInfo = packageInfo;
+            model.ItemImagePath = detail.ImagePath;
+
+            List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();
+            makerChecker.Add("Created User", detail.CreatedUser!);
+            makerChecker.Add("Created DateTime", detail.CreatedDateTime!);
+            makerChecker.Add("Modified User", detail.ModifiedUser!.ToDashFromNull());
+            makerChecker.Add("Modified DateTime ", detail.ModifiedDateTime!.ToDashFromNull());
+            model.MakerChecker = makerChecker;
+
+            return Result<PackageDetailModel>.Success(model);
+        }
+        catch(Exception ex)
+        {
+            return Result<PackageDetailModel>.Error(ex);
+        }
     }
 
     #endregion

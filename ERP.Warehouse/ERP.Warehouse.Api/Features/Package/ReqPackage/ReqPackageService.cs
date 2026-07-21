@@ -339,11 +339,11 @@ public class ReqPackageService : AuthorizationService
                 }, CommandType.StoredProcedure);
 
             List<DynamicReportModel> packageInfo = new List<DynamicReportModel>();
+            packageInfo.Add("Product Name", detail.ProductName!);
             packageInfo.Add("Package Name", detail.PackageName!);
             packageInfo.Add("PackageInfo Code", detail.PackageInfoCode!);
             packageInfo.Add("Branch Name", detail.BranchName!);
             packageInfo.Add("Quanity", detail.Quanity!);
-            packageInfo.Add("Product Name", detail.ProductName!);
             packageInfo.Add("Price", detail.Price!);
             packageInfo.Add("Currency Code", detail.CurrencyCode!);
             packageInfo.Add("Weight", detail.Weight!);

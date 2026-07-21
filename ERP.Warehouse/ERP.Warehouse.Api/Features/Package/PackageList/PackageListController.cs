@@ -29,10 +29,42 @@ public class PackageListController : BaseController
     }
 
     [HttpPost]
+    [Route("Create")]
+    public async Task<IActionResult> Create(PackageReqModel reqModel)
+    {
+        var result = await _packageListSerivce.Create(reqModel);
+        return await Execute(result);
+    }
+
+    [HttpPost]
     [Route("Edit")]
     public async Task<IActionResult> Edit(PackageEditModel reqModel)
     {
         var result = await _packageListSerivce.Edit(reqModel);
+        return await Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Update")]
+    public async Task<IActionResult> Update(PackageReqModel reqModel)
+    {
+        var result = await _packageListSerivce.Update(reqModel);
+        return await Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Delete")]
+    public async Task<IActionResult> Delete(PackageEditModel reqModel)
+    {
+        var result = await _packageListSerivce.Delete(reqModel);
+        return await Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Details")]
+    public async Task<IActionResult> Details(PackageEditModel reqModel)
+    {
+        var result = await _packageListSerivce.Details(reqModel);
         return await Execute(result);
     }
 

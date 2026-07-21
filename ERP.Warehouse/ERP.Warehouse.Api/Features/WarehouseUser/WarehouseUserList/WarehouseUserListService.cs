@@ -428,7 +428,7 @@ public class WarehouseUserListService : AuthorizationService
             if (reqUser)
             {
                 model = Result<WarehouseUserModel>.Error(JsonResource.WHE017);
-
+            }
 
             reqUser = await _db.TblReqWarehouseUserChanges
                 .AsNoTracking()
@@ -438,9 +438,6 @@ public class WarehouseUserListService : AuthorizationService
             {
                 model = Result<WarehouseUserModel>.Error(JsonResource.WHE018);
                 return model;
-            }
-
-             return model;
             }
 
             #endregion
