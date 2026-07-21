@@ -1,8 +1,53 @@
 ﻿@page "/package"
-@using ERP.Warehouse.Models.Models.Package.ReqPackage
+@using ERP.Warehouse.Models.Models.Package.PackageList
 @using Microsoft.AspNetCore.Authorization
 @inject ILogger<PackageList> _logger
 @attribute [Authorize]
 @using System.Net.Http.Json
 @using WSIMS_ERP.Shared.Enums
 @inject HttpClient httpClients
+
+@if (_formType is EnumFormType.List or EnumFormType.Edit or EnumFormType.Create)
+{
+    <MudTable @ref="_table" T="PackageModel" Items="@_model" Hover="true" OnRowClick="@OnRowClick">
+        <HeaderContent>
+            <MudTh></MudTh>
+            <MudTh>No</MudTh>
+            <MudTh>PackageName</MudTh>
+            <MudTh>PackageInfoCode</MudTh>
+            <MudTh>ProductCode</MudTh>
+            <MudTh>Price</MudTh>
+            <MudTh>CurrencyCode</MudTh>
+            <MudTh>Weight</MudTh>
+            <MudTh>BoxCode</MudTh>
+            <MudTh>Quanity</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>
+                <MudCheckBox T="bool"
+                             Value="@(selectedItem == context)"
+                             ValueChanged="@((bool isChecked) => OnSingleSelect(isChecked, context))"
+                             Color="Color.Success" />
+            </MudTd>
+            <MudTd DataLabel="No">@(_model.ToList().IndexOf(context) + 1)</MudTd>
+            <MudTd DataLabel="PackageName">@context.PackageName</MudTd>
+            <MudTd DataLabel="PackageInfoCode">@context.PackageInfoCode</MudTd>
+            <MudTd DataLabel="ProductCode">@context.ProductCode</MudTd>
+            <MudTd DataLabel="Price">@context.Price</MudTd>
+            <MudTd DataLabel="CurrencyCode">@context.CurrencyCode</MudTd>
+            <MudTd DataLabel="Weight">@context.Weight kg</MudTd>
+            <MudTd DataLabel="BoxCode">@context.BoxCode</MudTd>
+            <MudTd DataLabel="Quanity">@context.Quanity</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100 }" />
+        </PagerContent>
+    </MudTable>
+}
+
+
+<style>
+    .mud-table-head .mud-table-cell-checkbox .mud-checkbox {
+        display: none !important;
+    }
+</style>

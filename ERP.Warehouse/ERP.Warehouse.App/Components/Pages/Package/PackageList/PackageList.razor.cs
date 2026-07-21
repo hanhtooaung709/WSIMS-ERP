@@ -20,14 +20,15 @@ public partial class PackageList
     private List<CurrencyResponseModel> _currencyList = new();
     private List<BoxResponseModel> _boxList = new();
 
+    private PackageModel? selectedItem;
+    private MudTable<PackageModel>? _table;
     private MudDataGrid<PackageModel> _elementGrid = default!;
     private EnumFormType _formType = EnumFormType.List;
-    private bool hover = true;
-    private bool _readOnly;
 
     private IList<IBrowserFile> _selectedFiles = new List<IBrowserFile>();
     private string? _imagePreviewUrl;
     private string? _existingImagePath;
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -277,6 +278,23 @@ public partial class PackageList
             await _injectService.DisableLoading();
             _logger.LogCustomError(ex);
             await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private void OnRowClick(TableRowClickEventArgs<PackageModel> args)
+    {
+
+    }
+
+    private void OnSingleSelect(bool isChecked, PackageModel item)
+    {
+        if (isChecked)
+        {
+            selectedItem = item;
+        }
+        else
+        {
+            selectedItem = null;
         }
     }
 
