@@ -4,6 +4,7 @@ using ERP.Warehouse.Api.Common;
 using ERP.Warehouse.Models.Models.Currency;
 using ERP.Warehouse.Models.Models.Package.PackageList;
 using ERP.Warehouse.Models.Models.Package.ReqPackage;
+using ERP.Warehouse.Models.Models.Product.ProductList;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
@@ -38,6 +39,8 @@ public class PackageListSerivce : AuthorizationService
         PackageRepModel model = new();
         try
         {
+            #region Check User
+
             var user = await _db.TblWarehouseUsers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.WarehouseUserId == "01KVNHVBPTSARA9NFQ8NYSQS1F");
@@ -45,6 +48,10 @@ public class PackageListSerivce : AuthorizationService
             {
                 return Result<PackageRepModel>.Error(JsonResource.WHE001);
             }
+
+            #endregion
+
+            #region Package
 
             var userPackages =  await _db.TblPackages
                 .AsNoTracking()
@@ -63,19 +70,82 @@ public class PackageListSerivce : AuthorizationService
                 .GroupBy(x => x.PackageInfoCode)
                 .Select(g => g.First());
 
+            #endregion
+
+            #region PackageInfo
+
+            var allPackageInfoCodes = userPackages
+                .Concat(distinctOtherPackages)
+                .Select(x => x.PackageInfoCode)
+                .ToList();
+
+            var packageInfo = await _db.TblPackageInfos
+                .AsNoTracking()
+                .Where(x => allPackageInfoCodes.Contains(x.PackageInfoCode))
+                .ToListAsync();
+
+            var infoDict = packageInfo.ToDictionary(x => x.PackageInfoCode);
+
+            #endregion
+
+            #region Product
+
+            var allProductCodes = packageInfo.Select(x => x.ProductCode).ToList();
+
+            var productCode = await _db.TblProducts
+                .AsNoTracking()
+                .Where(x => allProductCodes.Contains(x.ProductCode))
+                .ToListAsync();
+
+            var product = productCode.ToDictionary(x => x.ProductCode);
+
+            #endregion
+
+            #region Box
+
+            var allBox = packageInfo.Select(x => x.BoxCode).ToList();
+
+            var boxCode = await _db.TblBoxes
+                .AsNoTracking()
+                .Where(x => allBox.Contains(x.BoxCode))
+                .ToListAsync();
+
+            var box = boxCode.ToDictionary(x => x.BoxCode);
+
+            #endregion
+
+            #region Prepare Data
+
             var combinedPackages = userPackages
                 .Concat(distinctOtherPackages)
-                .Select(item => new PackageModel
+                .Select(x =>
                 {
-                    PackageId = item.PackageId,
-                    PackageInfoCode = item.PackageInfoCode,
-                    Quanity = item.BranchCode != user.BranchCode ? "0" : item.Quanity.ToString(),
+                    infoDict.TryGetValue(x.PackageInfoCode, out var info);
+                    product.TryGetValue(info.ProductCode, out var prod);
+                    box.TryGetValue(info.BoxCode, out var boxSize);
+                    {
+                        return new PackageModel
+                        {
+                            PackageId = x.PackageId,
+                            PackageName = info.PackageName,
+                            ProductCode = prod.ProductName,
+                            Price = info.Price.ToString(),
+                            CurrencyCode = info.CurrencyCode,
+                            Weight = info.Weight.ToString(),
+                            BoxCode = boxSize.Size,
+                            PackageInfoCode = x.PackageInfoCode,
+                            Quanity = x.BranchCode != user.BranchCode ? "0" : x.Quanity.ToString(),
+                        };
+                    }
+                    
                 })
                 .ToList();
 
             model.list = combinedPackages;
 
             return Result<PackageRepModel>.Success(model);
+
+            #endregion
         }
         catch (Exception ex)
         {
