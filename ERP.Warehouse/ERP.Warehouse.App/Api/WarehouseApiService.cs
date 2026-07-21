@@ -9,6 +9,7 @@ using ERP.Warehouse.App.Api.Endpoints.WarehouseUser;
 using ERP.Warehouse.Models.Models.Box;
 using ERP.Warehouse.Models.Models.Branch;
 using ERP.Warehouse.Models.Models.Currency;
+using ERP.Warehouse.Models.Models.Package.PackageList;
 using ERP.Warehouse.Models.Models.Package.ReqPackage;
 using ERP.Warehouse.Models.Models.Product.ProductList;
 using ERP.Warehouse.Models.Models.Product.ReqProduct;
@@ -312,6 +313,34 @@ public class WarehouseApiService
     public async Task<Result<ReqProductChangesDetailModel>> ApproveReqProductDetails(ReqProductChangesEditModel reqModel)
        => await _httpClientService.ExecuteAsync<ReqProductChangesEditModel, ReqProductChangesDetailModel>
        (ApproveReqProductChangesEndpoints.Details, reqModel);
+
+    #endregion
+
+    #region Package
+
+    public async Task<Result<PackageRepModel>> Get(PackageReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<PackageReqModel, PackageRepModel>
+        (PackageEndpoints.Get, reqModel);
+
+    public async Task<Result<PackageModel>> Create(PackageReqModel reqModel)
+       => await _httpClientService.ExecuteAsync<PackageReqModel, PackageModel>
+       (PackageEndpoints.Create, reqModel);
+
+    public async Task<Result<PackageModel>> Edit(PackageEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<PackageEditModel, PackageModel>
+       (PackageEndpoints.Edit, reqModel);
+
+    public async Task<Result<PackageModel>> Update(PackageReqModel reqModel)
+       => await _httpClientService.ExecuteAsync<PackageReqModel, PackageModel>
+       (PackageEndpoints.Update, reqModel);
+
+    public async Task<Result<PackageModel>> Delete(PackageEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<PackageEditModel, PackageModel>
+       (PackageEndpoints.Delete, reqModel);
+
+    public async Task<Result<PackageDetailModel>> Details(PackageEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<PackageEditModel, PackageDetailModel>
+       (PackageEndpoints.Details, reqModel);
 
     #endregion
 
