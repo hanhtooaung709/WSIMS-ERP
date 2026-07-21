@@ -26,6 +26,8 @@ public class SqlQueries
 
     public const string Sp_GetReqProductChangesDetail = "Sp_GetReqProductChangesDetail";
 
+    public const string Sp_GetPackageList = "Sp_GetPackageList";
+
     public const string Sp_GetReqPackageList = "Sp_GetReqPackageList";
     public const string Sp_GetReqPackageDetail = "Sp_GetReqPackageDetail";
 }
