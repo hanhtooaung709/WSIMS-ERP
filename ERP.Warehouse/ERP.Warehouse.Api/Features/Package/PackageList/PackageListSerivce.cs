@@ -58,5 +58,111 @@ public class PackageListSerivce : AuthorizationService
         }
     }
 
+    public async Task<Result<PackageModel>> Edit(PackageEditModel reqModel)
+    {
+        var model = new Result<PackageModel>();
+        try
+        {
+            #region Check Package
+
+            var packageInfo = await _db.TblPackageInfos
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId);
+            if (packageInfo is null)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE083);
+                return model;
+            }
+
+            var package = await _db.TblPackages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.PackageInfoCode == reqModel.PackageInfoCode);
+            if (package is null)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE083);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Branch
+
+            var branch = await _db.TblBranches
+            .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.BranchCode == package.BranchCode && x.DelFlag == 0);
+            if (branch is null)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE016);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Product
+
+            var product = await _db.TblProducts
+            .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ProductCode == packageInfo.ProductCode && x.DelFlag == 0);
+            if (product is null)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE067);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Currency
+
+            var currency = await _db.TblCurrencies
+            .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.CurrencyCode == packageInfo.CurrencyCode && x.DelFlag == 0);
+            if (currency is null)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE067);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Box
+
+            var box = await _db.TblBoxes
+            .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.BoxCode == packageInfo.BoxCode && x.DelFlag == 0);
+            if (product is null)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE059);
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            var response = new PackageModel
+            {
+                PackageId = packageInfo.PackageInfoId,
+                PackageName = packageInfo.PackageName,
+                PackageInfoCode = packageInfo.PackageInfoCode,
+                BranchCode = package.BranchCode,
+                Quanity = package.Quanity.ToString(),
+                ProductCode = packageInfo.ProductCode,
+                Price = packageInfo.Price.ToString(),
+                CurrencyCode = packageInfo.CurrencyCode,
+                Weight = packageInfo.Weight.ToString(),
+                BoxCode = packageInfo.BoxCode,
+                ImagePath = product.ImagePath
+            };
+            model = Result<PackageModel>.Success(response);
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<PackageModel>.Error(ex);
+        }
+        return model;
+    }
+
     #endregion
 }

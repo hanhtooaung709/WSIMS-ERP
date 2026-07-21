@@ -17,4 +17,5 @@ public class PackageModel
     public string? BoxCode { get; set; }
     public string? Quanity { get; set; }
     public string? BranchCode { get; set; }
+    public string? ImagePath { get; set; }
 }

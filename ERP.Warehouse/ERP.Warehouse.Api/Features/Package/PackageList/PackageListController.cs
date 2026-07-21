@@ -28,5 +28,13 @@ public class PackageListController : BaseController
         return await Execute(result);
     }
 
+    [HttpPost]
+    [Route("Edit")]
+    public async Task<IActionResult> Edit(PackageEditModel reqModel)
+    {
+        var result = await _packageListSerivce.Edit(reqModel);
+        return await Execute(result);
+    }
+
     #endregion
 }
