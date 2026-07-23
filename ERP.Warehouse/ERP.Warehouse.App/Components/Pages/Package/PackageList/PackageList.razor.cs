@@ -344,6 +344,34 @@ public partial class PackageList
         return $"{baseUrl}/api/image/{folder}/{fileName}";
     }
 
+    private void OnProductCodeChanged(string value)
+    {
+        _reqModel.ProductCode = value;
+        UpdatePackageName();
+    }
+
+    private void OnBoxCodeChanged(string value)
+    {
+        _reqModel.BoxCode = value;
+        UpdatePackageName();
+    }
+
+    private void UpdatePackageName()
+    {
+        var productName = _productList?.FirstOrDefault(x => x.ProductCode == _reqModel.ProductCode)?.ProductName;
+
+        var boxName = _boxList?.FirstOrDefault(x => x.BoxCode == _reqModel.BoxCode)?.Box;
+
+        if (!string.IsNullOrEmpty(productName) || !string.IsNullOrEmpty(boxName))
+        {
+            _reqModel.PackageName = $"{productName} ({boxName})";
+        }
+        else
+        {
+            _reqModel.PackageName = string.Empty;
+        }
+    }
+
     #endregion
 
     #region DropDown
