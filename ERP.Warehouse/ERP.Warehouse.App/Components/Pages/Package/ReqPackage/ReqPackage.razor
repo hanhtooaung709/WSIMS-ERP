@@ -85,6 +85,7 @@
                                       Margin="Margin.Dense"
                                       Style="width: 100%; min-width: 500px;"
                                       Variant="MudBlazor.Variant.Outlined"
+                                      Disabled="true"
                                       Required="true"
                                       RequiredError="Package Name is required!" />
                     </EditTemplate>
@@ -104,18 +105,21 @@
 
                 <PropertyColumn Property="x => x.ProductCode" Title="Product Name" HeaderStyle="min-width: 200px;">
                     <EditTemplate>
-                        <MudSelect @bind-Value="_reqModel.ProductCode"
-                                      Label="Product Name"
-                                      Margin="Margin.Dense"
-                                      Style="width: 100%; min-width: 500px;"
-                                      Variant="MudBlazor.Variant.Outlined"
-                                      Required="true"
-                                      RequiredError="Product Name is required!">
+                        <MudSelect T="string"
+                                   Value="_reqModel.ProductCode"
+                                   ValueChanged="OnProductCodeChanged"
+                                   Label="Product Name"
+                                   Style="width: 100%; min-width: 500px;"
+                                   Variant="MudBlazor.Variant.Outlined"
+                                   Margin="Margin.Dense"
+                                   Required="true"
+                                   RequiredError="Product Name is required!"
+                                   Clearable>
                             @if (_productList != null)
                             {
-                                @foreach (var role in _productList)
+                                @foreach (var item in _productList)
                                 {
-                                    <MudSelectItem Value="@role.ProductCode">@role.ProductName</MudSelectItem>
+                                    <MudSelectItem Value="@item.ProductCode">@item.ProductName</MudSelectItem>
                                 }
                             }
                         </MudSelect>
@@ -124,18 +128,21 @@
 
                 <PropertyColumn Property="x => x.BoxCode" Title="Box" HeaderStyle="min-width: 250px;">
                     <EditTemplate>
-                        <MudSelect @bind-Value="_reqModel.BoxCode"
-                                      Label="Box"
-                                      Margin="Margin.Dense"
-                                      Style="width: 100%; min-width: 500px;"
-                                      Variant="MudBlazor.Variant.Outlined"
-                                      Required="true"
-                                      RequiredError="Box is required!">
+                        <MudSelect T="string"
+                                   Value="_reqModel.BoxCode"
+                                   ValueChanged="OnBoxCodeChanged"
+                                   Label="Box"
+                                   Style="width: 100%; min-width: 500px;"
+                                   Variant="MudBlazor.Variant.Outlined"
+                                   Margin="Margin.Dense"
+                                   Required="true"
+                                   RequiredError="Box is required!"
+                                   Clearable>
                             @if (_boxList != null)
                             {
-                                @foreach (var role in _boxList)
+                                @foreach (var item in _boxList)
                                 {
-                                    <MudSelectItem Value="@role.BoxCode">@role.Box</MudSelectItem>
+                                    <MudSelectItem Value="@item.BoxCode">@item.Box</MudSelectItem>
                                 }
                             }
                         </MudSelect>
