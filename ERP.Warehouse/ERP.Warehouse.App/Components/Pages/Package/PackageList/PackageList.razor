@@ -150,29 +150,6 @@
                     </EditTemplate>
                 </PropertyColumn>
 
-                <PropertyColumn Property="x => x.BranchCode" Title="Branch Name" HeaderStyle="min-width: 180px;" Hidden="true">
-                    <EditTemplate>
-                        @if (_formType == EnumFormType.Create)
-                        {
-                            <MudSelect @bind-Value="_reqModel.BranchCode"
-                                   Label="Branch Name"
-                                   Margin="Margin.Dense"
-                                   Style="width: 100%; min-width: 500px;"
-                                   Variant="MudBlazor.Variant.Outlined"
-                                   Required="true"
-                                   RequiredError="Branch Name is required!">
-                            @if (_banchList != null)
-                            {
-                                @foreach (var role in _banchList)
-                                {
-                                    <MudSelectItem Value="@role.BranchCode">@role.Address</MudSelectItem>
-                                }
-                            }
-                        </MudSelect>
-                        }
-                    </EditTemplate>
-                </PropertyColumn>
-
                 <PropertyColumn Property="x => x.Price" Title="Price" HeaderStyle="min-width: 180px;">
                     <EditTemplate>
                         <MudTextField @bind-Value="_reqModel.Price"

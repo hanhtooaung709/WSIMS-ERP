@@ -342,6 +342,10 @@ public class WarehouseApiService
        => await _httpClientService.ExecuteAsync<PackageEditModel, PackageDetailModel>
        (PackageEndpoints.Details, reqModel);
 
+    public async Task<Result<List<BranchResponseModel>>> GetOtherBranch()
+       => await _httpClientService.ExecuteAsync<object, List<BranchResponseModel>>
+       (PackageEndpoints.GetBranch, null!);
+
     #endregion
 
     #region ReqPackage

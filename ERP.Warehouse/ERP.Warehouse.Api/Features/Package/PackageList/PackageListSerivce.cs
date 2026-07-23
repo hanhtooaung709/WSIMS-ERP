@@ -12,6 +12,7 @@ using WSIMS_ERP.Shared.Models.ConfigModel;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
 using ERP.Warehouse.Models.Models.Package.ReqPackage;
+using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 
 namespace ERP.Warehouse.Api.Features.Package.PackageList;
 
@@ -151,7 +152,7 @@ public class PackageListSerivce : AuthorizationService
                 PackageName = reqModel.PackageName!,
                 PackageInfoCode = reqModel.PackageInfoCode!,
                 Quanity = reqModel.Quanity!.ToInt32(),
-                BranchCode = reqModel.BranchCode!,
+                BranchCode = user.BranchCode!,
                 ProductCode = reqModel.ProductCode!,
                 Price = reqModel.Price!.ToInt32(),
                 CurrencyCode = reqModel.CurrencyCode!,
@@ -508,6 +509,37 @@ public class PackageListSerivce : AuthorizationService
         catch(Exception ex)
         {
             return Result<PackageDetailModel>.Error(ex);
+        }
+    }
+
+    #endregion
+
+    #region Get Other Branch
+
+    public async Task<Result<List<BranchResponseModel>>> GetBranch()
+    {
+        try
+        {
+            var user = await _db.TblWarehouseUsers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.WarehouseUserId == AuthorizedUserId &&
+                                          x.DelFlag == 0);
+
+            var result = await _db.TblBranches
+                .AsNoTracking()
+                .Where(x => x.DelFlag == 0 && x.BranchCode != user.BranchCode)
+                .Select(x => new BranchResponseModel
+                {
+                    Address = x.Address,
+                    BranchCode = x.BranchCode
+                })
+                .ToListAsync();
+
+            return Result<List<BranchResponseModel>>.Success(result);
+        }
+        catch (Exception ex)
+        {
+            return Result<List<BranchResponseModel>>.Error(ex);
         }
     }
 

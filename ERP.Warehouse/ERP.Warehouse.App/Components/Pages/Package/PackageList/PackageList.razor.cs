@@ -25,7 +25,6 @@ public partial class PackageList
     private List<SelectListModel> _lstStatus = Commons.GetStatusList();
 
     private PackageModel? selectedItem;
-    private MudTable<PackageModel>? _table;
     private MudDataGrid<PackageModel> _elementGrid = default!;
     private EnumFormType _formType = EnumFormType.List;
     private bool hover = true;

@@ -68,5 +68,13 @@ public class PackageListController : BaseController
         return await Execute(result);
     }
 
+    [HttpPost]
+    [Route("GetBranch")]
+    public async Task<IActionResult> GetBranch()
+    {
+        var result = await _packageListSerivce.GetBranch();
+        return await Execute(result);
+    }
+
     #endregion
 }
