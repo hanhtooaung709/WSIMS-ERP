@@ -375,7 +375,9 @@ public class PackageListSerivce : AuthorizationService
             TblReqPackageInfoChange result = new TblReqPackageInfoChange
             {
                 ReqPackageInfoChangesId = DevCode.GenerateUlid(),
+                PackageInfoId = reqModel.PackageId!,
                 PackageName = reqModel.PackageName!,
+                PackageInfoCode = reqModel.PackageInfoCode!,
                 ProductCode = reqModel.ProductCode!,
                 Price = reqModel.Price!.ToInt32(),
                 CurrencyCode = reqModel.CurrencyCode!,
@@ -483,8 +485,8 @@ public class PackageListSerivce : AuthorizationService
                }, CommandType.StoredProcedure);
 
             List<DynamicReportModel> packageInfo = new List<DynamicReportModel>();
-            packageInfo.Add("Product Name", detail.ProductName!);
             packageInfo.Add("Package Name", detail.PackageName!);
+            packageInfo.Add("Product Name", detail.ProductName!);
             packageInfo.Add("PackageInfo Code", detail.PackageInfoCode!);
             packageInfo.Add("Quanity", detail.Quanity!);
             packageInfo.Add("Price", detail.Price!);

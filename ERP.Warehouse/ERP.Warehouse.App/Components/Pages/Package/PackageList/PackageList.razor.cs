@@ -1,10 +1,12 @@
-﻿using ERP.Warehouse.Models.Models.Package.PackageList;
+﻿using ERP.Warehouse.App.Common;
+using ERP.Warehouse.Models.Models.Package.PackageList;
 using ERP.Warehouse.Models.Models.Package.ReqPackage;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
+using WSIMS_ERP.Shared.Models;
 
 namespace ERP.Warehouse.App.Components.Pages.Package.PackageList;
 
@@ -20,10 +22,14 @@ public partial class PackageList
     private List<CurrencyResponseModel> _currencyList = new();
     private List<BoxResponseModel> _boxList = new();
 
+    private List<SelectListModel> _lstStatus = Commons.GetStatusList();
+
     private PackageModel? selectedItem;
     private MudTable<PackageModel>? _table;
     private MudDataGrid<PackageModel> _elementGrid = default!;
     private EnumFormType _formType = EnumFormType.List;
+    private bool hover = true;
+    private bool _readOnly;
 
     private IList<IBrowserFile> _selectedFiles = new List<IBrowserFile>();
     private string? _imagePreviewUrl;
@@ -63,6 +69,7 @@ public partial class PackageList
             {
                 await _injectService.ShowDialog(result);
                 _reqModel = new();
+                selectedItem = null;
                 return;
             }
 
@@ -111,6 +118,7 @@ public partial class PackageList
                 {
                     await _injectService.ShowDialog(result);
                     _reqModel = new();
+                    selectedItem = null;
                     return;
                 }
                 await _injectService.ShowDialog(result);
@@ -133,6 +141,7 @@ public partial class PackageList
                 {
                     await _injectService.ShowDialog(result);
                     _reqModel = new();
+                    selectedItem = null;
                     return;
                 }
                 await _injectService.ShowDialog(result);
@@ -149,6 +158,14 @@ public partial class PackageList
             await _injectService.DisableLoading();
             _logger.LogCustomError(ex);
             await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private async Task OnEditClicked()
+    {
+        if (selectedItem != null && _elementGrid != null)
+        {
+            await _elementGrid.SetEditingItemAsync(selectedItem);
         }
     }
 
@@ -206,6 +223,7 @@ public partial class PackageList
         try
         {
             _reqModel = new();
+            selectedItem = null;
             StateHasChanged();
             List();
             _formType = EnumFormType.List;
@@ -237,10 +255,12 @@ public partial class PackageList
             if (result.IsError)
             {
                 await _injectService.ShowDialog(result);
+                selectedItem = null;
                 return;
             }
             await _injectService.ShowDialog(result);
 
+            selectedItem = null;
             await List();
             _formType = EnumFormType.List;
             StateHasChanged();
@@ -266,6 +286,7 @@ public partial class PackageList
             if (result.IsError)
             {
                 await _injectService.ShowDialog(result);
+                selectedItem = null;
                 return;
             }
 
