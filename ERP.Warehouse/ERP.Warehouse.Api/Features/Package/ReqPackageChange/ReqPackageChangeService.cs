@@ -180,7 +180,6 @@ public class ReqPackageChangeService : AuthorizationService
             name = await _db.TblReqPackageInfos
                 .AsNoTracking()
                 .AnyAsync(x => x.PackageName.Trim().ToLower() == reqModel.PackageName!.Trim().ToLower() &&
-                               x.ReqPackageInfoId != reqModel.ReqPackageChangeId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (name)
             {
@@ -191,6 +190,7 @@ public class ReqPackageChangeService : AuthorizationService
             name = await _db.TblReqPackageInfoChanges
                 .AsNoTracking()
                 .AnyAsync(x => x.PackageName.Trim().ToLower() == reqModel.PackageName!.Trim().ToLower() &&
+                               x.ReqPackageInfoChangesId != reqModel.ReqPackageChangeId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (name)
             {
@@ -216,7 +216,6 @@ public class ReqPackageChangeService : AuthorizationService
                 .AsNoTracking()
                 .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
                           x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
-                          x.ReqPackageInfoId != reqModel.ReqPackageChangeId &&
                           x.Status == EnumRequestedStatus.Pending.ToString());
             if (item)
             {
@@ -228,6 +227,7 @@ public class ReqPackageChangeService : AuthorizationService
                 .AsNoTracking()
                 .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
                           x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
+                          x.ReqPackageInfoChangesId != reqModel.ReqPackageChangeId &&
                           x.Status == EnumRequestedStatus.Pending.ToString());
             if (item)
             {
