@@ -28,6 +28,22 @@ public class ApproveReqPackageChangeController : BaseController
     }
 
     [HttpPost]
+    [Route("Approve")]
+    public async Task<IActionResult> Approve(ReqPackageChangeEditModel reqModel)
+    {
+        var result = await _approveReqPackageChangeService.Approve(reqModel);
+        return await Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Reject")]
+    public async Task<IActionResult> Reject(ReqPackageChangeEditModel reqModel)
+    {
+        var result = await _approveReqPackageChangeService.Reject(reqModel);
+        return await Execute(result);
+    }
+
+    [HttpPost]
     [Route("Details")]
     public async Task<IActionResult> Details(ReqPackageChangeEditModel reqModel)
     {
