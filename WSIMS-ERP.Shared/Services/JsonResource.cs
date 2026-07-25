@@ -19,6 +19,16 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// Requested Package Change is successfully Updated.
+    /// </summary>
+    public static readonly string WHS086 = "WH#S086";
+
+    /// <summary>
+    /// Requseted Package Change is not pending status!
+    /// </summary>
+    public static readonly string WHE085 = "WH#E085";
+
+    /// <summary>
     /// Requested Package Change does not exist!
     /// </summary>
     public static readonly string WHE084 = "WH#E084";

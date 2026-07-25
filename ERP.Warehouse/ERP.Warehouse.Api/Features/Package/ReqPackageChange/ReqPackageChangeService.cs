@@ -3,6 +3,8 @@ using ERP.Warehouse.Models.Models.Package.ReqPackage;
 using ERP.Warehouse.Models.Models.Package.ReqPackageChange;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
+using WSIMS_ERP.Shared.Enums;
+using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Models.ConfigModel;
 using WSIMS_ERP.Shared.Queries;
@@ -124,6 +126,130 @@ public class ReqPackageChangeService : AuthorizationService
                 Status = reqPackage.Status
             };
             model = Result<ReqPackageChangeModel>.Success(response);
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<ReqPackageChangeModel>.Error(ex);
+        }
+        return model;
+    }
+
+    public async Task<Result<ReqPackageChangeModel>> Update(ReqPackageChangeReqModel reqModel)
+    {
+        var model = new Result<ReqPackageChangeModel>();
+        try
+        {
+            #region Check ReqPackageChange
+
+            var reqPackage = await _db.TblReqPackageInfoChanges
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ReqPackageInfoChangesId == reqModel.ReqPackageChangeId);
+            if (reqPackage is null)
+            {
+                model = Result<ReqPackageChangeModel>.Error(JsonResource.WHE084);
+                return model;
+            }
+
+            bool package = await _db.TblReqPackageInfoChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.ReqPackageInfoChangesId == reqModel.ReqPackageChangeId &&
+                               x.Status != EnumRequestedStatus.Pending.ToString());
+            if (package)
+            {
+                model = Result<ReqPackageChangeModel>.Error(JsonResource.WHE085);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate PackageName
+
+            bool name = await _db.TblPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.PackageName.Trim().ToLower() == reqModel.PackageName!.Trim().ToLower());
+            if (name)
+            {
+                model = Result<ReqPackageChangeModel>.Error(JsonResource.WHE074);
+                return model;
+            }
+
+            name = await _db.TblReqPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.PackageName.Trim().ToLower() == reqModel.PackageName!.Trim().ToLower() &&
+                               x.ReqPackageInfoId != reqModel.ReqPackageChangeId &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (name)
+            {
+                model = Result<ReqPackageChangeModel>.Error(JsonResource.WHE075);
+                return model;
+            }
+
+            name = await _db.TblReqPackageInfoChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.PackageName.Trim().ToLower() == reqModel.PackageName!.Trim().ToLower() &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (name)
+            {
+                model = Result<ReqPackageChangeModel>.Error(JsonResource.WHE076);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate Product and Box
+
+            bool item = await _db.TblPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
+                          x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower());
+            if (item)
+            {
+                model = Result<ReqPackageChangeModel>.Error(JsonResource.WHE080);
+                return model;
+            }
+
+            item = await _db.TblReqPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
+                          x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
+                          x.ReqPackageInfoId != reqModel.ReqPackageChangeId &&
+                          x.Status == EnumRequestedStatus.Pending.ToString());
+            if (item)
+            {
+                model = Result<ReqPackageChangeModel>.Error(JsonResource.WHE081);
+                return model;
+            }
+
+            item = await _db.TblReqPackageInfoChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
+                          x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
+                          x.Status == EnumRequestedStatus.Pending.ToString());
+            if (item)
+            {
+                model = Result<ReqPackageChangeModel>.Error(JsonResource.WHE082);
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            reqPackage.PackageName = reqModel.PackageName!;
+            reqPackage.PackageInfoCode = reqModel.PackageInfoCode!;
+            reqPackage.ProductCode = reqModel.ProductCode!;
+            reqPackage.Price = reqModel.Price!.ToInt32();
+            reqPackage.CurrencyCode = reqModel.CurrencyCode!;
+            reqPackage.Weight = reqModel.Weight!.ToInt32();
+            reqPackage.BoxCode = reqModel.BoxCode!;
+            reqPackage.ReqDateTime = DevCode.GetServerDateTime();
+
+            _db.Entry(reqPackage).State = EntityState.Modified;
+            _db.TblReqPackageInfoChanges.Update(reqPackage);
+            await _db.SaveChangesAsync();
+            model = Result<ReqPackageChangeModel>.Success(JsonResource.WHS086);
 
             #endregion
         }
