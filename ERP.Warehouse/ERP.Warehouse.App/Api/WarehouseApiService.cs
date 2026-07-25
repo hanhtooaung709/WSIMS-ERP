@@ -385,7 +385,7 @@ public class WarehouseApiService
 
     #endregion
 
-    #region ReqPackageChanfe
+    #region ReqPackageChange
 
     public async Task<Result<ReqPackageChangeRepModel>> Get(ReqPackageChangeReqModel reqModel)
         => await _httpClientService.ExecuteAsync<ReqPackageChangeReqModel, ReqPackageChangeRepModel>

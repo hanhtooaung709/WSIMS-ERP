@@ -1,29 +1,28 @@
 ﻿using ERP.Warehouse.App.Common;
 using ERP.Warehouse.Models.Models.Package.ReqPackage;
-using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
+using ERP.Warehouse.Models.Models.Package.ReqPackageChange;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared.Models;
 
-namespace ERP.Warehouse.App.Components.Pages.Package.ReqPackage;
+namespace ERP.Warehouse.App.Components.Pages.Package.ReqPackageChange;
 
-public partial class ReqPackage
+public partial class ReqPackageChange
 {
-    private ReqPackageReqModel _reqModel = new();
-    private IEnumerable<ReqPackageModel> _model = new List<ReqPackageModel>();
-    private ReqPackageEditModel _edit = new();
-    private ReqPackageDetailModel _details = new();
+    private ReqPackageChangeReqModel _reqModel = new();
+    private IEnumerable<ReqPackageChangeModel> _model = new List<ReqPackageChangeModel>();
+    private ReqPackageChangeEditModel _edit = new();
+    private ReqPackageChangeDetailModel _details = new();
 
-    private List<BranchResponseModel> _banchList = new();
     private List<ProductResponseModel> _productList = new();
     private List<CurrencyResponseModel> _currencyList = new();
     private List<BoxResponseModel> _boxList = new();
 
     private List<SelectListModel> _lstStatus = Commons.GetStatusList();
 
-    private MudDataGrid<ReqPackageModel> _elementGrid = default!;
+    private MudDataGrid<ReqPackageChangeModel> _elementGrid = default!;
     private EnumFormType _formType = EnumFormType.List;
     private bool hover = true;
     private bool _readOnly;
@@ -79,7 +78,7 @@ public partial class ReqPackage
         }
     }
 
-    private async Task Save(ReqPackageModel reqModel)
+    private async Task Save(ReqPackageChangeModel reqModel)
     {
         try
         {
@@ -110,21 +109,20 @@ public partial class ReqPackage
         }
     }
 
-    private async Task Edit(ReqPackageModel reqModel)
+    private async Task Edit(ReqPackageChangeModel reqModel)
     {
         try
         {
-            if (reqModel is null || string.IsNullOrEmpty(reqModel.ReqPackageId))
+            if (reqModel is null || string.IsNullOrEmpty(reqModel.ReqPackageChangeId))
             {
                 _formType = EnumFormType.Create;
                 return;
             }
 
-            await GetBranch();
             await GetProduct();
             await GetCurrency();
             await GetBox();
-            _edit.ReqPackageId = reqModel.ReqPackageId!;
+            _edit.ReqPackageChangeId = reqModel.ReqPackageChangeId!;
 
             await _injectService.EnableLoading();
             var result = await _apiService.Edit(_edit);
@@ -136,11 +134,10 @@ public partial class ReqPackage
                 return;
             }
 
-            _reqModel.ReqPackageId = result.Data.ReqPackageId;
+            _reqModel.ReqPackageChangeId = result.Data.ReqPackageChangeId;
+            _reqModel.PackageId = result.Data.PackageId;
             _reqModel.PackageName = result.Data.PackageName;
             _reqModel.PackageInfoCode = result.Data.PackageInfoCode;
-            _reqModel.BranchCode = result.Data.BranchCode;
-            _reqModel.Quanity = result.Data.Quanity;
             _reqModel.ProductCode = result.Data.ProductCode;
             _reqModel.Price = result.Data.Price;
             _reqModel.CurrencyCode = result.Data.CurrencyCode;
@@ -175,7 +172,7 @@ public partial class ReqPackage
         }
     }
 
-    private async Task Delete(ReqPackageModel reqModel)
+    private async Task Delete(ReqPackageChangeModel reqModel)
     {
         try
         {
@@ -185,7 +182,7 @@ public partial class ReqPackage
                 return;
             }
 
-            _edit.ReqPackageId = reqModel.ReqPackageId!;
+            _edit.ReqPackageChangeId = reqModel.ReqPackageChangeId!;
 
             await _injectService.EnableLoading();
             var result = await _apiService.Delete(_edit);
@@ -210,11 +207,11 @@ public partial class ReqPackage
         }
     }
 
-    private async Task Details(ReqPackageModel reqModel)
+    private async Task Details(ReqPackageChangeModel reqModel)
     {
         try
         {
-            _edit.ReqPackageId = reqModel.ReqPackageId!;
+            _edit.ReqPackageChangeId = reqModel.ReqPackageChangeId!;
 
             await _injectService.EnableLoading();
             var result = await _apiService.Details(_edit);
@@ -295,30 +292,6 @@ public partial class ReqPackage
     #endregion
 
     #region DropDown
-
-    private async Task GetBranch()
-    {
-        try
-        {
-            await _injectService.EnableLoading();
-            var result = await _apiService.GetBranch();
-            await _injectService.DisableLoading();
-
-            if (result.IsError)
-            {
-                await _injectService.ShowDialog(result);
-                return;
-            }
-            _banchList = result.Data;
-            StateHasChanged();
-        }
-        catch (Exception ex)
-        {
-            await _injectService.DisableLoading();
-            _logger.LogCustomError(ex);
-            await _injectService.ErrorDialogMessage(ex.Message);
-        }
-    }
 
     private async Task GetProduct()
     {

@@ -19,7 +19,7 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
-    /// Requsted Package is successfully Deteted.
+    /// Requsted Package Change is successfully Deteted.
     /// </summary>
     public static readonly string WHS088 = "WH#S088";
 
