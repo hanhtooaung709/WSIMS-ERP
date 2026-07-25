@@ -52,5 +52,13 @@ public class ReqPackageChangeController : BaseController
         return await Execute(result);
     }
 
+    [HttpPost]
+    [Route("Details")]
+    public async Task<IActionResult> Details(ReqPackageChangeEditModel reqModel)
+    {
+        var result = await _reqPackageChangeService.Details(reqModel);
+        return await Execute(result);
+    }
+
     #endregion
 }

@@ -1,5 +1,5 @@
 ﻿using ERP.Warehouse.Api.Common;
-using ERP.Warehouse.Models.Models.Package.ReqPackage;
+using WSIMS_ERP.Shared.Models.DynamicModel;
 using ERP.Warehouse.Models.Models.Package.ReqPackageChange;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
@@ -9,6 +9,8 @@ using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Models.ConfigModel;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
+using ERP.Warehouse.Models;
+using System.Data;
 
 namespace ERP.Warehouse.Api.Features.Package.ReqPackageChange;
 
@@ -306,6 +308,45 @@ public class ReqPackageChangeService : AuthorizationService
             return Result<ReqPackageChangeModel>.Error(ex);
         }
         return model;
+    }
+
+    public async Task<Result<ReqPackageChangeDetailModel>> Details(ReqPackageChangeEditModel reqModel)
+    {
+        ReqPackageChangeDetailModel model = new();
+        try
+        {
+            var detail = await _dapperService.GetDetailAsync<ReqPackageChangeDetailInfoModel>(
+                SqlQueries.Sp_GetReqPackageChangeDetail, new
+                {
+                    ReqPackageChangeId = reqModel.ReqPackageChangeId
+                }, CommandType.StoredProcedure);
+
+            List<DynamicReportModel> packageInfo = new List<DynamicReportModel>();
+            packageInfo.Add("Package Name", detail.PackageName!);
+            packageInfo.Add("Product Name", detail.ProductName!);
+            packageInfo.Add("PackageInfo Code", detail.PackageInfoCode!);
+            packageInfo.Add("Price", detail.Price!);
+            packageInfo.Add("Currency Code", detail.CurrencyCode!);
+            packageInfo.Add("Weight", detail.Weight!);
+            packageInfo.Add("Box", detail.Box!);
+            model.PackageInfo = packageInfo;
+            model.ItemImagePath = detail.ImagePath;
+
+            List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();
+            makerChecker.Add("Requested User", detail.ReqUser!);
+            makerChecker.Add("Requested DateTime", detail.ReqDateTime!);
+            makerChecker.Add("Approved User", detail.ApprovedUser!.ToDashFromNull());
+            makerChecker.Add("Approved DateTime ", detail.ApprovedDateTime!.ToDashFromNull());
+            makerChecker.Add("Status", detail.Status!);
+            makerChecker.Add("Reject Reason", detail.RejectReason!.ToDashFromNull());
+            model.MakerChecker = makerChecker;
+
+            return Result<ReqPackageChangeDetailModel>.Success(model);
+        }
+        catch (Exception ex)
+        {
+            return Result<ReqPackageChangeDetailModel>.Error(ex);
+        }
     }
 
     #endregion
