@@ -1,4 +1,5 @@
 ﻿using ERP.Warehouse.Api.Common;
+using ERP.Warehouse.Api.Features.ApprovePackage.ApproveReqPackage;
 using ERP.Warehouse.Api.Features.ApproveProduct.ApproveReqProduct;
 using ERP.Warehouse.Api.Features.ApproveProduct.ApproveReqProductChanges;
 using ERP.Warehouse.Api.Features.Box;
@@ -78,6 +79,7 @@ public static class FeatureManager
         builder.Services.AddScoped<PackageListSerivce>();
         builder.Services.AddScoped<ReqPackageService>();
         builder.Services.AddScoped<ReqPackageChangeService>();
+        builder.Services.AddScoped<ApproveReqPackageSevice>();
         return builder;
     }
 }
