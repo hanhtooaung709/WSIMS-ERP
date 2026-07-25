@@ -1,4 +1,5 @@
-﻿using ERP.Warehouse.App.Api.Endpoints.ApproveProduct;
+﻿using ERP.Warehouse.App.Api.Endpoints.ApprovePackage;
+using ERP.Warehouse.App.Api.Endpoints.ApproveProduct;
 using ERP.Warehouse.App.Api.Endpoints.Box;
 using ERP.Warehouse.App.Api.Endpoints.Branch;
 using ERP.Warehouse.App.Api.Endpoints.Currency;
@@ -406,6 +407,26 @@ public class WarehouseApiService
     public async Task<Result<ReqPackageChangeDetailModel>> Details(ReqPackageChangeEditModel reqModel)
        => await _httpClientService.ExecuteAsync<ReqPackageChangeEditModel, ReqPackageChangeDetailModel>
        (ReqPackageChangeEndpoints.Details, reqModel);
+
+    #endregion
+
+    #region ApproveReqProduct
+
+    public async Task<Result<ReqPackageRepModel>> GetApproveReqProduct(ReqPackageReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<ReqPackageReqModel, ReqPackageRepModel>
+        (ApproveReqPackageEndpoints.Get, reqModel);
+
+    public async Task<Result<ReqPackageModel>> Approve(ReqPackageEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqPackageEditModel, ReqPackageModel>
+       (ApproveReqPackageEndpoints.Approve, reqModel);
+
+    public async Task<Result<ReqPackageModel>> Reject(ReqPackageEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqPackageEditModel, ReqPackageModel>
+       (ApproveReqPackageEndpoints.Reject, reqModel);
+
+    public async Task<Result<ReqPackageDetailModel>> ApproveReqProductDetails(ReqPackageEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqPackageEditModel, ReqPackageDetailModel>
+       (ApproveReqPackageEndpoints.Details, reqModel);
 
     #endregion
 }

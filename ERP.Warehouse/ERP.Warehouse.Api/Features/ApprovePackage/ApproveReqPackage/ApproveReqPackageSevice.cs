@@ -3,7 +3,7 @@ using ERP.Warehouse.Models;
 using ERP.Warehouse.Models.Models.Branch;
 using ERP.Warehouse.Models.Models.Currency;
 using ERP.Warehouse.Models.Models.Package.ReqPackage;
-using ERP.Warehouse.Models.Models.Product.ReqProduct;
+using WSIMS_ERP.Shared.Models.DynamicModel;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
 using System.Data;

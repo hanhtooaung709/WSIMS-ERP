@@ -36,6 +36,14 @@ public class ApproveReqPackageController : BaseController
     }
 
     [HttpPost]
+    [Route("Reject")]
+    public async Task<IActionResult> Reject(ReqPackageEditModel reqModel)
+    {
+        var result = await _aproveReqPackageSevice.Reject(reqModel);
+        return await Execute(result);
+    }
+
+    [HttpPost]
     [Route("Details")]
     public async Task<IActionResult> Details(ReqPackageEditModel reqModel)
     {
