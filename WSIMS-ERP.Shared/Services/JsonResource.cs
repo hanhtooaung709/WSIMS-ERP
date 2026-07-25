@@ -19,6 +19,11 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// Requested Package Change does not exist!
+    /// </summary>
+    public static readonly string WHE084 = "WH#E084";
+
+    /// <summary>
     /// Package does not exist!
     /// </summary>
     public static readonly string WHE083 = "WH#E083";

@@ -107,7 +107,7 @@ public class ReqPackageService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.CurrencyCode == reqPackage.CurrencyCode && x.DelFlag == 0);
             if (currency is null)
             {
-                model = Result<ReqPackageModel>.Error(JsonResource.WHE067);
+                model = Result<ReqPackageModel>.Error(JsonResource.WHE052);
                 return model;
             }
 
