@@ -260,5 +260,53 @@ public class ReqPackageChangeService : AuthorizationService
         return model;
     }
 
+    public async Task<Result<ReqPackageChangeModel>> Delete(ReqPackageChangeEditModel reqModel)
+    {
+        var model = new Result<ReqPackageChangeModel>();
+        try
+        {
+            #region Check ReqPackageChange
+
+            var reqPackage = await _db.TblReqPackageInfoChanges
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ReqPackageInfoChangesId == reqModel.ReqPackageChangeId);
+            if (reqPackage is null)
+            {
+                model = Result<ReqPackageChangeModel>.Error(JsonResource.WHE084);
+                return model;
+            }
+
+            bool package = await _db.TblReqPackageInfoChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.ReqPackageInfoChangesId == reqModel.ReqPackageChangeId &&
+                               x.Status != EnumRequestedStatus.Pending.ToString());
+            if (package)
+            {
+                model = Result<ReqPackageChangeModel>.Error(JsonResource.WHE085);
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            _db.TblReqPackageInfoChanges.Remove(reqPackage);
+            var result = _db.SaveChanges();
+            if (result <= 0)
+            {
+                model = Result<ReqPackageChangeModel>.Error(JsonResource.WHE087);
+                return model;
+            }
+            model = Result<ReqPackageChangeModel>.Success(JsonResource.WHS088);
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<ReqPackageChangeModel>.Error(ex);
+        }
+        return model;
+    }
+
     #endregion
 }

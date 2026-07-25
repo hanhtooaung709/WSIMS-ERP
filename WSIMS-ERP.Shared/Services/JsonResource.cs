@@ -19,6 +19,16 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// Requsted Package is successfully Deteted.
+    /// </summary>
+    public static readonly string WHS088 = "WH#S088";
+
+    /// <summary>
+    /// Requsted Package Change delete fail!
+    /// </summary>
+    public static readonly string WHE087 = "WH#E087";
+
+    /// <summary>
     /// Requested Package Change is successfully Updated.
     /// </summary>
     public static readonly string WHS086 = "WH#S086";

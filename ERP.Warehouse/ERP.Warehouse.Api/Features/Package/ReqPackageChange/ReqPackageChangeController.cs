@@ -44,5 +44,13 @@ public class ReqPackageChangeController : BaseController
         return await Execute(result);
     }
 
+    [HttpPost]
+    [Route("Delete")]
+    public async Task<IActionResult> Delete(ReqPackageChangeEditModel reqModel)
+    {
+        var result = await _reqPackageChangeService.Delete(reqModel);
+        return await Execute(result);
+    }
+
     #endregion
 }
