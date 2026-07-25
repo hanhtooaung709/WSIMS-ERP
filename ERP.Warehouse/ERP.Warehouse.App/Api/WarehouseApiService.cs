@@ -410,9 +410,9 @@ public class WarehouseApiService
 
     #endregion
 
-    #region ApproveReqProduct
+    #region ApproveReqPackage
 
-    public async Task<Result<ReqPackageRepModel>> GetApproveReqProduct(ReqPackageReqModel reqModel)
+    public async Task<Result<ReqPackageRepModel>> GetApproveReqPackage(ReqPackageReqModel reqModel)
         => await _httpClientService.ExecuteAsync<ReqPackageReqModel, ReqPackageRepModel>
         (ApproveReqPackageEndpoints.Get, reqModel);
 
@@ -424,7 +424,7 @@ public class WarehouseApiService
        => await _httpClientService.ExecuteAsync<ReqPackageEditModel, ReqPackageModel>
        (ApproveReqPackageEndpoints.Reject, reqModel);
 
-    public async Task<Result<ReqPackageDetailModel>> ApproveReqProductDetails(ReqPackageEditModel reqModel)
+    public async Task<Result<ReqPackageDetailModel>> ApproveReqPackageDetails(ReqPackageEditModel reqModel)
        => await _httpClientService.ExecuteAsync<ReqPackageEditModel, ReqPackageDetailModel>
        (ApproveReqPackageEndpoints.Details, reqModel);
 

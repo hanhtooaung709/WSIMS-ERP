@@ -50,7 +50,7 @@ public class ApproveReqPackageSevice : AuthorizationService
                 Status = reqModel.Status
             };
             var result = await _dapperService.QueryStoredProcedureAsync<ReqPackageModel>
-                (SqlQueries.Sp_GetReqPackageList, parameters);
+                (SqlQueries.Sp_GetApproveReqPackageList, parameters);
             model.list = result;
             return Result<ReqPackageRepModel>.Success(model);
         }

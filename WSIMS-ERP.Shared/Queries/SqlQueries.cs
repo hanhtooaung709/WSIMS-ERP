@@ -34,4 +34,6 @@ public class SqlQueries
 
     public const string Sp_GetReqPackageChangeList = "Sp_GetReqPackageChangeList";
     public const string Sp_GetReqPackageChangeDetail = "Sp_GetReqPackageChangeDetail";
+
+    public const string Sp_GetApproveReqPackageList = "Sp_GetApproveReqPackageList";
 }
