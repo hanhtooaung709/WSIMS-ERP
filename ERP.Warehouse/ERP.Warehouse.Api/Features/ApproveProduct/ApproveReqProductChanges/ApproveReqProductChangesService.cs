@@ -101,7 +101,8 @@ public class ApproveReqProductChangesService : AuthorizationService
 
             TblProduct? product = await _db.TblProducts
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.ProductId == reqModel.ProductId);
+                .FirstOrDefaultAsync(x => x.ProductId == reqModel.ProductId &&
+                                          x.DelFlag == 0);
             if (product is null)
             {
                 model = Result<ReqProductChangesModel>.Error(JsonResource.WHE067);
@@ -190,7 +191,8 @@ public class ApproveReqProductChangesService : AuthorizationService
 
             TblProduct? product = await _db.TblProducts
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.ProductId == reqModel.ProductId);
+                .FirstOrDefaultAsync(x => x.ProductId == reqModel.ProductId &&
+                                          x.DelFlag == 0);
             if (product is null)
             {
                 model = Result<ReqProductChangesModel>.Error(JsonResource.WHE067);

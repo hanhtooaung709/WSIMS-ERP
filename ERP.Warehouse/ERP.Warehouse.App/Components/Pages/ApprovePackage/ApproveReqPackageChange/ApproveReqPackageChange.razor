@@ -1,0 +1,195 @@
+﻿@page "/approve-req-package-changes"
+@using Microsoft.AspNetCore.Authorization
+@inject ILogger<ApproveReqPackageChange> _logger
+@attribute [Authorize]
+@using System.Net.Http.Json
+@using WSIMS_ERP.Shared.Enums
+@inject HttpClient httpClient
+
+@if (_formType is EnumFormType.List)
+{
+    <MudPaper Class="pa-4 mb-4">
+        <MudText Typo="Typo.h6" Style="font-weight: 600; color: #333; margin-bottom: 12px;">Approve Requested Products Changes</MudText>
+        <MudGrid>
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudTextField @bind-Value="_reqModel.PackageName" Label="Product Name" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable />
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudSelect @bind-Value="_reqModel.ProductCode" Label="Product Name" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable>
+                    @if (_productList != null)
+                    {
+                        @foreach (var item in _productList)
+                        {
+                            <MudSelectItem Value="@item.ProductCode">@item.ProductName</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudSelect @bind-Value="_reqModel.BoxCode" Label="Box" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable>
+                    @if (_boxList != null)
+                    {
+                        @foreach (var item in _boxList)
+                        {
+                            <MudSelectItem Value="@item.BoxCode">@item.Box</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudSelect @bind-Value="_reqModel.Status" Label="Status" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable>
+                    @if (_lstStatus != null)
+                    {
+                        @foreach (var item in _lstStatus)
+                        {
+                            <MudSelectItem Value="@item.Value">@item.Text</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" Style="display: flex; align-items: flex-end; justify-content: flex-end; gap: 8px;">
+                <MudButton ButtonType="MudBlazor.ButtonType.Button" Variant="MudBlazor.Variant.Outlined" Color="Color.Default" StartIcon="@Icons.Material.Filled.Close" OnClick="@Cancel">Cancel</MudButton>
+                <MudButton ButtonType="MudBlazor.ButtonType.Button" Variant="MudBlazor.Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Search" OnClick="@List">Search</MudButton>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+
+    <MudTable Items="@_model" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+        <HeaderContent>
+            <MudTh>No</MudTh>
+            <MudTh>Package Name</MudTh>
+            <MudTh>PackageInfo Code</MudTh>
+            <MudTh>Product Name</MudTh>
+            <MudTh>Box</MudTh>
+            <MudTh>Price</MudTh>
+            <MudTh>Currency</MudTh>
+            <MudTh>Weight</MudTh>
+            <MudTh>ChangesType</MudTh>
+            <MudTh>Status</MudTh>
+            <MudTh>Actions</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="No">@(_model.ToList().IndexOf(context) + 1)</MudTd>
+            <MudTd DataLabel="ProductName">@context.PackageName</MudTd>
+            <MudTd DataLabel="ProductCode">@context.PackageInfoCode</MudTd>
+            <MudTd DataLabel="SupplierName">@context.ProductCode</MudTd>
+            <MudTd DataLabel="ChangesType">@context.BoxCode</MudTd>
+            <MudTd DataLabel="ChangesType">@context.Price</MudTd>
+            <MudTd DataLabel="ChangesType">@context.CurrencyCode</MudTd>
+            <MudTd DataLabel="ChangesType">@context.Weight</MudTd>
+            <MudTd DataLabel="ChangesType">@context.ChangesType</MudTd>
+            <MudTd DataLabel="Status">
+                <MudText Class="@GetBadgeClass(context.Status!)">@context.Status</MudText>
+            </MudTd>
+            <MudTd DataLabel="Actions">
+                <div style="display: inline-block; white-space: nowrap;">
+                    @{
+                        var _isDisable = context.Status != EnumRequestedStatus.Pending.ToString();
+                    }
+                    <MudFab Size="@Size.Small"
+                            StartIcon="@Icons.Material.Outlined.Done"
+                            Color="Color.Success"
+                            OnClick="@(() => Approve(context))"
+                            Disabled="_isDisable" />
+
+                    <MudFab Size="@Size.Small"
+                            StartIcon="@Icons.Material.Outlined.Close"
+                            Color="Color.Error"
+                            OnClick="@(() => Reject(context))"
+                            Disabled="_isDisable" />
+
+                    <MudFab Size="@Size.Small"
+                            StartIcon="@Icons.Material.Outlined.Details"
+                            Color="Color.Primary"
+                            OnClick="@(() => Details(context))" />
+                </div>
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
+
+@if (_formType is EnumFormType.Detail)
+{
+    <MudPaper Elevation="2" Class="pa-0 mt-4" Style="border-radius: 12px; overflow: hidden;">
+        <div Style="background-color: #3f7375; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
+            <MudText Typo="Typo.h5" Style="color: #fff; font-weight: 600; margin: 0;">
+                Requested Package Change Details
+            </MudText>
+            <MudFab Size="@Size.Small" Color="Color.Default" StartIcon="@Icons.Material.Filled.ArrowBack" Style="background-color: rgba(255,255,255,0.2); color: #fff;" OnClick="@(() => { _formType = EnumFormType.List; StateHasChanged(); })" />
+        </div>
+        <div Class="pa-6">
+            <MudGrid>
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-center justify-center mud-width-full pa-4" Elevation="0" Style="background-color: #e8e8e8; border-radius: 8px;">
+                        <MudItem xs="12" sm="11">
+                            <MudText Typo="Typo.subtitle1" Style="font-weight: 600; color: #333; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #3f7375;">
+                                Requested Product Change Information
+                            </MudText>
+                            @foreach (var item in _details.PackageInfo)
+                            {
+                                <ul class="list-unstyled mb-4">
+                                    <li class="d-flex align-items-center mb-3">
+                                        <MudText Typo="Typo.body2">
+                                            <span Style="font-weight: 600; color: #555; min-width: 120px; display: inline-block;">@(item.Key) :</span>
+                                            <span Style="color: #333;">@item.Value</span>
+                                        </MudText>
+                                    </li>
+                                </ul>
+                            }
+                            @if (!string.IsNullOrEmpty(_details.ItemImagePath))
+                            {
+                                <ul class="list-unstyled mb-4">
+                                    <li class="d-flex align-items-center mb-3">
+                                        <MudText Typo="Typo.body2">
+                                            <span Style="font-weight: 600; color: #555; min-width: 120px; display: inline-block;">Image :</span>
+                                            <img src="@GetImageUrl(_details.ItemImagePath)" style="max-width: 200px; max-height: 200px; border: 1px solid #ddd; border-radius: 4px;" />
+                                        </MudText>
+                                    </li>
+                                </ul>
+                            }
+                        </MudItem>
+                    </MudPaper>
+                </MudItem>
+
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-center justify-center mud-width-full pa-4" Elevation="0" Style="background-color: #e8e8e8; border-radius: 8px;">
+                        <MudItem xs="12" sm="11">
+                            <MudText Typo="Typo.subtitle1" Style="font-weight: 600; color: #333; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #3f7375;">
+                                Maker / Checker
+                            </MudText>
+                            @foreach (var item in _details.MakerChecker)
+                            {
+                                if (item.Key.Contains("Status"))
+                                {
+                                    <ul class="list-unstyled mb-4">
+                                        <li class="d-flex align-items-center mb-3">
+                                            <MudText Typo="Typo.body2">
+                                                <span Style="font-weight: 600; color: #555; min-width: 150px; display: inline-block;">@(item.Key) :</span>
+                                                <span class="@GetBadgeClass(item.Value)" Style="color: #333;">@item.Value</span>
+                                            </MudText>
+                                        </li>
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <ul class="list-unstyled mb-4">
+                                        <li class="d-flex align-items-center mb-3">
+                                            <MudText Typo="Typo.body2">
+                                                <span Style="font-weight: 600; color: #555; min-width: 150px; display: inline-block;">@(item.Key) :</span>
+                                                <span Style="color: #333;">@item.Value</span>
+                                            </MudText>
+                                        </li>
+                                    </ul>
+                                }
+                            }
+                        </MudItem>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+        </div>
+    </MudPaper>
+}

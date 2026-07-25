@@ -63,10 +63,21 @@ public class ApproveReqPackageChangeService : AuthorizationService
         {
             #region Check Package
 
-            TblPackageInfo? package = await _db.TblPackageInfos
+            TblPackageInfo? packageInfo = await _db.TblPackageInfos
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId);
-            if (package is null)
+                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId &&
+                                          x.DelFlag == 0);
+            if (packageInfo is null)
+            {
+                model = Result<ReqPackageChangeModel>.Error(JsonResource.WHE083);
+                return model;
+            }
+
+            var packages = _db.TblPackages
+                .AsNoTracking()
+                .Where(x => x.PackageInfoCode == packageInfo.PackageInfoCode &&
+                                          x.DelFlag == 0);
+            if (!packages.Any())
             {
                 model = Result<ReqPackageChangeModel>.Error(JsonResource.WHE083);
                 return model;
@@ -97,22 +108,29 @@ public class ApproveReqPackageChangeService : AuthorizationService
 
             if (packageChanges!.ChangesType == EnumRequestedType.Update.ToString())
             {
-                package.PackageName = packageChanges.PackageName!;
-                package.PackageInfoCode = packageChanges.PackageInfoCode!;
-                package.ProductCode = packageChanges.ProductCode!;
-                package.Price = packageChanges.Price!;
-                package.CurrencyCode = packageChanges.CurrencyCode!;
-                package.Weight = packageChanges.Weight!;
-                package.BoxCode = packageChanges.BoxCode!;
-                package.ModifiedUserId = AuthorizedUserId;
-                package.ModifiedDateTime = DevCode.GetServerDateTime();
-                _db.Entry(package).State = EntityState.Modified;
+                packageInfo.PackageName = packageChanges.PackageName!;
+                packageInfo.PackageInfoCode = packageChanges.PackageInfoCode!;
+                packageInfo.ProductCode = packageChanges.ProductCode!;
+                packageInfo.Price = packageChanges.Price!;
+                packageInfo.CurrencyCode = packageChanges.CurrencyCode!;
+                packageInfo.Weight = packageChanges.Weight!;
+                packageInfo.BoxCode = packageChanges.BoxCode!;
+                packageInfo.ModifiedUserId = AuthorizedUserId;
+                packageInfo.ModifiedDateTime = DevCode.GetServerDateTime();
+                _db.Entry(packageInfo).State = EntityState.Modified;
                 await _db.SaveChangesAsync();
             }
             else
             {
-                package.DelFlag = 1;
-                _db.Entry(package).State = EntityState.Modified;
+                packageInfo.DelFlag = 1;
+                _db.Entry(packageInfo).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+
+                foreach(var item in packages)
+                {
+                    item.DelFlag = 1;
+                    _db.Entry(item).State = EntityState.Modified;
+                }
                 await _db.SaveChangesAsync();
             }
 
@@ -143,7 +161,8 @@ public class ApproveReqPackageChangeService : AuthorizationService
 
             TblPackageInfo? package = await _db.TblPackageInfos
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId);
+                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId &&
+                                          x.DelFlag == 0);
             if (package is null)
             {
                 model = Result<ReqPackageChangeModel>.Error(JsonResource.WHE083);

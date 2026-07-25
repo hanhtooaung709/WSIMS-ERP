@@ -15,6 +15,7 @@ public class ReqPackageChangeModel
     public string? Price { get; set; }
     public string? CurrencyCode { get; set; }
     public string? Weight { get; set; }
+    public string? ChangesType { get; set; }
     public string? BoxCode { get; set; }
     public string? Status { get; set; }
 }

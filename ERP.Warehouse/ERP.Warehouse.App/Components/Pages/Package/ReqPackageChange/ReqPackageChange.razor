@@ -194,6 +194,12 @@
                     </EditTemplate>
                 </PropertyColumn>
 
+                <TemplateColumn Title="Changes Type" HeaderStyle="min-width: 100px;">
+                    <CellTemplate>
+                        <MudText>@context.Item.ChangesType</MudText>
+                    </CellTemplate>
+                </TemplateColumn>
+
                 <TemplateColumn Title="Status" HeaderStyle="min-width: 100px;">
                     <CellTemplate>
                         <MudText Class="@GetBadgeClass(context.Item.Status!)">@context.Item.Status</MudText>

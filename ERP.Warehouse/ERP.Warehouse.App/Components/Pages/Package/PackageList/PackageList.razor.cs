@@ -72,6 +72,7 @@ public partial class PackageList
                 return;
             }
 
+            selectedItem = null;
             _model = result.Data!.list!;
             StateHasChanged();
         }
@@ -149,6 +150,7 @@ public partial class PackageList
             #endregion
 
             _reqModel = new();
+            selectedItem = null;
             await List();
         }
 
