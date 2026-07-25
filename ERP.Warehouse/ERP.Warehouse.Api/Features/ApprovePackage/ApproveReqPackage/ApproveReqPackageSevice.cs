@@ -133,6 +133,8 @@ public class ApproveReqPackageSevice : AuthorizationService
             await _db.TblPackages.AddAsync(item2);
             await _db.SaveChangesAsync();
 
+            model = Result<ReqPackageModel>.Success(JsonResource.WHS089);
+
             #endregion
         }
         catch (Exception ex)
@@ -140,6 +142,55 @@ public class ApproveReqPackageSevice : AuthorizationService
             return Result<ReqPackageModel>.Error(ex);
         }
 
+        return model;
+    }
+
+    public async Task<Result<ReqPackageModel>> Reject(ReqPackageEditModel reqModel)
+    {
+        var model = new Result<ReqPackageModel>();
+        try
+        {
+            #region Check ReqPackage
+
+            var reqPackage = await _db.TblReqPackageInfos
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ReqPackageInfoId == reqModel.ReqPackageId);
+            if (reqPackage is null)
+            {
+                model = Result<ReqPackageModel>.Error(JsonResource.WHE072);
+                return model;
+            }
+
+            bool package = await _db.TblReqPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.ReqPackageInfoId == reqModel.ReqPackageId &&
+                               x.Status != EnumRequestedStatus.Pending.ToString());
+            if (package)
+            {
+                model = Result<ReqPackageModel>.Error(JsonResource.WHE073);
+                return model;
+            }
+
+
+            #endregion
+
+            #region Prepare Data
+
+            reqPackage!.Status = EnumRequestedStatus.Rejected.ToString();
+            reqPackage.ApprovedUserId = AuthorizedUserId;
+            reqPackage.ApprovedDateTime = DevCode.GetServerDateTime();
+            reqPackage.RejectReason = reqModel.RejectReason;
+            _db.Entry(reqPackage).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+
+            model = Result<ReqPackageModel>.Success(JsonResource.WHS090);
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<ReqPackageModel>.Error(ex);
+        }
         return model;
     }
 
