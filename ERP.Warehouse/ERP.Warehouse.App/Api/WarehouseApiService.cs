@@ -11,6 +11,7 @@ using ERP.Warehouse.Models.Models.Branch;
 using ERP.Warehouse.Models.Models.Currency;
 using ERP.Warehouse.Models.Models.Package.PackageList;
 using ERP.Warehouse.Models.Models.Package.ReqPackage;
+using ERP.Warehouse.Models.Models.Package.ReqPackageChange;
 using ERP.Warehouse.Models.Models.Product.ProductList;
 using ERP.Warehouse.Models.Models.Product.ReqProduct;
 using ERP.Warehouse.Models.Models.Product.ReqProductChanges;
@@ -381,6 +382,30 @@ public class WarehouseApiService
     public async Task<Result<List<BoxResponseModel>>> GetBox()
        => await _httpClientService.ExecuteAsync<object, List<BoxResponseModel>>
        (ReqPackageEndpoints.GetBox, null!);
+
+    #endregion
+
+    #region ReqPackageChanfe
+
+    public async Task<Result<ReqPackageChangeRepModel>> Get(ReqPackageChangeReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<ReqPackageChangeReqModel, ReqPackageChangeRepModel>
+        (ReqPackageChangeEndpoints.Get, reqModel);
+
+    public async Task<Result<ReqPackageChangeModel>> Edit(ReqPackageChangeEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqPackageChangeEditModel, ReqPackageChangeModel>
+       (ReqPackageChangeEndpoints.Edit, reqModel);
+
+    public async Task<Result<ReqPackageChangeModel>> Update(ReqPackageChangeReqModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqPackageChangeReqModel, ReqPackageChangeModel>
+       (ReqPackageChangeEndpoints.Update, reqModel);
+
+    public async Task<Result<ReqPackageChangeModel>> Delete(ReqPackageChangeEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqPackageChangeEditModel, ReqPackageChangeModel>
+       (ReqPackageChangeEndpoints.Delete, reqModel);
+
+    public async Task<Result<ReqPackageChangeDetailModel>> Details(ReqPackageChangeEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<ReqPackageChangeEditModel, ReqPackageChangeDetailModel>
+       (ReqPackageChangeEndpoints.Details, reqModel);
 
     #endregion
 }
