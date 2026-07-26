@@ -6,7 +6,7 @@ public class PackageReqModel
     public string? PackageName { get; set; }
     public string? PackageInfoCode { get; set; }
     public string? BranchCode { get; set; }
-    public string? Quanity { get; set; }
+    public int Quanity { get; set; }
     public string? ProductCode { get; set; }
     public string? Price { get; set; }
     public string? CurrencyCode { get; set; }

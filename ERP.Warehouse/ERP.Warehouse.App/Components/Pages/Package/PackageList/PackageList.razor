@@ -173,13 +173,7 @@
                     <EditTemplate>
                         @if (_formType == EnumFormType.Create)
                         {
-                        <MudTextField @bind-Value="_reqModel.Quanity"
-                                      Label="Quanity"
-                                      Margin="Margin.Dense"
-                                      Style="width: 100%; min-width: 500px;"
-                                      Variant="MudBlazor.Variant.Outlined"
-                                      Required="true"
-                                      RequiredError="Quanity is required!" />                            
+                            <MudNumericField @bind-Value="_reqModel.Quanity" Label="Quanity" Variant="MudBlazor.Variant.Outlined" Min="0" />
                         }
                     </EditTemplate>
                 </PropertyColumn>

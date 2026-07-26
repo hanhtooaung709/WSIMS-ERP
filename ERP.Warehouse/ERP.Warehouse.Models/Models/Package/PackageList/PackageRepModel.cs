@@ -15,7 +15,7 @@ public class PackageModel
     public string? CurrencyCode { get; set; }
     public string? Weight { get; set; }
     public string? BoxCode { get; set; }
-    public string? Quanity { get; set; }
+    public int Quanity { get; set; }
     public string? BranchCode { get; set; }
     public string? ImagePath { get; set; }
 }
