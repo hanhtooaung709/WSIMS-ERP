@@ -201,7 +201,7 @@ public partial class PackageList
             _reqModel.PackageName = result.Data.PackageName;
             _reqModel.PackageInfoCode = result.Data.PackageInfoCode;
             _reqModel.BranchCode = result.Data.BranchCode;
-            _reqModel.Quanity = result.Data.Quanity;
+            _reqModel.Quantity = result.Data.Quantity;
             _reqModel.ProductCode = result.Data.ProductCode;
             _reqModel.Price = result.Data.Price;
             _reqModel.CurrencyCode = result.Data.CurrencyCode;
