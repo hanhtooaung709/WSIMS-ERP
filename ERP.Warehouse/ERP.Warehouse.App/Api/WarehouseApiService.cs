@@ -344,6 +344,10 @@ public class WarehouseApiService
        => await _httpClientService.ExecuteAsync<PackageEditModel, PackageDetailModel>
        (PackageEndpoints.Details, reqModel);
 
+    public async Task<Result<PackageModel>> StockModifly(PackageReqModel reqModel)
+       => await _httpClientService.ExecuteAsync<PackageReqModel, PackageModel>
+       (PackageEndpoints.StockModifly, reqModel);
+
     public async Task<Result<List<BranchResponseModel>>> GetOtherBranch()
        => await _httpClientService.ExecuteAsync<object, List<BranchResponseModel>>
        (PackageEndpoints.GetOtherBranch, null!);

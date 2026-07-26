@@ -105,7 +105,7 @@ public partial class PackageList
         {
             #region Create
 
-            if (_reqModel.PackageInfoId.IsNullOrEmpty())
+            if (_reqModel.PackageInfoId.IsNullOrEmpty() && _formType == EnumFormType.Create)
             {
                 bool confirm = await _injectService.ShowCreateDialog();
                 if (!confirm) return;
@@ -128,13 +128,36 @@ public partial class PackageList
 
             #region Update
 
-            else
+            else if (!_reqModel.PackageInfoId.IsNullOrEmpty() && _formType == EnumFormType.Edit)
             {
                 bool confirm = await _injectService.ShowUpdateDialog();
                 if (!confirm) return;
 
                 await _injectService.EnableLoading();
                 var result = await _apiService.Update(_reqModel);
+                await _injectService.DisableLoading();
+
+                if (result.IsError)
+                {
+                    await _injectService.ShowDialog(result);
+                    _reqModel = new();
+                    selectedItem = null;
+                    return;
+                }
+                await _injectService.ShowDialog(result);
+            }
+
+            #endregion
+
+            #region StockModifly
+
+            else if (_formType == EnumFormType.StockModifly)
+            {
+                bool confirm = await _injectService.ShowUpdateDialog();
+                if (!confirm) return;
+
+                await _injectService.EnableLoading();
+                var result = await _apiService.StockModifly(_reqModel);
                 await _injectService.DisableLoading();
 
                 if (result.IsError)

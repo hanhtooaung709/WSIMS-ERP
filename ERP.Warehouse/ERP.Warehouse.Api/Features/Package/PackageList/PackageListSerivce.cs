@@ -315,11 +315,11 @@ public class PackageListSerivce : AuthorizationService
 
             #region Check Duplicate Id
 
-            bool reqUser = await _db.TblReqPackageInfoChanges
+            bool reqPackage = await _db.TblReqPackageInfoChanges
                 .AsNoTracking()
                 .AnyAsync(x => x.PackageInfoId == reqModel.PackageInfoId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
-            if (reqUser)
+            if (reqPackage)
             {
                 model = Result<PackageModel>.Error(JsonResource.WHE093);
                 return model;
@@ -450,11 +450,11 @@ public class PackageListSerivce : AuthorizationService
 
             #region Check Duplicate Id
 
-            bool reqUser = await _db.TblReqPackageInfoChanges
+            bool reqPackage = await _db.TblReqPackageInfoChanges
                 .AsNoTracking()
                 .AnyAsync(x => x.PackageInfoId == reqModel.PackageInfoId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
-            if (reqUser)
+            if (reqPackage)
             {
                 model = Result<PackageModel>.Error(JsonResource.WHE093);
                 return model;
@@ -579,11 +579,22 @@ public class PackageListSerivce : AuthorizationService
 
             #region Check Duplicate Id
 
-            bool reqUser = await _db.TblReqPackages
+            bool reqPackage = await _db.TblReqPackageInfoChanges
                 .AsNoTracking()
-                .AnyAsync(x => x.PackageId == reqModel.PackageInfoId &&
+                .AnyAsync(x => x.PackageInfoCode == reqModel.PackageInfoCode &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
-            if (reqUser)
+            if (reqPackage)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE093);
+                return model;
+            }
+
+            reqPackage = await _db.TblReqPackages
+                .AsNoTracking()
+                .AnyAsync(x => x.PackageId == reqModel.PackageId &&
+                               x.ChangesType == EnumRequestedType.Update.ToString() &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (reqPackage)
             {
                 model = Result<PackageModel>.Error(JsonResource.WHE093);
                 return model;
