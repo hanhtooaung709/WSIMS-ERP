@@ -105,7 +105,7 @@ public partial class PackageList
         {
             #region Create
 
-            if (_reqModel.PackageId.IsNullOrEmpty())
+            if (_reqModel.PackageInfoId.IsNullOrEmpty())
             {
                 bool confirm = await _injectService.ShowCreateDialog();
                 if (!confirm) return;
@@ -174,7 +174,7 @@ public partial class PackageList
     {
         try
         {
-            if (reqModel is null || string.IsNullOrEmpty(reqModel.PackageId))
+            if (reqModel is null || string.IsNullOrEmpty(reqModel.PackageInfoId))
             {
                 _formType = EnumFormType.Create;
                 return;
@@ -184,7 +184,7 @@ public partial class PackageList
             await GetProduct();
             await GetCurrency();
             await GetBox();
-            _edit.PackageId = reqModel.PackageId!;
+            _edit.PackageInfoId = reqModel.PackageInfoId!;
             _edit.PackageInfoCode = reqModel.PackageInfoCode!;
 
             await _injectService.EnableLoading();
@@ -197,7 +197,7 @@ public partial class PackageList
                 return;
             }
 
-            _reqModel.PackageId = result.Data.PackageId;
+            _reqModel.PackageInfoId = result.Data.PackageInfoId;
             _reqModel.PackageName = result.Data.PackageName;
             _reqModel.PackageInfoCode = result.Data.PackageInfoCode;
             _reqModel.BranchCode = result.Data.BranchCode;
@@ -247,7 +247,7 @@ public partial class PackageList
                 return;
             }
 
-            _edit.PackageId = reqModel.PackageId!;
+            _edit.PackageInfoId = reqModel.PackageInfoId!;
 
             await _injectService.EnableLoading();
             var result = await _apiService.Delete(_edit);
@@ -278,7 +278,7 @@ public partial class PackageList
     {
         try
         {
-            _edit.PackageId = reqModel.PackageId!;
+            _edit.PackageInfoId = reqModel.PackageInfoId!;
 
             await _injectService.EnableLoading();
             var result = await _apiService.Details(_edit);

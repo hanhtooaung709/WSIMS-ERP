@@ -68,6 +68,22 @@ public class PackageListController : BaseController
         return await Execute(result);
     }
 
+    #endregion
+
+    #region StockModifly/StockTransfere
+
+    [HttpPost]
+    [Route("StockModifly")]
+    public async Task<IActionResult> StockModifly(PackageReqModel reqModel)
+    {
+        var result = await _packageListSerivce.StockModifly(reqModel);
+        return await Execute(result);
+    }
+
+    #endregion
+
+    #region Get Other Branch
+
     [HttpPost]
     [Route("GetOtherBranch")]
     public async Task<IActionResult> GetOtherBranch()

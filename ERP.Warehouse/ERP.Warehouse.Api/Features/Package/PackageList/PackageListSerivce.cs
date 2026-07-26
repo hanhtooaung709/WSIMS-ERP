@@ -199,7 +199,7 @@ public class PackageListSerivce : AuthorizationService
 
             var packageInfo = await _db.TblPackageInfos
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId &&
+                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageInfoId &&
                                           x.DelFlag == 0);
             if (packageInfo is null)
             {
@@ -260,7 +260,7 @@ public class PackageListSerivce : AuthorizationService
 
             var response = new PackageModel
             {
-                PackageId = packageInfo.PackageInfoId,
+                PackageInfoId = packageInfo.PackageInfoId,
                 PackageName = packageInfo.PackageName,
                 PackageInfoCode = packageInfo.PackageInfoCode,
                 Quantity = packageQut,
@@ -291,7 +291,7 @@ public class PackageListSerivce : AuthorizationService
 
             var packageInfo = await _db.TblPackageInfos
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId &&
+                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageInfoId &&
                                           x.DelFlag == 0);
             if (packageInfo is null)
             {
@@ -305,7 +305,7 @@ public class PackageListSerivce : AuthorizationService
 
             bool reqUser = await _db.TblReqPackageInfoChanges
                 .AsNoTracking()
-                .AnyAsync(x => x.PackageInfoId == reqModel.PackageId &&
+                .AnyAsync(x => x.PackageInfoId == reqModel.PackageInfoId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (reqUser)
             {
@@ -320,7 +320,7 @@ public class PackageListSerivce : AuthorizationService
             bool name = await _db.TblPackageInfos
                 .AsNoTracking()
                 .AnyAsync(x => x.PackageName.Trim().ToLower() == reqModel.PackageName!.Trim().ToLower() &&
-                          x.PackageInfoId != reqModel.PackageId);
+                          x.PackageInfoId != reqModel.PackageInfoId);
             if (name)
             {
                 model = Result<PackageModel>.Error(JsonResource.WHE074);
@@ -355,7 +355,7 @@ public class PackageListSerivce : AuthorizationService
                 .AsNoTracking()
                 .AnyAsync(x => x.ProductCode.Trim().ToLower() == reqModel.ProductCode!.Trim().ToLower() &&
                                x.BoxCode.Trim().ToLower() == reqModel.BoxCode!.Trim().ToLower() &&
-                               x.PackageInfoId != reqModel.PackageId);
+                               x.PackageInfoId != reqModel.PackageInfoId);
             if (item)
             {
                 model = Result<PackageModel>.Error(JsonResource.WHE080);
@@ -391,7 +391,7 @@ public class PackageListSerivce : AuthorizationService
             TblReqPackageInfoChange result = new TblReqPackageInfoChange
             {
                 ReqPackageInfoChangesId = DevCode.GenerateUlid(),
-                PackageInfoId = reqModel.PackageId!,
+                PackageInfoId = reqModel.PackageInfoId!,
                 PackageName = reqModel.PackageName!,
                 PackageInfoCode = reqModel.PackageInfoCode!,
                 ProductCode = reqModel.ProductCode!,
@@ -426,7 +426,7 @@ public class PackageListSerivce : AuthorizationService
 
             var packageInfo = await _db.TblPackageInfos
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId &&
+                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageInfoId &&
                                           x.DelFlag == 0);
             if (packageInfo is null)
             {
@@ -440,7 +440,7 @@ public class PackageListSerivce : AuthorizationService
 
             bool reqUser = await _db.TblReqPackageInfoChanges
                 .AsNoTracking()
-                .AnyAsync(x => x.PackageInfoId == reqModel.PackageId &&
+                .AnyAsync(x => x.PackageInfoId == reqModel.PackageInfoId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
             if (reqUser)
             {
@@ -489,7 +489,7 @@ public class PackageListSerivce : AuthorizationService
             var detail = await _dapperService.GetDetailAsync<PackageDetailInfoModel>(
                SqlQueries.Sp_GetPackageDetail, new
                {
-                   PackageId = reqModel.PackageId
+                   PackageId = reqModel.PackageInfoId
                }, CommandType.StoredProcedure);
 
             List<DynamicReportModel> packageInfo = new List<DynamicReportModel>();
@@ -528,11 +528,24 @@ public class PackageListSerivce : AuthorizationService
         var model = new Result<PackageModel>();
         try
         {
+            #region Check User
+
+            var user = await _db.TblWarehouseUsers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.WarehouseUserId == AuthorizedUserId);
+            if (user is null)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE001);
+                return model;
+            }
+
+            #endregion
+
             #region Check Package
 
             var packageInfo = await _db.TblPackageInfos
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId &&
+                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageInfoId &&
                                           x.DelFlag == 0);
             if (packageInfo is null)
             {
@@ -540,13 +553,27 @@ public class PackageListSerivce : AuthorizationService
                 return model;
             }
 
-            var package = _db.TblPackages
+            var package = await _db.TblPackages
                 .AsNoTracking()
-                .Where(x => x.PackageInfoCode == reqModel.PackageInfoCode &&
-                            x.DelFlag == 0);
+                .FirstOrDefaultAsync(x => x.PackageId == reqModel.PackageId &&
+                                          x.DelFlag == 0);
             if (package is null)
             {
                 model = Result<PackageModel>.Error(JsonResource.WHE083);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate Id
+
+            bool reqUser = await _db.TblReqPackages
+                .AsNoTracking()
+                .AnyAsync(x => x.PackageId == reqModel.PackageInfoId &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (reqUser)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE093);
                 return model;
             }
 
@@ -557,9 +584,10 @@ public class PackageListSerivce : AuthorizationService
             TblReqPackage result = new TblReqPackage
             {
                 ReqPackageId = DevCode.GenerateUlid(),
-                PackageInfoCode = reqModel.PackageId!,
+                PackageId = package.PackageId,
+                PackageInfoCode = reqModel.PackageInfoId!,
                 Quantity = reqModel.Quantity,
-                BranchCode = reqModel.BranchCode!,
+                BranchCode = user.BranchCode!,
                 ChangesType = EnumRequestedType.Update.ToString(),
                 Status = EnumRequestedStatus.Pending.ToString(),
                 ReqUserId = AuthorizedUserId,
