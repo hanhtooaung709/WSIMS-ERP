@@ -346,7 +346,7 @@ public class WarehouseApiService
 
     public async Task<Result<List<BranchResponseModel>>> GetOtherBranch()
        => await _httpClientService.ExecuteAsync<object, List<BranchResponseModel>>
-       (PackageEndpoints.GetBranch, null!);
+       (PackageEndpoints.GetOtherBranch, null!);
 
     #endregion
 

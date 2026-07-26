@@ -19,6 +19,11 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// Package is already Requested!
+    /// </summary>
+    public static readonly string WHE093 = "WH#E093";
+
+    /// <summary>
     /// Requested Package Change is successfully Reject.
     /// </summary>
     public static readonly string WHS092 = "WH#S092";

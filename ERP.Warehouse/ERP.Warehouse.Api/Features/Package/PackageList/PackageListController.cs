@@ -69,10 +69,10 @@ public class PackageListController : BaseController
     }
 
     [HttpPost]
-    [Route("GetBranch")]
-    public async Task<IActionResult> GetBranch()
+    [Route("GetOtherBranch")]
+    public async Task<IActionResult> GetOtherBranch()
     {
-        var result = await _packageListSerivce.GetBranch();
+        var result = await _packageListSerivce.GetOtherBranch();
         return await Execute(result);
     }
 

@@ -189,6 +189,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.RejectReason).HasMaxLength(100);
             entity.Property(e => e.ReqDateTime).HasColumnType("timestamp without time zone");
             entity.Property(e => e.ReqUserId).HasMaxLength(50);
+            entity.Property(e => e.Status).HasMaxLength(10);
         });
 
         modelBuilder.Entity<TblReqPackageInfo>(entity =>

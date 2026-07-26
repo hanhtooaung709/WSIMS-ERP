@@ -124,7 +124,7 @@ public class ApproveReqPackageSevice : AuthorizationService
             {
                 PackageId = DevCode.GenerateUlid(),
                 PackageInfoCode = reqPackage.PackageInfoCode,
-                Quanity = reqPackage.Quanity,
+                Quantity = reqPackage.Quanity,
                 BranchCode = reqPackage.BranchCode,
                 CreatedUserId = AuthorizedUserId,
                 CreatedDateTime = DevCode.GetServerDateTime(),

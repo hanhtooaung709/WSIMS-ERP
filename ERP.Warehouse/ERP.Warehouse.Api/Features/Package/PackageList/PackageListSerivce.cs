@@ -13,6 +13,7 @@ using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
 using ERP.Warehouse.Models.Models.Package.ReqPackage;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
+using ERP.Warehouse.Models.Models.Product.ProductList;
 
 namespace ERP.Warehouse.Api.Features.Package.PackageList;
 
@@ -181,36 +182,28 @@ public class PackageListSerivce : AuthorizationService
         var model = new Result<PackageModel>();
         try
         {
-            #region Check Package
+            #region Check User
 
-            var packageInfo = await _db.TblPackageInfos
+            var user = await _db.TblWarehouseUsers
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId);
-            if (packageInfo is null)
+                .FirstOrDefaultAsync(x => x.WarehouseUserId == AuthorizedUserId);
+            if (user is null)
             {
-                model = Result<PackageModel>.Error(JsonResource.WHE083);
-                return model;
-            }
-
-            var package = await _db.TblPackages
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.PackageInfoCode == reqModel.PackageInfoCode);
-            if (package is null)
-            {
-                model = Result<PackageModel>.Error(JsonResource.WHE083);
+                model = Result<PackageModel>.Error(JsonResource.WHE001);
                 return model;
             }
 
             #endregion
 
-            #region Check Branch
+            #region Check Package
 
-            var branch = await _db.TblBranches
-            .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.BranchCode == package.BranchCode && x.DelFlag == 0);
-            if (branch is null)
+            var packageInfo = await _db.TblPackageInfos
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId &&
+                                          x.DelFlag == 0);
+            if (packageInfo is null)
             {
-                model = Result<PackageModel>.Error(JsonResource.WHE016);
+                model = Result<PackageModel>.Error(JsonResource.WHE083);
                 return model;
             }
 
@@ -257,13 +250,20 @@ public class PackageListSerivce : AuthorizationService
 
             #region Prepare Data
 
+            int packageQut = await _db.TblPackages
+                .AsNoTracking()
+                .Where(x => x.PackageInfoCode == reqModel.PackageInfoCode &&
+                            x.BranchCode == user.BranchCode &&
+                            x.DelFlag == 0)
+                .Select(x => x.Quantity)
+                .FirstOrDefaultAsync();
+
             var response = new PackageModel
             {
                 PackageId = packageInfo.PackageInfoId,
                 PackageName = packageInfo.PackageName,
                 PackageInfoCode = packageInfo.PackageInfoCode,
-                BranchCode = package.BranchCode,
-                Quanity = package.Quanity,
+                Quanity = packageQut,
                 ProductCode = packageInfo.ProductCode,
                 Price = packageInfo.Price.ToString(),
                 CurrencyCode = packageInfo.CurrencyCode,
@@ -291,10 +291,25 @@ public class PackageListSerivce : AuthorizationService
 
             var packageInfo = await _db.TblPackageInfos
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId);
+                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId &&
+                                          x.DelFlag == 0);
             if (packageInfo is null)
             {
                 model = Result<PackageModel>.Error(JsonResource.WHE083);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate Id
+
+            bool reqUser = await _db.TblReqPackageInfoChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.PackageInfoId == reqModel.PackageId &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (reqUser)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE093);
                 return model;
             }
 
@@ -411,7 +426,8 @@ public class PackageListSerivce : AuthorizationService
 
             var packageInfo = await _db.TblPackageInfos
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId);
+                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId &&
+                                          x.DelFlag == 0);
             if (packageInfo is null)
             {
                 model = Result<PackageModel>.Error(JsonResource.WHE083);
@@ -420,24 +436,15 @@ public class PackageListSerivce : AuthorizationService
 
             #endregion
 
-            #region Check Duplicate
+            #region Check Duplicate Id
 
-            bool package = await _db.TblReqPackageInfos
+            bool reqUser = await _db.TblReqPackageInfoChanges
                 .AsNoTracking()
                 .AnyAsync(x => x.PackageInfoId == reqModel.PackageId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
-            if (package)
+            if (reqUser)
             {
-                model = Result<PackageModel>.Error(JsonResource.WHE075);
-            }
-
-            package = await _db.TblReqPackageInfoChanges
-                    .AsNoTracking()
-                    .AnyAsync(x => x.PackageInfoId == reqModel.PackageId &&
-                                   x.Status == EnumRequestedStatus.Pending.ToString());
-            if (package)
-            {
-                model = Result<PackageModel>.Error(JsonResource.WHE076);
+                model = Result<PackageModel>.Error(JsonResource.WHE093);
                 return model;
             }
 
@@ -514,9 +521,68 @@ public class PackageListSerivce : AuthorizationService
 
     #endregion
 
+    #region StockModifly/StockTransfer
+
+    public async Task<Result<PackageModel>> StockModifly(PackageReqModel reqModel)
+    {
+        var model = new Result<PackageModel>();
+        try
+        {
+            #region Check Package
+
+            var packageInfo = await _db.TblPackageInfos
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageId &&
+                                          x.DelFlag == 0);
+            if (packageInfo is null)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE083);
+                return model;
+            }
+
+            var package = _db.TblPackages
+                .AsNoTracking()
+                .Where(x => x.PackageInfoCode == reqModel.PackageInfoCode &&
+                            x.DelFlag == 0);
+            if (package is null)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE083);
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            TblReqPackage result = new TblReqPackage
+            {
+                ReqPackageId = DevCode.GenerateUlid(),
+                PackageInfoCode = reqModel.PackageId!,
+                Quantity = reqModel.Quanity,
+                BranchCode = reqModel.BranchCode!,
+                ChangesType = EnumRequestedType.Update.ToString(),
+                Status = EnumRequestedStatus.Pending.ToString(),
+                ReqUserId = AuthorizedUserId,
+                ReqDateTime = DevCode.GetServerDateTime()
+            };
+            await _db.TblReqPackages.AddAsync(result);
+            await _db.SaveChangesAsync();
+            model = Result<PackageModel>.Success(JsonResource.WHS014);
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<PackageModel>.Error(ex);
+        }
+        return model;
+    }
+
+    #endregion
+
     #region Get Other Branch
 
-    public async Task<Result<List<BranchResponseModel>>> GetBranch()
+    public async Task<Result<List<BranchResponseModel>>> GetOtherBranch()
     {
         try
         {

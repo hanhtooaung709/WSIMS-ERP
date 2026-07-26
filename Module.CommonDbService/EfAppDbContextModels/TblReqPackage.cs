@@ -11,13 +11,13 @@ public partial class TblReqPackage
 
     public string PackageInfoCode { get; set; } = null!;
 
-    public int Quanity { get; set; }
+    public int Quantity { get; set; }
 
     public string BranchCode { get; set; } = null!;
 
     public string ChangesType { get; set; } = null!;
 
-    public byte[] Status { get; set; } = null!;
+    public string Status { get; set; } = null!;
 
     public string ReqUserId { get; set; } = null!;
 
