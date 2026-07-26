@@ -170,6 +170,15 @@ public partial class PackageList
         }
     }
 
+    private async Task OnStockModifly()
+    {
+        if (selectedItem != null && _elementGrid != null)
+        {
+            await _elementGrid.SetEditingItemAsync(selectedItem);
+        }
+        _formType = EnumFormType.StockModifly;
+    }
+
     private async Task Edit(PackageModel reqModel)
     {
         try
@@ -185,6 +194,7 @@ public partial class PackageList
             await GetCurrency();
             await GetBox();
             _edit.PackageInfoId = reqModel.PackageInfoId!;
+            _edit.PackageId = reqModel.PackageId!;
             _edit.PackageInfoCode = reqModel.PackageInfoCode!;
 
             await _injectService.EnableLoading();
@@ -198,6 +208,7 @@ public partial class PackageList
             }
 
             _reqModel.PackageInfoId = result.Data.PackageInfoId;
+            _reqModel.PackageId = result.Data.PackageId;
             _reqModel.PackageName = result.Data.PackageName;
             _reqModel.PackageInfoCode = result.Data.PackageInfoCode;
             _reqModel.BranchCode = result.Data.BranchCode;

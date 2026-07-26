@@ -14,6 +14,7 @@ using WSIMS_ERP.Shared.Services;
 using ERP.Warehouse.Models.Models.Package.ReqPackage;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 using ERP.Warehouse.Models.Models.Product.ProductList;
+using System.IO.Packaging;
 
 namespace ERP.Warehouse.Api.Features.Package.PackageList;
 
@@ -207,6 +208,16 @@ public class PackageListSerivce : AuthorizationService
                 return model;
             }
 
+            var package = await _db.TblPackages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.PackageId == reqModel.PackageId &&
+                                          x.DelFlag == 0);
+            if (packageInfo is null)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE083);
+                return model;
+            }
+
             #endregion
 
             #region Check Product
@@ -261,6 +272,7 @@ public class PackageListSerivce : AuthorizationService
             var response = new PackageModel
             {
                 PackageInfoId = packageInfo.PackageInfoId,
+                PackageId = package.PackageId!,
                 PackageName = packageInfo.PackageName,
                 PackageInfoCode = packageInfo.PackageInfoCode,
                 Quantity = packageQut,
@@ -584,8 +596,8 @@ public class PackageListSerivce : AuthorizationService
             TblReqPackage result = new TblReqPackage
             {
                 ReqPackageId = DevCode.GenerateUlid(),
-                PackageId = package.PackageId,
-                PackageInfoCode = reqModel.PackageInfoId!,
+                PackageId = reqModel.PackageId!,
+                PackageInfoCode = reqModel.PackageInfoCode!,
                 Quantity = reqModel.Quantity,
                 BranchCode = user.BranchCode!,
                 ChangesType = EnumRequestedType.Update.ToString(),

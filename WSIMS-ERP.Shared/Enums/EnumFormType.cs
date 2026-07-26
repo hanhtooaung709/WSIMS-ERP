@@ -13,8 +13,8 @@ public enum EnumFormType
     [Description("Detail")]
     Detail,
     Delete,
-    [Description("NormalChange")]
-    NormalChange,
-    [Description("ForceChange")]
-    ForceChange,
+    [Description("StockModifly")]
+    StockModifly,
+    [Description("StockTransfer")]
+    StockTransfer,
 }
