@@ -48,7 +48,7 @@ public partial class ReqPackage
         }
     }
 
-    #region Get/Create/Edit/Update/Delete/Details
+    #region Get/Edit/Update/Delete/Details
 
     private async Task List()
     {

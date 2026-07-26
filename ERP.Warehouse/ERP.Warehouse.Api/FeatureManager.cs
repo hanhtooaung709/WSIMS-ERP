@@ -13,6 +13,7 @@ using ERP.Warehouse.Api.Features.Product.ProductList;
 using ERP.Warehouse.Api.Features.Product.ReqProduct;
 using ERP.Warehouse.Api.Features.Product.ReqProductChanges;
 using ERP.Warehouse.Api.Features.SignIn;
+using ERP.Warehouse.Api.Features.Stock;
 using ERP.Warehouse.Api.Features.WarehouseUser.ReqWarehouseUser;
 using ERP.Warehouse.Api.Features.WarehouseUser.ReqWarehouseUserChanges;
 using ERP.Warehouse.Api.Features.WarehouseUser.WarehouseUserList;
@@ -82,6 +83,7 @@ public static class FeatureManager
         builder.Services.AddScoped<ReqPackageChangeService>();
         builder.Services.AddScoped<ApproveReqPackageSevice>();
         builder.Services.AddScoped<ApproveReqPackageChangeService>();
+        builder.Services.AddScoped<ReqStockService>();
         return builder;
     }
 }

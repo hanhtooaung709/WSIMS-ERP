@@ -40,7 +40,7 @@ public partial class ReqWarehouseUser
         }
     }
 
-    #region Get/Create/Edit/Update/Delete/Details
+    #region Get/Edit/Update/Delete/Details
 
     private async Task List()
     {

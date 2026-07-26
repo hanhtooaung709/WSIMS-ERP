@@ -31,7 +31,7 @@ public class ReqProductService : AuthorizationService
         _setting = setting;
     }
 
-    #region Get/Create/Edit/Update/Delete/Details
+    #region Get/Edit/Update/Delete/Details
 
     public async Task<Result<ReqProductRepModel>> Get(ReqProductReqModel reqModel)
     {

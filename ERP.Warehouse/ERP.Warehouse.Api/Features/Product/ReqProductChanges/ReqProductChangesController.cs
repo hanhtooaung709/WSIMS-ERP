@@ -18,7 +18,7 @@ public class ReqProductChangesController : BaseController
         _reqProductChangesService = reqProductChangesService;
     }
 
-    #region Get/Create/Edit/Update/Delete/Details
+    #region Get/Edit/Update/Delete/Details
 
     [HttpPost]
     [Route("Get")]
