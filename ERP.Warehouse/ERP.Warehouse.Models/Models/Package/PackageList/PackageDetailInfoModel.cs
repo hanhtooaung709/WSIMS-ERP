@@ -4,7 +4,7 @@ public class PackageDetailInfoModel
 {
     public string? PackageName { get; set; }
     public string? PackageInfoCode { get; set; }
-    public string? Quanity { get; set; }
+    public string? Quantity { get; set; }
     public string? ProductName { get; set; }
     public string? Price { get; set; }
     public string? CurrencyCode { get; set; }

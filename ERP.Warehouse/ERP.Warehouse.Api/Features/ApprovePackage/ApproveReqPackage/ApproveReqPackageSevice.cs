@@ -124,7 +124,7 @@ public class ApproveReqPackageSevice : AuthorizationService
             {
                 PackageId = DevCode.GenerateUlid(),
                 PackageInfoCode = reqPackage.PackageInfoCode,
-                Quantity = reqPackage.Quanity,
+                Quantity = reqPackage.Quantity,
                 BranchCode = reqPackage.BranchCode,
                 CreatedUserId = AuthorizedUserId,
                 CreatedDateTime = DevCode.GetServerDateTime(),
@@ -210,7 +210,7 @@ public class ApproveReqPackageSevice : AuthorizationService
             packageInfo.Add("Product Name", detail.ProductName!);
             packageInfo.Add("PackageInfo Code", detail.PackageInfoCode!);
             packageInfo.Add("Branch Name", detail.BranchName!);
-            packageInfo.Add("Quanity", detail.Quanity!);
+            packageInfo.Add("Quanity", detail.Quantity!);
             packageInfo.Add("Price", detail.Price!);
             packageInfo.Add("Currency Code", detail.CurrencyCode!);
             packageInfo.Add("Weight", detail.Weight!);

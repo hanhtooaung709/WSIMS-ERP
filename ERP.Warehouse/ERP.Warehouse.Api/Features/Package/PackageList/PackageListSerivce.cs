@@ -152,7 +152,7 @@ public class PackageListSerivce : AuthorizationService
                 ReqPackageInfoId = DevCode.GenerateUlid(),
                 PackageName = reqModel.PackageName!,
                 PackageInfoCode = reqModel.PackageInfoCode!,
-                Quanity = reqModel.Quanity,
+                Quantity = reqModel.Quanity,
                 BranchCode = user.BranchCode!,
                 ProductCode = reqModel.ProductCode!,
                 Price = reqModel.Price!.ToInt32(),
@@ -496,7 +496,7 @@ public class PackageListSerivce : AuthorizationService
             packageInfo.Add("Package Name", detail.PackageName!);
             packageInfo.Add("Product Name", detail.ProductName!);
             packageInfo.Add("PackageInfo Code", detail.PackageInfoCode!);
-            packageInfo.Add("Quanity", detail.Quanity!);
+            packageInfo.Add("Quantity", detail.Quantity!);
             packageInfo.Add("Price", detail.Price!);
             packageInfo.Add("Currency Code", detail.CurrencyCode!);
             packageInfo.Add("Weight", detail.Weight!);

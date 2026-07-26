@@ -134,7 +134,7 @@ public class ReqPackageService : AuthorizationService
                 PackageName = reqPackage.PackageName,
                 PackageInfoCode = reqPackage.PackageInfoCode,
                 BranchCode = reqPackage.BranchCode,
-                Quanity = reqPackage.Quanity,
+                Quanity = reqPackage.Quantity,
                 ProductCode = reqPackage.ProductCode,
                 Price = reqPackage.Price.ToString(),
                 CurrencyCode = reqPackage.CurrencyCode,
@@ -256,7 +256,7 @@ public class ReqPackageService : AuthorizationService
 
             reqPackage.PackageName = reqModel.PackageName!;
             reqPackage.PackageInfoCode = reqModel.PackageInfoCode!;
-            reqPackage.Quanity = reqModel.Quanity;
+            reqPackage.Quantity = reqModel.Quanity;
             reqPackage.BranchCode = reqModel.BranchCode!;
             reqPackage.ProductCode = reqModel.ProductCode!;
             reqPackage.Price = reqModel.Price!.ToInt32();
@@ -343,7 +343,7 @@ public class ReqPackageService : AuthorizationService
             packageInfo.Add("Product Name", detail.ProductName!);
             packageInfo.Add("PackageInfo Code", detail.PackageInfoCode!);
             packageInfo.Add("Branch Name", detail.BranchName!);
-            packageInfo.Add("Quanity", detail.Quanity!);
+            packageInfo.Add("Quanity", detail.Quantity!);
             packageInfo.Add("Price", detail.Price!);
             packageInfo.Add("Currency Code", detail.CurrencyCode!);
             packageInfo.Add("Weight", detail.Weight!);

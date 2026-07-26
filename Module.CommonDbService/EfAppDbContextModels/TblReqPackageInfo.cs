@@ -11,7 +11,7 @@ public partial class TblReqPackageInfo
 
     public string PackageInfoCode { get; set; } = null!;
 
-    public int Quanity { get; set; }
+    public int Quantity { get; set; }
 
     public string BranchCode { get; set; } = null!;
 
