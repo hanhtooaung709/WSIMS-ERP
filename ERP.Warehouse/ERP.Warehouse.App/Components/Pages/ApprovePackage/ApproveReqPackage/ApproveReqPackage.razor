@@ -55,7 +55,12 @@
     </MudPaper>
 
 
-    <MudTable Items="@_model" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+    <MudTable Items="@_model"
+              Hover="true"
+              Breakpoint="Breakpoint.None"
+              HorizontalScrollbar="true"
+              LoadingProgressColor="Color.Info"
+              Class="custom-scrolling-table">
         <HeaderContent>
             <MudTh>No</MudTh>
             <MudTh>Package Name</MudTh>
@@ -85,7 +90,7 @@
                 <MudText Class="@GetBadgeClass(context.Status!)">@context.Status</MudText>
             </MudTd>
             <MudTd DataLabel="Actions">
-                <div style="display: inline-block; white-space: nowrap;">
+                <div style="display: flex; gap: 4px; white-space: nowrap;">
                     @{
                         var _isDisable = context.Status != EnumRequestedStatus.Pending.ToString();
                     }
@@ -195,3 +200,14 @@
         </div>
     </MudPaper>
 }
+
+<style>
+    .custom-scrolling-table .mud-table-container {
+        overflow-x: auto !important;
+    }
+
+    .custom-scrolling-table table {
+        min-width: 1300px;
+        white-space: nowrap;
+    }
+</style>
