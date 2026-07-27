@@ -1,10 +1,12 @@
 ﻿using ERP.Warehouse.Api.Common;
-using ERP.Warehouse.Models.Models.Branch;
+using ERP.Warehouse.Models;
+using WSIMS_ERP.Shared.Models.DynamicModel;
 using ERP.Warehouse.Models.Models.Package.ReqPackageChange;
 using ERP.Warehouse.Models.Models.Product.ProductList;
 using ERP.Warehouse.Models.Models.Stock;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
+using System.Data;
 using System.IO.Packaging;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Enums;
@@ -120,7 +122,7 @@ public class ReqStockService : AuthorizationService
                 .FirstOrDefaultAsync(x => x.ReqPackageId == reqModel.ReqPackageId);
             if (reqStock is null)
             {
-                model = Result<StockModel>.Error(JsonResource.WHE095);
+                model = Result<StockModel>.Error(JsonResource.WHE094);
                 return model;
             }
 
@@ -130,7 +132,7 @@ public class ReqStockService : AuthorizationService
                                           x.Status != EnumRequestedStatus.Pending.ToString());
             if (reqStock is null)
             {
-                model = Result<StockModel>.Error(JsonResource.WHE096);
+                model = Result<StockModel>.Error(JsonResource.WHE095);
                 return model;
             }
 
@@ -154,6 +156,93 @@ public class ReqStockService : AuthorizationService
             return Result<StockModel>.Error(ex);
         }
         return model;
+    }
+
+    public async Task<Result<StockModel>> Delete(StockEditModel reqModel)
+    {
+        var model = new Result<StockModel>();
+        try
+        {
+            #region Check ReqStock
+
+            var reqStock = await _db.TblReqPackages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ReqPackageId == reqModel.ReqPackageId);
+            if (reqStock is null)
+            {
+                model = Result<StockModel>.Error(JsonResource.WHE094);
+                return model;
+            }
+
+            bool stock = await _db.TblReqPackages
+                .AsNoTracking()
+                .AnyAsync(x => x.ReqPackageId == reqModel.ReqPackageId &&
+                                          x.Status != EnumRequestedStatus.Pending.ToString());
+            if (reqStock is null)
+            {
+                model = Result<StockModel>.Error(JsonResource.WHE095);
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            _db.TblReqPackages.Remove(reqStock);
+            var result = _db.SaveChanges();
+            if (result <= 0)
+            {
+                model = Result<StockModel>.Error(JsonResource.WHE096);
+                return model;
+            }
+            model = Result<StockModel>.Success(JsonResource.WHS097);
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<StockModel>.Error(ex);
+        }
+        return model;
+    }
+
+    public async Task<Result<StockDetailModel>> Details(StockEditModel reqModel)
+    {
+        StockDetailModel model = new();
+        try
+        {
+            var detail = await _dapperService.GetDetailAsync<StockDetailInfoModel>(
+                SqlQueries.Sp_GetStockDetail, new
+                {
+                    ReqPackageId = reqModel.ReqPackageId
+                }, CommandType.StoredProcedure);
+
+            List<DynamicReportModel> packageInfo = new List<DynamicReportModel>();
+            packageInfo.Add("Package Name", detail.PackageName!);
+            packageInfo.Add("Product Name", detail.ProductName!);
+            packageInfo.Add("PackageInfo Code", detail.PackageInfoCode!);
+            packageInfo.Add("Price", detail.Price!);
+            packageInfo.Add("Currency Code", detail.CurrencyCode!);
+            packageInfo.Add("Weight", detail.Weight!);
+            packageInfo.Add("Box", detail.Box!);
+            model.Package = packageInfo;
+            model.ItemImagePath = detail.ImagePath;
+
+            List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();
+            makerChecker.Add("Requested User", detail.ReqUser!);
+            makerChecker.Add("Requested DateTime", detail.ReqDateTime!);
+            makerChecker.Add("Approved User", detail.ApprovedUser!.ToDashFromNull());
+            makerChecker.Add("Approved DateTime ", detail.ApprovedDateTime!.ToDashFromNull());
+            makerChecker.Add("Status", detail.Status!);
+            makerChecker.Add("Reject Reason", detail.RejectReason!.ToDashFromNull());
+            model.MakerChecker = makerChecker;
+
+            return Result<StockDetailModel>.Success(model);
+        }
+        catch (Exception ex)
+        {
+            return Result<StockDetailModel>.Error(ex);
+        }
     }
 
     #endregion

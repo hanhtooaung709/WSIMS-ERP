@@ -44,5 +44,21 @@ public class ReqStockController : BaseController
         return await Execute(result);
     }
 
+    [HttpPost]
+    [Route("Delete")]
+    public async Task<IActionResult> Delete(StockEditModel reqModel)
+    {
+        var result = await _reqStockService.Delete(reqModel);
+        return await Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Details")]
+    public async Task<IActionResult> Details(StockEditModel reqModel)
+    {
+        var result = await _reqStockService.Details(reqModel);
+        return await Execute(result);
+    }
+
     #endregion
 }

@@ -40,4 +40,5 @@ public class SqlQueries
     public const string Sp_GetApproveReqPackageChangeList = "Sp_GetApproveReqPackageChangeList";
 
     public const string Sp_GetStockList = "Sp_GetStockList";
+    public const string Sp_GetStockDetail = "Sp_GetStockDetail";
 }

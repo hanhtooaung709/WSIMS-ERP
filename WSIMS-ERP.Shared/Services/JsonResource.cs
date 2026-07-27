@@ -19,12 +19,17 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
-    /// Requseted Stock is not pending status!
+    /// Requsted Stock is successfully Deteted.
+    /// </summary>
+    public static readonly string WHS097 = "WH#S097";
+
+    /// <summary>
+    /// Requsted Stock delete fail!
     /// </summary>
     public static readonly string WHE096 = "WH#E096";
 
     /// <summary>
-    /// Requested Stock does not exist!
+    /// Requseted Stock is not pending status!
     /// </summary>
     public static readonly string WHE095 = "WH#E095";
 
