@@ -6,6 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Components\Pages\Package\PackageList\PackageList.razor.cs~RF21f106.TMP" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="BlazorDownloadFile" Version="2.4.0.2" />
 		<PackageReference Include="Humanizer.Core" Version="2.14.1" />

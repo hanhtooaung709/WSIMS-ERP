@@ -200,6 +200,7 @@ public partial class PackageList
             await _elementGrid.SetEditingItemAsync(selectedItem);
         }
         _formType = EnumFormType.StockModifly;
+        _reqModel.Quantity = 0;
     }
 
     private async Task Edit(PackageModel reqModel)

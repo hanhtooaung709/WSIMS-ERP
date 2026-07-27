@@ -28,5 +28,21 @@ public class ReqStockController : BaseController
         return await Execute(result);
     }
 
+    [HttpPost]
+    [Route("Edit")]
+    public async Task<IActionResult> Edit(StockEditModel reqModel)
+    {
+        var result = await _reqStockService.Edit(reqModel);
+        return await Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Update")]
+    public async Task<IActionResult> Update(StockReqModel reqModel)
+    {
+        var result = await _reqStockService.Update(reqModel);
+        return await Execute(result);
+    }
+
     #endregion
 }

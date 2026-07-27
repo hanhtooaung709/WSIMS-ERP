@@ -19,6 +19,21 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// Requseted Stock is not pending status!
+    /// </summary>
+    public static readonly string WHE096 = "WH#E096";
+
+    /// <summary>
+    /// Requested Stock does not exist!
+    /// </summary>
+    public static readonly string WHE095 = "WH#E095";
+
+    /// <summary>
+    /// Requested Stock does not exist!
+    /// </summary>
+    public static readonly string WHE094 = "WH#E094";
+
+    /// <summary>
     /// Package is already Requested!
     /// </summary>
     public static readonly string WHE093 = "WH#E093";
