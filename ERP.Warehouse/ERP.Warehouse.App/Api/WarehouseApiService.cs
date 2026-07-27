@@ -6,6 +6,7 @@ using ERP.Warehouse.App.Api.Endpoints.Currency;
 using ERP.Warehouse.App.Api.Endpoints.Package;
 using ERP.Warehouse.App.Api.Endpoints.Product;
 using ERP.Warehouse.App.Api.Endpoints.SignIn;
+using ERP.Warehouse.App.Api.Endpoints.Stock;
 using ERP.Warehouse.App.Api.Endpoints.WarehouseUser;
 using ERP.Warehouse.Models.Models.Box;
 using ERP.Warehouse.Models.Models.Branch;
@@ -18,6 +19,7 @@ using ERP.Warehouse.Models.Models.Product.ReqProduct;
 using ERP.Warehouse.Models.Models.Product.ReqProductChanges;
 using ERP.Warehouse.Models.Models.Signin;
 using ERP.Warehouse.Models.Models.Signin.Signin;
+using ERP.Warehouse.Models.Models.Stock;
 using ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUser;
 using ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUserChanges;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
@@ -451,6 +453,30 @@ public class WarehouseApiService
     public async Task<Result<ReqPackageChangeDetailModel>> ApproveReqPackageDetails(ReqPackageChangeEditModel reqModel)
        => await _httpClientService.ExecuteAsync<ReqPackageChangeEditModel, ReqPackageChangeDetailModel>
        (ApproveReqPackageChangeEndpoints.Details, reqModel);
+
+    #endregion
+
+    #region ReqStock
+
+    public async Task<Result<StockRepModel>> Get(StockReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<StockReqModel, StockRepModel>
+        (ReqStockEndpoints.Get, reqModel);
+
+    public async Task<Result<StockModel>> Edit(StockEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<StockEditModel, StockModel>
+       (ReqStockEndpoints.Edit, reqModel);
+
+    public async Task<Result<StockModel>> Update(StockReqModel reqModel)
+       => await _httpClientService.ExecuteAsync<StockReqModel, StockModel>
+       (ReqStockEndpoints.Update, reqModel);
+
+    public async Task<Result<StockModel>> Delete(StockEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<StockEditModel, StockModel>
+       (ReqStockEndpoints.Delete, reqModel);
+
+    public async Task<Result<StockDetailModel>> Details(StockEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<StockEditModel, StockDetailModel>
+       (ReqStockEndpoints.Details, reqModel);
 
     #endregion
 }
