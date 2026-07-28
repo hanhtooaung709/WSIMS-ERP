@@ -346,6 +346,14 @@ public class ProductListService : AuthorizationService
                 imagePath = Path.Combine(imgFolder, fileName);
                 await DevCode.WriteBase64ToFileAsync(reqModel.ImageData, imagePath);
             }
+            else
+            {
+                var imgFolder = _setting.Image.ReqProductChange;
+                Directory.CreateDirectory(imgFolder);
+                var fileName = reqProductChangesId + ".jpg";
+                imagePath = Path.Combine(imgFolder, fileName);
+                File.Copy(product.ImagePath!, imagePath);
+            }
 
             TblReqProductChange item = new TblReqProductChange
             {
