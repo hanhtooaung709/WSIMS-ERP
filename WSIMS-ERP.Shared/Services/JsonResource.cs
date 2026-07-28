@@ -19,6 +19,11 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// You are wasn't choose Destination Branch! Please choose Destination Branch.
+    /// </summary>
+    public static readonly string WHE099 = "WH#E099";
+
+    /// <summary>
     /// Stock 0 Quanitity is can't Transfer
     /// </summary>
     public static readonly string WHE098 = "WH#E098";

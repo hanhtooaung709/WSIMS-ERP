@@ -674,11 +674,17 @@ public class PackageListSerivce : AuthorizationService
 
             #endregion
 
-            #region Check Stock Quantity
+            #region Check Stock Quantity & Branch
 
-            if(reqModel.Quantity == 0)
+            if (reqModel.Quantity == 0)
             {
                 model = Result<PackageModel>.Error(JsonResource.WHE098);
+                return model;
+            }
+
+            if (reqModel.BranchCode.IsNullOrEmpty())
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE099);
                 return model;
             }
 
