@@ -364,10 +364,10 @@
         </div>
 
         <div Class="pa-6">
-            <!-- Flex Container to guarantee side-by-side layout on desktop -->
-            <div class="d-flex flex-column flex-md-row align-center justify-space-between gap-4">
+            <!-- Main Flex Container -->
+            <div class="d-flex flex-column flex-md-row align-start justify-space-between gap-4">
 
-                <!-- Left Panel: Current Package Info -->
+                <!-- Left Column: Source Package Details -->
                 <div style="flex: 1; width: 100%;">
                     <MudPaper Class="pa-4" Elevation="0" Style="background-color: #e8e8e8; border-radius: 8px;">
                         <MudText Typo="Typo.subtitle1" Style="font-weight: 600; color: #333; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #3f7375;">
@@ -393,7 +393,7 @@
 
                         <!-- Current Quantity -->
                         <div Class="mt-2">
-                            <MudNumericField Value="_selectedItem?.Quantity"
+                            <MudNumericField Value="_selectedItem?.Quantity - _reqModel!.Quantity"
                                              Label="Current Available Quantity"
                                              Variant="MudBlazor.Variant.Outlined"
                                              Margin="Margin.Dense"
@@ -420,15 +420,17 @@
                     </MudPaper>
                 </div>
 
-                <!-- Center Divider: Double Arrow Icon -->
-                <div class="d-flex justify-center align-center my-2 my-md-0 px-2">
+                <!-- Center Divider Icon -->
+                <div class="d-flex justify-center align-center align-self-center my-2 my-md-0 px-2" style="margin-top: auto; margin-bottom: auto;">
                     <MudPaper Elevation="1" Class="d-flex justify-center align-center pa-3" Style="border-radius: 50%; background-color: #3f7375; min-width: 48px; min-height: 48px;">
                         <MudIcon Icon="@Icons.Material.Filled.DoubleArrow" Style="color: #ffffff; font-size: 1.8rem;" />
                     </MudPaper>
                 </div>
 
-                <!-- Right Panel: Transfer Target Configuration -->
-                <div style="flex: 1; width: 100%;">
+                <!-- Right Column: Transfer -->
+                <div class="d-flex flex-column" style="flex: 1; width: 100%;">
+
+                    <!-- Grey Card -->
                     <MudPaper Class="pa-4" Elevation="0" Style="background-color: #e8e8e8; border-radius: 8px;">
                         <MudText Typo="Typo.subtitle1" Style="font-weight: 600; color: #333; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #3f7375;">
                             Transfer Details
@@ -480,23 +482,24 @@
                                 }
                             </MudSelect>
                         </div>
-
-                        <!-- Action Buttons -->
-                        <div class="d-flex justify-end gap-2 mt-6">
-                            <MudButton Variant="MudBlazor.Variant.Outlined"
-                                       Color="Color.Default"
-                                       StartIcon="@Icons.Material.Filled.Close"
-                                       OnClick="@Cancel">
-                                Cancel
-                            </MudButton>
-                            <MudButton Variant="MudBlazor.Variant.Filled"
-                                       Color="Color.Primary"
-                                       StartIcon="@Icons.Material.Filled.Send"
-                                       OnClick="@(() => Transfer(_reqModel!))">
-                                Transfer
-                            </MudButton>
-                        </div>
                     </MudPaper>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-end gap-2 mt-4">
+                        <MudButton Variant="MudBlazor.Variant.Outlined"
+                                   Color="Color.Default"
+                                   StartIcon="@Icons.Material.Filled.Close"
+                                   OnClick="@Cancel">
+                            Cancel
+                        </MudButton>
+                        <MudButton Variant="MudBlazor.Variant.Filled"
+                                   Color="Color.Primary"
+                                   StartIcon="@Icons.Material.Filled.Send"
+                                   OnClick="@Transfer">
+                            Transfer
+                        </MudButton>
+                    </div>
+
                 </div>
 
             </div>

@@ -15,6 +15,7 @@ using ERP.Warehouse.Models.Models.Package.ReqPackage;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 using ERP.Warehouse.Models.Models.Product.ProductList;
 using System.IO.Packaging;
+using ERP.Warehouse.Models.Models.Branch;
 
 namespace ERP.Warehouse.Api.Features.Package.PackageList;
 
@@ -275,6 +276,7 @@ public class PackageListSerivce : AuthorizationService
                 PackageId = package.PackageId!,
                 PackageName = packageInfo.PackageName,
                 PackageInfoCode = packageInfo.PackageInfoCode,
+                BranchCode = user.BranchCode,
                 Quantity = packageQut,
                 ProductCode = packageInfo.ProductCode,
                 Price = packageInfo.Price.ToString(),
@@ -667,6 +669,16 @@ public class PackageListSerivce : AuthorizationService
             if (reqPackage)
             {
                 model = Result<PackageModel>.Error(JsonResource.WHE093);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Stock Quantity
+
+            if(reqModel.Quantity == 0)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE098);
                 return model;
             }
 

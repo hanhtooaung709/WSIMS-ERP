@@ -195,63 +195,6 @@ public partial class PackageList
         }
     }
 
-    private async Task OnStockModifly()
-    {
-        if (_selectedItem != null && _elementGrid != null)
-        {
-            await _elementGrid.SetEditingItemAsync(_selectedItem);
-        }
-        _formType = EnumFormType.StockModifly;
-        _reqModel.Quantity = 0;
-    }
-
-    private async Task StockTransfer(PackageModel reqModel)
-    {
-        await GetBranch();
-        await GetProduct();
-        await GetCurrency();
-        await GetBox();
-        await GetOtherBranch();
-        _edit.PackageInfoId = reqModel.PackageInfoId!;
-        _edit.PackageId = reqModel.PackageId!;
-        _edit.PackageInfoCode = reqModel.PackageInfoCode!;
-
-        await _injectService.EnableLoading();
-        var result = await _apiService.Edit(_edit);
-        await _injectService.DisableLoading();
-
-        if (result.IsError)
-        {
-            await _injectService.ShowDialog(result);
-            return;
-        }
-
-        #region #region Prepare reqModel
-
-        _reqModel.PackageInfoId = result.Data.PackageInfoId;
-        _reqModel.PackageId = result.Data.PackageId;
-        _reqModel.PackageName = result.Data.PackageName;
-        _reqModel.PackageInfoCode = result.Data.PackageInfoCode;
-        _reqModel.BranchCode = null;
-        _reqModel.Quantity = 0;
-        _reqModel.ProductCode = result.Data.ProductCode;
-        _reqModel.Price = result.Data.Price;
-        _reqModel.CurrencyCode = result.Data.CurrencyCode;
-        _reqModel.Weight = result.Data.Weight;
-        _reqModel.BoxCode = result.Data.BoxCode;
-        _reqModel.ImagePath = result.Data.ImagePath;
-
-        #endregion
-
-        _formType = EnumFormType.StockTransfer;
-        StateHasChanged();
-    }
-
-    private async Task Transfer(PackageReqModel reqModel)
-    {
-
-    }
-
     private async Task Edit(PackageModel reqModel)
     {
         try
@@ -387,11 +330,6 @@ public partial class PackageList
         }
     }
 
-    private void OnRowClick(TableRowClickEventArgs<PackageModel> args)
-    {
-
-    }
-
     private void OnSingleSelect(bool isChecked, PackageModel item)
     {
         if (isChecked)
@@ -455,6 +393,89 @@ public partial class PackageList
         else
         {
             _reqModel.PackageName = string.Empty;
+        }
+    }
+
+    #endregion
+
+    #region StockModifly/StockTransfer
+
+    private async Task OnStockModifly()
+    {
+        if (_selectedItem != null && _elementGrid != null)
+        {
+            await _elementGrid.SetEditingItemAsync(_selectedItem);
+        }
+        _formType = EnumFormType.StockModifly;
+        _reqModel.Quantity = 0;
+    }
+
+    private async Task StockTransfer(PackageModel reqModel)
+    {
+        await GetBranch();
+        await GetProduct();
+        await GetCurrency();
+        await GetBox();
+        await GetOtherBranch();
+        _edit.PackageInfoId = reqModel.PackageInfoId!;
+        _edit.PackageId = reqModel.PackageId!;
+        _edit.PackageInfoCode = reqModel.PackageInfoCode!;
+
+        await _injectService.EnableLoading();
+        var result = await _apiService.Edit(_edit);
+        await _injectService.DisableLoading();
+
+        if (result.IsError)
+        {
+            await _injectService.ShowDialog(result);
+            return;
+        }
+
+        #region #region Prepare reqModel
+
+        _reqModel.PackageInfoId = result.Data.PackageInfoId;
+        _reqModel.PackageId = result.Data.PackageId;
+        _reqModel.PackageName = result.Data.PackageName;
+        _reqModel.PackageInfoCode = result.Data.PackageInfoCode;
+        _selectedItem.BranchCode = result.Data.BranchCode;
+        _reqModel.BranchCode = null;
+        _reqModel.Quantity = 0;
+        _reqModel.ProductCode = result.Data.ProductCode;
+        _reqModel.Price = result.Data.Price;
+        _reqModel.CurrencyCode = result.Data.CurrencyCode;
+        _reqModel.Weight = result.Data.Weight;
+        _reqModel.BoxCode = result.Data.BoxCode;
+        _reqModel.ImagePath = result.Data.ImagePath;
+
+        #endregion
+
+        _formType = EnumFormType.StockTransfer;
+        StateHasChanged();
+    }
+
+    private async Task Transfer()
+    {
+        try
+        {
+            bool confirm = await _injectService.ShowTransferDialog();
+            if (!confirm) return;
+
+            await _injectService.EnableLoading();
+            var result = await _apiService.StockTransfer(_reqModel);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            await _injectService.ShowDialog(result);
+        }
+        catch(Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
         }
     }
 

@@ -19,6 +19,11 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// Stock 0 Quanitity is can't Transfer
+    /// </summary>
+    public static readonly string WHE098 = "WH#E098";
+
+    /// <summary>
     /// Requsted Stock is successfully Deteted.
     /// </summary>
     public static readonly string WHS097 = "WH#S097";

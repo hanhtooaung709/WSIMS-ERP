@@ -91,9 +91,12 @@ public interface IInjectService
         List<DynamicReportModel>? lstData = null);
     Task<bool> ShowReject(string title = "Confirm", string message = "Are you sure want to Reject?",
         List<DynamicReportModel>? lstData = null);
-    Task<bool> ShowCreateDialog(string title = "Confirm", string message = "Are you sure want to create?",
+    Task<bool> ShowCreateDialog(string title = "Confirm", string message = "Are you sure want to Create?",
         List<DynamicReportModel>? lstData = null);
-    Task<bool> ShowUpdateDialog(string title = "Confirm", string message = "Are you sure want to update?",
+    Task<bool> ShowUpdateDialog(string title = "Confirm", string message = "Are you sure want to Update?",
+        List<DynamicReportModel>? lstData = null);
+
+    Task<bool> ShowTransferDialog(string title = "Confirm", string message = "Are you sure want to Transfer?",
         List<DynamicReportModel>? lstData = null);
     Task ClearSession();
     Task<bool> EodRunConfirm(string title = "Confirm", string message = "Are you sure want to run?");
