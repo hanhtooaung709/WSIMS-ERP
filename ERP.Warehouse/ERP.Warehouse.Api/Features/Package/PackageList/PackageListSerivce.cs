@@ -629,6 +629,81 @@ public class PackageListSerivce : AuthorizationService
         return model;
     }
 
+    public async Task<Result<PackageModel>> StockTransfer(PackageReqModel reqModel)
+    {
+        var model = new Result<PackageModel>();
+        try
+        {
+            #region Check Package
+
+            var packageInfo = await _db.TblPackageInfos
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.PackageInfoId == reqModel.PackageInfoId &&
+                                          x.DelFlag == 0);
+            if (packageInfo is null)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE083);
+                return model;
+            }
+
+            var package = await _db.TblPackages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.PackageId == reqModel.PackageId &&
+                                          x.DelFlag == 0);
+            if (package is null)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE083);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate Id
+
+            bool reqPackage = await _db.TblReqPackageInfoChanges
+                .AsNoTracking()
+                .AnyAsync(x => x.PackageInfoCode == reqModel.PackageInfoCode &&
+                               x.Status == EnumRequestedStatus.Pending.ToString());
+            if (reqPackage)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE093);
+                return model;
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            TblReqPackage result = new TblReqPackage
+            {
+                ReqPackageId = DevCode.GenerateUlid(),
+                PackageId = reqModel.PackageId!,
+                PackageInfoCode = reqModel.PackageInfoCode!,
+                Quantity = reqModel.Quantity,
+                BranchCode = reqModel.BranchCode!,
+                ChangesType = EnumRequestedType.Transfer.ToString(),
+                Status = EnumRequestedStatus.Pending.ToString(),
+                ReqUserId = AuthorizedUserId,
+                ReqDateTime = DevCode.GetServerDateTime()
+            };
+            await _db.TblReqPackages.AddAsync(result);
+            await _db.SaveChangesAsync();
+
+            package.Quantity -= reqModel.Quantity;
+            _db.Entry(package).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+
+            model = Result<PackageModel>.Success(JsonResource.WHS014);
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<PackageModel>.Error(ex);
+        }
+        return model;
+    }
+
     #endregion
 
     #region Get Other Branch

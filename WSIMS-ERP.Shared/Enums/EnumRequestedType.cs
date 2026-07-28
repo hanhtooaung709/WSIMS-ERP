@@ -10,4 +10,6 @@ public enum EnumRequestedType
     ResetPassword,
     [Description("Delete")]
     Delete,
+    [Description("Transfer")]
+    Transfer
 }

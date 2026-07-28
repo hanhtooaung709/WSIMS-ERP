@@ -203,6 +203,17 @@ public partial class PackageList
         _reqModel.Quantity = 0;
     }
 
+    private async Task StockTransfer()
+    {
+        if (selectedItem != null && _elementGrid != null)
+        {
+            await _elementGrid.SetEditingItemAsync(selectedItem);
+        }
+        _formType = EnumFormType.StockTransfer;
+        _reqModel.BranchCode = null;
+        _reqModel.Quantity = 0;
+    }
+
     private async Task Edit(PackageModel reqModel)
     {
         try

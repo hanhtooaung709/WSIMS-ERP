@@ -80,6 +80,14 @@ public class PackageListController : BaseController
         return await Execute(result);
     }
 
+    [HttpPost]
+    [Route("StockTransfer")]
+    public async Task<IActionResult> StockTransfer(PackageReqModel reqModel)
+    {
+        var result = await _packageListSerivce.StockTransfer(reqModel);
+        return await Execute(result);
+    }
+
     #endregion
 
     #region Get Other Branch
