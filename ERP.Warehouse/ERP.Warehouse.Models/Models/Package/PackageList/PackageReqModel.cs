@@ -14,4 +14,5 @@ public class PackageReqModel
     public string? Weight { get; set; }
     public string? BoxCode { get; set; }
     public string? Status { get; set; }
+    public string? ImagePath { get; set;}
 }

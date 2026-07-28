@@ -49,7 +49,7 @@
         <MudDataGrid @ref="_elementGrid"
                      T="PackageModel"
                      Items="@_model"
-                     @bind-SelectedItem="selectedItem"
+                     @bind-SelectedItem="_selectedItem"
                      Hover="@hover"
                      ReadOnly="@_readOnly"
                      Breakpoint="Breakpoint.None"
@@ -71,7 +71,7 @@
                 <TemplateColumn Title="" Sortable="false" Filterable="false" HeaderStyle="width: 70px;" Style="width: 70px;">
                     <CellTemplate>
                         <MudCheckBox T="bool"
-                                     Value="@(selectedItem == context.Item)"
+                                     Value="@(_selectedItem == context.Item)"
                                      ValueChanged="@((bool isChecked) => OnSingleSelect(isChecked, context.Item))"
                                      Color="Color.Success" />
                     </CellTemplate>
@@ -236,36 +236,36 @@
         <MudButton Variant="MudBlazor.Variant.Filled"
                    Color="Color.Info"
                    StartIcon="@Icons.Material.Filled.EditAttributes"
-                   Disabled="@(selectedItem == null)"
-                   OnClick="StockTransfer">
+                   Disabled="@(_selectedItem == null)"
+                   OnClick="@(() => StockTransfer(_selectedItem!))">
             StockTransfer
         </MudButton>
         <MudButton Variant="MudBlazor.Variant.Filled"
                    Color="Color.Info"
                    StartIcon="@Icons.Material.Filled.EditAttributes"
-                   Disabled="@(selectedItem == null)"
+                   Disabled="@(_selectedItem == null)"
                    OnClick="OnStockModifly">
             StockModifly
         </MudButton>
         <MudButton Variant="MudBlazor.Variant.Filled"
                    Color="Color.Warning"
                    StartIcon="@Icons.Material.Filled.Edit"
-                   Disabled="@(selectedItem == null)"
+                   Disabled="@(_selectedItem == null)"
                    OnClick="OnEditClicked">
             Edit
         </MudButton>
         <MudButton Variant="MudBlazor.Variant.Filled"
                    Color="Color.Error"
                    StartIcon="@Icons.Material.Filled.Delete"
-                   Disabled="@(selectedItem == null)"
-                   OnClick="@(() => Delete(selectedItem!))">
+                   Disabled="@(_selectedItem == null)"
+                   OnClick="@(() => Delete(_selectedItem!))">
             Delete
         </MudButton>
         <MudButton Variant="MudBlazor.Variant.Filled"
                    Color="Color.Primary"
                    StartIcon="@Icons.Material.Filled.Details"
-                   Disabled="@(selectedItem == null)"
-                   OnClick="@(() => Details(selectedItem!))">
+                   Disabled="@(_selectedItem == null)"
+                   OnClick="@(() => Details(_selectedItem!))">
             Detail
         </MudButton>
     </div>
@@ -351,6 +351,38 @@
             </MudGrid>
         </div>
     </MudPaper>
+}
+
+@if (_formType is EnumFormType.StockTransfer)
+{
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.body1">@_selectedItem!.PackageName</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardMedia Image="@GetImageUrl(_reqModel.ImagePath)" Height="250" />
+        <MudCardContent>
+            <MudText Typo="Typo.body2">This photo was taken in a small village in Istra Croatia.</MudText>
+        </MudCardContent>
+        <MudCardActions>
+            <MudNumericField @bind-Value="_selectedItem!.Quantity" Label="Quantity" Variant="MudBlazor.Variant.Outlined" Disabled="true" />
+            <MudSelect T="string"
+                       Value="_selectedItem.BranchCode"
+                       Label="Branch"
+                       Style="width: 100%; min-width: 500px;"
+                       Variant="MudBlazor.Variant.Outlined"
+                       Disabled="true">
+                @if (_banchList != null)
+                {
+                    @foreach (var item in _banchList)
+                    {
+                        <MudSelectItem Value="@item.BranchCode">@item.Address</MudSelectItem>
+                    }
+                }
+            </MudSelect>
+        </MudCardActions>
+    </MudCard>
 }
 
 

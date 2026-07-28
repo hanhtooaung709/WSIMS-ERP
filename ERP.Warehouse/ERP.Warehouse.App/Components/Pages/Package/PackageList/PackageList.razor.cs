@@ -13,6 +13,7 @@ namespace ERP.Warehouse.App.Components.Pages.Package.PackageList;
 public partial class PackageList
 {
     private PackageReqModel _reqModel = new();
+    private PackageModel _resModel = new();
     private IEnumerable<PackageModel> _model = new List<PackageModel>();
     private PackageEditModel _edit = new();
     private PackageDetailModel _details = new();
@@ -24,7 +25,7 @@ public partial class PackageList
 
     private List<SelectListModel> _lstStatus = Commons.GetStatusList();
 
-    private PackageModel? selectedItem;
+    private PackageModel? _selectedItem;
     private MudDataGrid<PackageModel> _elementGrid = default!;
     private EnumFormType _formType = EnumFormType.List;
     private bool hover = true;
@@ -68,11 +69,11 @@ public partial class PackageList
             {
                 await _injectService.ShowDialog(result);
                 _reqModel = new();
-                selectedItem = null;
+                _selectedItem = null;
                 return;
             }
 
-            selectedItem = null;
+            _selectedItem = null;
             _model = result.Data!.list!;
             StateHasChanged();
         }
@@ -118,7 +119,7 @@ public partial class PackageList
                 {
                     await _injectService.ShowDialog(result);
                     _reqModel = new();
-                    selectedItem = null;
+                    _selectedItem = null;
                     return;
                 }
                 await _injectService.ShowDialog(result);
@@ -141,7 +142,7 @@ public partial class PackageList
                 {
                     await _injectService.ShowDialog(result);
                     _reqModel = new();
-                    selectedItem = null;
+                    _selectedItem = null;
                     return;
                 }
                 await _injectService.ShowDialog(result);
@@ -164,7 +165,7 @@ public partial class PackageList
                 {
                     await _injectService.ShowDialog(result);
                     _reqModel = new();
-                    selectedItem = null;
+                    _selectedItem = null;
                     return;
                 }
                 await _injectService.ShowDialog(result);
@@ -173,7 +174,7 @@ public partial class PackageList
             #endregion
 
             _reqModel = new();
-            selectedItem = null;
+            _selectedItem = null;
             await List();
         }
 
@@ -187,31 +188,61 @@ public partial class PackageList
 
     private async Task OnEditClicked()
     {
-        if (selectedItem != null && _elementGrid != null)
+        if (_selectedItem != null && _elementGrid != null)
         {
-            await _elementGrid.SetEditingItemAsync(selectedItem);
+            await _elementGrid.SetEditingItemAsync(_selectedItem);
         }
     }
 
     private async Task OnStockModifly()
     {
-        if (selectedItem != null && _elementGrid != null)
+        if (_selectedItem != null && _elementGrid != null)
         {
-            await _elementGrid.SetEditingItemAsync(selectedItem);
+            await _elementGrid.SetEditingItemAsync(_selectedItem);
         }
         _formType = EnumFormType.StockModifly;
         _reqModel.Quantity = 0;
     }
 
-    private async Task StockTransfer()
+    private async Task StockTransfer(PackageModel reqModel)
     {
-        if (selectedItem != null && _elementGrid != null)
+        await GetBranch();
+        await GetProduct();
+        await GetCurrency();
+        await GetBox();
+        _edit.PackageInfoId = reqModel.PackageInfoId!;
+        _edit.PackageId = reqModel.PackageId!;
+        _edit.PackageInfoCode = reqModel.PackageInfoCode!;
+
+        await _injectService.EnableLoading();
+        var result = await _apiService.Edit(_edit);
+        await _injectService.DisableLoading();
+
+        if (result.IsError)
         {
-            await _elementGrid.SetEditingItemAsync(selectedItem);
+            await _injectService.ShowDialog(result);
+            return;
         }
+
+        #region #region Prepare reqModel
+
+        _reqModel.PackageInfoId = result.Data.PackageInfoId;
+        _reqModel.PackageId = result.Data.PackageId;
+        _reqModel.PackageName = result.Data.PackageName;
+        _reqModel.PackageInfoCode = result.Data.PackageInfoCode;
+        _reqModel.BranchCode = result.Data.BranchCode;
+        _reqModel.Quantity = result.Data.Quantity;
+        _reqModel.ProductCode = result.Data.ProductCode;
+        _reqModel.Price = result.Data.Price;
+        _reqModel.CurrencyCode = result.Data.CurrencyCode;
+        _reqModel.Weight = result.Data.Weight;
+        _reqModel.BoxCode = result.Data.BoxCode;
+        _reqModel.ImagePath = result.Data.ImagePath;
+
+        #endregion
+
         _formType = EnumFormType.StockTransfer;
-        _reqModel.BranchCode = null;
-        _reqModel.Quantity = 0;
+        StateHasChanged();
     }
 
     private async Task Edit(PackageModel reqModel)
@@ -270,7 +301,7 @@ public partial class PackageList
         try
         {
             _reqModel = new();
-            selectedItem = null;
+            _selectedItem = null;
             StateHasChanged();
             List();
             _formType = EnumFormType.List;
@@ -302,12 +333,12 @@ public partial class PackageList
             if (result.IsError)
             {
                 await _injectService.ShowDialog(result);
-                selectedItem = null;
+                _selectedItem = null;
                 return;
             }
             await _injectService.ShowDialog(result);
 
-            selectedItem = null;
+            _selectedItem = null;
             await List();
             _formType = EnumFormType.List;
             StateHasChanged();
@@ -333,7 +364,7 @@ public partial class PackageList
             if (result.IsError)
             {
                 await _injectService.ShowDialog(result);
-                selectedItem = null;
+                _selectedItem = null;
                 return;
             }
 
@@ -358,11 +389,11 @@ public partial class PackageList
     {
         if (isChecked)
         {
-            selectedItem = item;
+            _selectedItem = item;
         }
         else
         {
-            selectedItem = null;
+            _selectedItem = null;
         }
     }
 
