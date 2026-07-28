@@ -22,6 +22,7 @@ public partial class PackageList
     private List<ProductResponseModel> _productList = new();
     private List<CurrencyResponseModel> _currencyList = new();
     private List<BoxResponseModel> _boxList = new();
+    private List<OtherBranchResponseModel> _otherBanchList = new();
 
     private List<SelectListModel> _lstStatus = Commons.GetStatusList();
 
@@ -210,6 +211,7 @@ public partial class PackageList
         await GetProduct();
         await GetCurrency();
         await GetBox();
+        await GetOtherBranch();
         _edit.PackageInfoId = reqModel.PackageInfoId!;
         _edit.PackageId = reqModel.PackageId!;
         _edit.PackageInfoCode = reqModel.PackageInfoCode!;
@@ -230,8 +232,8 @@ public partial class PackageList
         _reqModel.PackageId = result.Data.PackageId;
         _reqModel.PackageName = result.Data.PackageName;
         _reqModel.PackageInfoCode = result.Data.PackageInfoCode;
-        _reqModel.BranchCode = result.Data.BranchCode;
-        _reqModel.Quantity = result.Data.Quantity;
+        _reqModel.BranchCode = null;
+        _reqModel.Quantity = 0;
         _reqModel.ProductCode = result.Data.ProductCode;
         _reqModel.Price = result.Data.Price;
         _reqModel.CurrencyCode = result.Data.CurrencyCode;
@@ -243,6 +245,11 @@ public partial class PackageList
 
         _formType = EnumFormType.StockTransfer;
         StateHasChanged();
+    }
+
+    private async Task Transfer(PackageReqModel reqModel)
+    {
+
     }
 
     private async Task Edit(PackageModel reqModel)
@@ -568,7 +575,7 @@ public partial class PackageList
                 await _injectService.ShowDialog(result);
                 return;
             }
-            _banchList = result.Data;
+            _otherBanchList = result.Data;
             StateHasChanged();
         }
         catch (Exception ex)

@@ -708,7 +708,7 @@ public class PackageListSerivce : AuthorizationService
 
     #region Get Other Branch
 
-    public async Task<Result<List<BranchResponseModel>>> GetOtherBranch()
+    public async Task<Result<List<OtherBranchResponseModel>>> GetOtherBranch()
     {
         try
         {
@@ -720,18 +720,18 @@ public class PackageListSerivce : AuthorizationService
             var result = await _db.TblBranches
                 .AsNoTracking()
                 .Where(x => x.DelFlag == 0 && x.BranchCode != user.BranchCode)
-                .Select(x => new BranchResponseModel
+                .Select(x => new OtherBranchResponseModel
                 {
                     Address = x.Address,
                     BranchCode = x.BranchCode
                 })
                 .ToListAsync();
 
-            return Result<List<BranchResponseModel>>.Success(result);
+            return Result<List<OtherBranchResponseModel>>.Success(result);
         }
         catch (Exception ex)
         {
-            return Result<List<BranchResponseModel>>.Error(ex);
+            return Result<List<OtherBranchResponseModel>>.Error(ex);
         }
     }
 
