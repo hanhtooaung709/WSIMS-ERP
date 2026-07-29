@@ -306,6 +306,7 @@ public partial class PackageList
         try
         {
             _edit.PackageInfoId = reqModel.PackageInfoId!;
+            _edit.PackageId = reqModel.PackageId!;
 
             await _injectService.EnableLoading();
             var result = await _apiService.Details(_edit);
@@ -470,6 +471,11 @@ public partial class PackageList
                 return;
             }
             await _injectService.ShowDialog(result);
+
+            _reqModel = new();
+            _selectedItem = null;
+            _formType = EnumFormType.List;
+            await List();
         }
         catch(Exception ex)
         {

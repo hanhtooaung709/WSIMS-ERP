@@ -114,12 +114,6 @@ public partial class ReqPackage
     {
         try
         {
-            if (reqModel is null || string.IsNullOrEmpty(reqModel.ReqPackageId))
-            {
-                _formType = EnumFormType.Create;
-                return;
-            }
-
             await GetBranch();
             await GetProduct();
             await GetCurrency();

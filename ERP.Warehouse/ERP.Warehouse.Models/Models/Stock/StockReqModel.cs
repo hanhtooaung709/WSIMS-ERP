@@ -14,4 +14,5 @@ public class StockReqModel
     public int InStockQuantity { get; set; }
     public string? Status { get; set; }
     public string? SourceBranch { get; set;}
+    public string? ImagePath { get; set; }
 }

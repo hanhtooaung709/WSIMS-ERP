@@ -67,7 +67,6 @@ public class ReqStockService : AuthorizationService
         var model = new Result<StockModel>();
         try
         {
-
             #region Check User
 
             var user = await _db.TblWarehouseUsers
@@ -103,12 +102,23 @@ public class ReqStockService : AuthorizationService
 
             var inStock = await _db.TblPackages
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.PackageId == reqModel.PackageId &&
-                                          x.BranchCode == user.BranchCode &&
-                                          x.DelFlag == 0);
+                .FirstOrDefaultAsync(x => x.PackageId == reqModel.PackageId && x.DelFlag == 0);
             if (inStock is null)
             {
                 model = Result<StockModel>.Error(JsonResource.WHE083);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Product
+
+            var product = await _db.TblProducts
+            .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ProductCode == package.ProductCode && x.DelFlag == 0);
+            if (product is null)
+            {
+                model = Result<StockModel>.Error(JsonResource.WHE067);
                 return model;
             }
 
@@ -128,7 +138,9 @@ public class ReqStockService : AuthorizationService
                 Quantity = reqStock.Quantity,
                 InStockQuantity = inStock.Quantity + reqStock.Quantity,
                 BranchCode = reqStock.BranchCode,
-                SourceBranch = inStock.BranchCode
+                SourceBranch = inStock.BranchCode,
+                ChangesType = reqStock.ChangesType,
+                ImagePath = product.ImagePath
             };
             model = Result<StockModel>.Success(response);
 
@@ -159,7 +171,7 @@ public class ReqStockService : AuthorizationService
 
             #endregion
 
-            #region Check ReqStock & Stock
+            #region Check ReqStock
 
             var reqStock = await _db.TblReqPackages
                 .AsNoTracking()
@@ -173,10 +185,20 @@ public class ReqStockService : AuthorizationService
             bool stock = await _db.TblReqPackages
                 .AsNoTracking()
                 .AnyAsync(x => x.ReqPackageId == reqModel.ReqPackageId &&
-                                          x.Status != EnumRequestedStatus.Pending.ToString());
+                               x.Status != EnumRequestedStatus.Pending.ToString());
             if (reqStock is null)
             {
                 model = Result<StockModel>.Error(JsonResource.WHE095);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Stock Quantity
+
+            if (reqModel.Quantity == 0)
+            {
+                model = Result<StockModel>.Error(JsonResource.WHE098);
                 return model;
             }
 
@@ -186,6 +208,16 @@ public class ReqStockService : AuthorizationService
 
             if (reqStock.ChangesType == EnumRequestedType.Transfer.ToString())
             {
+                #region Check Stock Branch
+
+                if (reqModel.BranchCode.IsNullOrEmpty())
+                {
+                    model = Result<StockModel>.Error(JsonResource.WHE099);
+                    return model;
+                }
+
+                #endregion
+
                 var inStock = await _db.TblPackages
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.PackageId == reqModel.PackageId &&
@@ -283,6 +315,8 @@ public class ReqStockService : AuthorizationService
                     return model;
                 }
                 inStock.Quantity += reqStock.Quantity;
+                _db.Entry(inStock).State = EntityState.Modified;
+                _db.TblPackages.Update(inStock);
             }
 
             _db.TblReqPackages.Remove(reqStock);

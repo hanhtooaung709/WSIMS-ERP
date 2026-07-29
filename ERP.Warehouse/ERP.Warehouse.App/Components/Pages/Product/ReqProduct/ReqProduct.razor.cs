@@ -108,12 +108,6 @@ public partial class ReqProduct
     {
         try
         {
-            if (reqModel is null || string.IsNullOrEmpty(reqModel.ReqProductId))
-            {
-                _formType = EnumFormType.Create;
-                return;
-            }
-
             _edit.ReqProductId = reqModel.ReqProductId!;
 
             await _injectService.EnableLoading();

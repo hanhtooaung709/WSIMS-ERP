@@ -113,12 +113,6 @@ public partial class ReqPackageChange
     {
         try
         {
-            if (reqModel is null || string.IsNullOrEmpty(reqModel.ReqPackageChangeId))
-            {
-                _formType = EnumFormType.Create;
-                return;
-            }
-
             await GetProduct();
             await GetCurrency();
             await GetBox();

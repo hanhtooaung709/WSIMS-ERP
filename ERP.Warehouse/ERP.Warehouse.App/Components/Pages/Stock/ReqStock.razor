@@ -7,7 +7,7 @@
 @using WSIMS_ERP.Shared.Enums
 @inject HttpClient httpClients
 
-@if (_formType is EnumFormType.List or EnumFormType.Edit or EnumFormType.Create)
+@if (_formType is EnumFormType.List or EnumFormType.StockModifly)
 {
     <MudPaper Class="pa-4 mb-4">
         <MudText Typo="Typo.h6" Style="font-weight: 600; color: #333; margin-bottom: 12px;">Requested Packages</MudText>
@@ -33,6 +33,17 @@
                         @foreach (var item in _boxList)
                         {
                             <MudSelectItem Value="@item.BoxCode">@item.Box</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudSelect @bind-Value="_reqModel.BranchCode" Label="Branch" Variant="MudBlazor.Variant.Outlined" Margin="Margin.Dense" Clearable>
+                    @if (_banchList != null)
+                    {
+                        @foreach (var item in _banchList)
+                        {
+                            <MudSelectItem Value="@item.BranchCode">@item.Address</MudSelectItem>
                         }
                     }
                 </MudSelect>
@@ -78,7 +89,7 @@
                 <PropertyColumn Property="x => x.PackageName" Title="Package Name" HeaderStyle="min-width: 200px;">
                     <EditTemplate>
                         <MudText Typo="Typo.h6" Style="padding: 16px 16px 0 16px; font-weight: bold;">
-                            @_formType.ToString() Requested Package
+                            Requested @_formType.ToString()
                         </MudText>
                         <MudTextField @bind-Value="_reqModel.PackageName"
                                       Label="Package Name"
@@ -98,75 +109,29 @@
                                       Margin="Margin.Dense"
                                       Style="width: 100%; min-width: 500px;"
                                       Variant="MudBlazor.Variant.Outlined"
+                                      Disabled="true"
                                       Required="true"
                                       RequiredError="PackageInfo Code is required!" />
                     </EditTemplate>
                 </PropertyColumn>
 
-                <PropertyColumn Property="x => x.ProductCode" Title="Product Name" HeaderStyle="min-width: 200px;">
-                    <EditTemplate>
-                        <MudSelect T="string"
-                                   Value="_reqModel.ProductCode"
-                                   Label="Product Name"
-                                   Style="width: 100%; min-width: 500px;"
-                                   Variant="MudBlazor.Variant.Outlined"
-                                   Margin="Margin.Dense"
-                                   Required="true"
-                                   RequiredError="Product Name is required!"
-                                   Clearable>
-                            @if (_productList != null)
-                            {
-                                @foreach (var item in _productList)
-                                {
-                                    <MudSelectItem Value="@item.ProductCode">@item.ProductName</MudSelectItem>
-                                }
-                            }
-                        </MudSelect>
-                    </EditTemplate>
-                </PropertyColumn>
+                <TemplateColumn Title="Product Name" HeaderStyle="min-width: 200px;">
+                    <CellTemplate>
+                        <MudText>@context.Item.ProductCode</MudText>
+                    </CellTemplate>
+                </TemplateColumn>
 
-                <PropertyColumn Property="x => x.BoxCode" Title="Box" HeaderStyle="min-width: 250px;">
-                    <EditTemplate>
-                        <MudSelect T="string"
-                                   Value="_reqModel.BoxCode"
-                                   Label="Box"
-                                   Style="width: 100%; min-width: 500px;"
-                                   Variant="MudBlazor.Variant.Outlined"
-                                   Margin="Margin.Dense"
-                                   Required="true"
-                                   RequiredError="Box is required!"
-                                   Clearable>
-                            @if (_boxList != null)
-                            {
-                                @foreach (var item in _boxList)
-                                {
-                                    <MudSelectItem Value="@item.BoxCode">@item.Box</MudSelectItem>
-                                }
-                            }
-                        </MudSelect>
-                    </EditTemplate>
-                </PropertyColumn>
+                <TemplateColumn Title="Box" HeaderStyle="min-width: 250px;">
+                    <CellTemplate>
+                        <MudText>@context.Item.BoxCode</MudText>
+                    </CellTemplate>
+                </TemplateColumn>
 
-                <PropertyColumn Property="x => x.BranchCode" Title="Branch Name" HeaderStyle="min-width: 180px;" Hidden="true">
-                    <EditTemplate>
-                        <MudSelect @bind-Value="_reqModel.BranchCode"
-                                   Label="Branch Name"
-                                   Margin="Margin.Dense"
-                                   Style="width: 100%; min-width: 500px;"
-                                   Variant="MudBlazor.Variant.Outlined"
-                                   Required="true"
-                                   RequiredError="Branch Name is required!"
-                                   Disabled="true">
-                            @if (_banchList != null)
-                            {
-                                @foreach (var role in _banchList)
-                                {
-                                    <MudSelectItem Value="@role.BranchCode">@role.Address</MudSelectItem>
-                                }
-                            }
-                        </MudSelect>
-                    </EditTemplate>
-                </PropertyColumn>
+                <TemplateColumn Title="Branch Name" HeaderStyle="min-width: 180px;">
+                    <CellTemplate>
+                        <MudText>@context.Item.BranchCode</MudText>
+                    </CellTemplate>
+                </TemplateColumn>
 
                 <PropertyColumn Property="x => x.Price" Title="Price" HeaderStyle="min-width: 180px;">
                     <EditTemplate>
@@ -175,6 +140,7 @@
                                       Margin="Margin.Dense"
                                       Style="width: 100%; min-width: 500px;"
                                       Variant="MudBlazor.Variant.Outlined"
+                                      Disabled="true"
                                       Required="true"
                                       RequiredError="Price is required!" />
                     </EditTemplate>
@@ -185,6 +151,12 @@
                         <MudNumericField @bind-Value="_reqModel.Quantity" Label="Quantity" Variant="MudBlazor.Variant.Outlined" Min="0" />
                     </EditTemplate>
                 </PropertyColumn>
+
+                <TemplateColumn Title="ChangesType" HeaderStyle="min-width: 150px;">
+                    <CellTemplate>
+                        <MudText>@context.Item.ChangesType</MudText>
+                    </CellTemplate>
+                </TemplateColumn>
 
                 <TemplateColumn Title="Status" HeaderStyle="min-width: 100px;">
                     <CellTemplate>
@@ -226,4 +198,240 @@
             </PagerContent>
         </MudDataGrid>
     </div>
+}
+
+@if (_formType is EnumFormType.Detail)
+{
+    <MudPaper Elevation="2" Class="pa-0 mt-4" Style="border-radius: 12px; overflow: hidden;">
+        <div Style="background-color: #3f7375; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
+            <MudText Typo="Typo.h5" Style="color: #fff; font-weight: 600; margin: 0;">
+                Requested Stock Details
+            </MudText>
+            <MudFab Size="@Size.Small" Color="Color.Default" StartIcon="@Icons.Material.Filled.ArrowBack" Style="background-color: rgba(255,255,255,0.2); color: #fff;" OnClick="@(() => { _formType = EnumFormType.List; StateHasChanged(); })" />
+        </div>
+        <div Class="pa-6">
+            <MudGrid>
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-center justify-center mud-width-full pa-4" Elevation="0" Style="background-color: #e8e8e8; border-radius: 8px;">
+                        <MudItem xs="12" sm="11">
+                            <MudText Typo="Typo.subtitle1" Style="font-weight: 600; color: #333; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #3f7375;">
+                                Requested Stock Information
+                            </MudText>
+                            @foreach (var item in _details.Package)
+                            {
+                                <ul class="list-unstyled mb-4">
+                                    <li class="d-flex align-items-center mb-3">
+                                        <MudText Typo="Typo.body2">
+                                            <span Style="font-weight: 600; color: #555; min-width: 120px; display: inline-block;">@(item.Key) :</span>
+                                            <span Style="color: #333;">@item.Value</span>
+                                        </MudText>
+                                    </li>
+                                </ul>
+                            }
+                            @if (!string.IsNullOrEmpty(_details.ItemImagePath))
+                            {
+                                <ul class="list-unstyled mb-4">
+                                    <li class="d-flex align-items-center mb-3">
+                                        <MudText Typo="Typo.body2">
+                                            <span Style="font-weight: 600; color: #555; min-width: 120px; display: inline-block;">Image :</span>
+                                            <img src="@GetImageUrl(_details.ItemImagePath)" style="max-width: 200px; max-height: 200px; border: 1px solid #ddd; border-radius: 4px;" />
+                                        </MudText>
+                                    </li>
+                                </ul>
+                            }
+                        </MudItem>
+                    </MudPaper>
+                </MudItem>
+
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-center justify-center mud-width-full pa-4" Elevation="0" Style="background-color: #e8e8e8; border-radius: 8px;">
+                        <MudItem xs="12" sm="11">
+                            <MudText Typo="Typo.subtitle1" Style="font-weight: 600; color: #333; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #3f7375;">
+                                Maker / Checker
+                            </MudText>
+                            @foreach (var item in _details.MakerChecker)
+                            {
+                                if (item.Key.Contains("Status"))
+                                {
+                                    <ul class="list-unstyled mb-4">
+                                        <li class="d-flex align-items-center mb-3">
+                                            <MudText Typo="Typo.body2">
+                                                <span Style="font-weight: 600; color: #555; min-width: 150px; display: inline-block;">@(item.Key) :</span>
+                                                <span class="@GetBadgeClass(item.Value)" Style="color: #333;">@item.Value</span>
+                                            </MudText>
+                                        </li>
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <ul class="list-unstyled mb-4">
+                                        <li class="d-flex align-items-center mb-3">
+                                            <MudText Typo="Typo.body2">
+                                                <span Style="font-weight: 600; color: #555; min-width: 150px; display: inline-block;">@(item.Key) :</span>
+                                                <span Style="color: #333;">@item.Value</span>
+                                            </MudText>
+                                        </li>
+                                    </ul>
+                                }
+                            }
+                        </MudItem>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+        </div>
+    </MudPaper>
+}
+
+@if (_formType is EnumFormType.StockTransfer)
+{
+    <MudPaper Elevation="2" Class="pa-0 mt-4" Style="border-radius: 12px; overflow: hidden;">
+        <!-- Header Banner -->
+        <div Style="background-color: #3f7375; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
+            <MudText Typo="Typo.h5" Style="color: #fff; font-weight: 600; margin: 0;">
+                Stock Transfer
+            </MudText>
+        </div>
+
+        <div Class="pa-6">
+            <!-- Main Flex Container -->
+            <div class="d-flex flex-column flex-md-row align-start justify-space-between gap-4">
+
+                <!-- Left Column: Source Package Details -->
+                <div style="flex: 1; width: 100%;">
+                    <MudPaper Class="pa-4" Elevation="0" Style="background-color: #e8e8e8; border-radius: 8px;">
+                        <MudText Typo="Typo.subtitle1" Style="font-weight: 600; color: #333; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #3f7375;">
+                            Source Package Details
+                        </MudText>
+
+                        <!-- Package Name -->
+                        <div Class="mb-3">
+                            <MudText Typo="Typo.body1" Style="font-weight: 500; color: #222;">
+                                @_reqModel.PackageName
+                            </MudText>
+                        </div>
+
+                        <!-- Package Image -->
+                        @if (!string.IsNullOrEmpty(_reqModel.ImagePath) || !string.IsNullOrEmpty(_details.ItemImagePath))
+                        {
+                            <div Class="mb-4 d-flex justify-center">
+                                <img src="@GetImageUrl(_details.ItemImagePath ?? _reqModel.ImagePath)"
+                                     alt="Package Image"
+                                     style="max-width: 220px; max-height: 180px; border: 1px solid #ccc; border-radius: 6px; object-fit: contain; background: #fff; padding: 4px;" />
+                            </div>
+                        }
+
+                        <!-- Current Quantity -->
+                        <div Class="mt-2">
+                            <MudNumericField Value="_reqModel.InStockQuantity - _reqModel!.Quantity"
+                                             Label="Current Available Quantity"
+                                             Variant="MudBlazor.Variant.Outlined"
+                                             Margin="Margin.Dense"
+                                             Disabled="true" />
+                        </div>
+
+                        <!-- Source Branch -->
+                        <div Class="mt-3">
+                            <MudSelect T="string"
+                                       Value="_reqModel.SourceBranch"
+                                       Label="Source Branch"
+                                       Variant="MudBlazor.Variant.Outlined"
+                                       Margin="Margin.Dense"
+                                       Disabled="true">
+                                @if (_banchList != null)
+                                {
+                                    @foreach (var item in _banchList)
+                                    {
+                                        <MudSelectItem Value="@item.BranchCode">@item.Address</MudSelectItem>
+                                    }
+                                }
+                            </MudSelect>
+                        </div>
+                    </MudPaper>
+                </div>
+
+                <!-- Center Divider Icon -->
+                <div class="d-flex justify-center align-center align-self-center my-2 my-md-0 px-2" style="margin-top: auto; margin-bottom: auto;">
+                    <MudPaper Elevation="1" Class="d-flex justify-center align-center pa-3" Style="border-radius: 50%; background-color: #3f7375; min-width: 48px; min-height: 48px;">
+                        <MudIcon Icon="@Icons.Material.Filled.DoubleArrow" Style="color: #ffffff; font-size: 1.8rem;" />
+                    </MudPaper>
+                </div>
+
+                <!-- Right Column: Transfer -->
+                <div class="d-flex flex-column" style="flex: 1; width: 100%;">
+
+                    <!-- Grey Card -->
+                    <MudPaper Class="pa-4" Elevation="0" Style="background-color: #e8e8e8; border-radius: 8px;">
+                        <MudText Typo="Typo.subtitle1" Style="font-weight: 600; color: #333; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #3f7375;">
+                            Transfer Details
+                        </MudText>
+
+                        <!-- Package Name -->
+                        <div Class="mb-3">
+                            <MudText Typo="Typo.body1" Style="font-weight: 500; color: #222;">
+                                @_reqModel.PackageName
+                            </MudText>
+                        </div>
+
+                        <!-- Package Image -->
+                        @if (!string.IsNullOrEmpty(_reqModel?.ImagePath) || !string.IsNullOrEmpty(_details?.ItemImagePath))
+                        {
+                            <div Class="mb-4 d-flex justify-center">
+                                <img src="@GetImageUrl(_details?.ItemImagePath ?? _reqModel?.ImagePath)"
+                                     alt="Package Image"
+                                     style="max-width: 220px; max-height: 180px; border: 1px solid #ccc; border-radius: 6px; object-fit: contain; background: #fff; padding: 4px;" />
+                            </div>
+                        }
+
+                        <!-- Quantity To Transfer -->
+                        <div Class="mb-4">
+                            <MudNumericField @bind-Value="_reqModel!.Quantity"
+                                             Label="Quantity to Transfer"
+                                             Variant="MudBlazor.Variant.Outlined"
+                                             Margin="Margin.Dense"
+                                             Min="0"
+                                             Max="@(_reqModel?.InStockQuantity ?? 0)" />
+                        </div>
+
+                        <!-- Target Branch Selection -->
+                        <div Class="mb-3">
+                            <MudSelect T="string"
+                                       @bind-Value="_reqModel.BranchCode"
+                                       Label="Destination Branch"
+                                       Variant="MudBlazor.Variant.Outlined"
+                                       Margin="Margin.Dense"
+                                       Clearable="true"
+                                       Required="true"
+                                       RequiredError="Destination branch is required">
+                                @if (_otherBanchList != null)
+                                {
+                                    @foreach (var item in _otherBanchList)
+                                    {
+                                        <MudSelectItem Value="@item.BranchCode">@item.Address</MudSelectItem>
+                                    }
+                                }
+                            </MudSelect>
+                        </div>
+                    </MudPaper>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-end gap-2 mt-4">
+                        <MudButton Variant="MudBlazor.Variant.Outlined"
+                                   Color="Color.Default"
+                                   StartIcon="@Icons.Material.Filled.Close"
+                                   OnClick="@Cancel">
+                            Cancel
+                        </MudButton>
+                        <MudButton Variant="MudBlazor.Variant.Filled"
+                                   Color="Color.Primary"
+                                   StartIcon="@Icons.Material.Filled.Send"
+                                   OnClick="@Save">
+                            Update Transfer
+                        </MudButton>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </MudPaper>
 }

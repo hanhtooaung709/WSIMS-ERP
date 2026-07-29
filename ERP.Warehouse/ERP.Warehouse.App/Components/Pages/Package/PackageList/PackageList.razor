@@ -115,14 +115,15 @@
 
                 <PropertyColumn Property="x => x.ProductCode" Title="Product Name" HeaderStyle="min-width: 200px;">
                     <EditTemplate>
-                        <MudSelect T="string"
+                        @if (_formType == EnumFormType.Create || _formType == EnumFormType.Edit)
+                        {
+                            <MudSelect T="string"
                                    Value="_reqModel.ProductCode"
                                    ValueChanged="OnProductCodeChanged"
                                    Label="Product Name"
                                    Style="width: 100%; min-width: 500px;"
                                    Variant="MudBlazor.Variant.Outlined"
                                    Margin="Margin.Dense"
-                                   Disabled="@(_formType == EnumFormType.StockModifly)"
                                    Required="true"
                                    RequiredError="Product Name is required!"
                                    Clearable>
@@ -134,45 +135,46 @@
                                 }
                             }
                         </MudSelect>
+                        }
                     </EditTemplate>
                 </PropertyColumn>
 
                 <PropertyColumn Property="x => x.BoxCode" Title="Box" HeaderStyle="min-width: 250px;">
                     <EditTemplate>
-                        <MudSelect T="string"
-                                   Value="_reqModel.BoxCode"
-                                   ValueChanged="OnBoxCodeChanged"
-                                   Label="Box"
-                                   Style="width: 100%; min-width: 500px;"
-                                   Variant="MudBlazor.Variant.Outlined"
-                                   Margin="Margin.Dense"
-                                   Disabled="@(_formType == EnumFormType.StockModifly)"
-                                   Required="true"
-                                   RequiredError="Box is required!"
-                                   Clearable>
-                            @if (_boxList != null)
-                            {
-                                @foreach (var item in _boxList)
+                        @if (_formType == EnumFormType.Create || _formType == EnumFormType.Edit)
+                        {
+                            <MudSelect T="string"
+                                       Value="_reqModel.BoxCode"
+                                       ValueChanged="OnBoxCodeChanged"
+                                       Label="Box"
+                                       Style="width: 100%; min-width: 500px;"
+                                       Variant="MudBlazor.Variant.Outlined"
+                                       Margin="Margin.Dense"
+                                       Required="true"
+                                       RequiredError="Box is required!"
+                                       Clearable>
+                                @if (_boxList != null)
                                 {
-                                    <MudSelectItem Value="@item.BoxCode">@item.Box</MudSelectItem>
+                                    @foreach (var item in _boxList)
+                                    {
+                                        <MudSelectItem Value="@item.BoxCode">@item.Box</MudSelectItem>
+                                    }
                                 }
-                            }
-                        </MudSelect>
+                            </MudSelect>
+                        }
                     </EditTemplate>
                 </PropertyColumn>
 
                 <PropertyColumn Property="x => x.Price" Title="Price" HeaderStyle="min-width: 180px;">
                     <EditTemplate>
-                        @if (_formType == EnumFormType.Edit)
-                        {
-                            <MudTextField @bind-Value="_reqModel.Price"
-                                          Label="Price"
-                                          Margin="Margin.Dense"
-                                          Style="width: 100%; min-width: 500px;"
-                                          Variant="MudBlazor.Variant.Outlined"
-                                          Required="true"
-                                          RequiredError="Price is required!" />
-                        }
+                        <MudTextField @bind-Value="_reqModel.Price"
+                                      Label="Price"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Disabled="@(_formType == EnumFormType.StockModifly)"
+                                      Required="true"
+                                      RequiredError="Price is required!" />
                     </EditTemplate>
                 </PropertyColumn>
 
@@ -187,17 +189,17 @@
 
                 <PropertyColumn Property="x => x.CurrencyCode" Title="Currency Code" HeaderStyle="min-width: 180px;" Hidden="true">
                     <EditTemplate>
-                        @if (_formType == EnumFormType.Edit)
+                        @if (_formType == EnumFormType.Create || _formType == EnumFormType.Edit)
                         {
                             <MudSelect @bind-Value="_reqModel.CurrencyCode"
-                                       Label="Currency Code"
-                                       Margin="Margin.Dense"
-                                       Style="width: 100%; min-width: 500px;"
-                                       Variant="MudBlazor.Variant.Outlined"
-                                       Required="true"
-                                       RequiredError="Currency Code is required!">
+                                   Label="Currency Code"
+                                   Margin="Margin.Dense"
+                                   Style="width: 100%; min-width: 500px;"
+                                   Variant="MudBlazor.Variant.Outlined"
+                                   Required="true"
+                                   RequiredError="Currency Code is required!">
 
-                                @if (_currencyList != null)
+                            @if (_currencyList != null)
                             {
                                 @foreach (var role in _currencyList)
                                 {
@@ -211,16 +213,16 @@
 
                 <PropertyColumn Property="x => x.Weight" Title="Weight" HeaderStyle="min-width: 180px;" Hidden="true">
                     <EditTemplate>
-                        @if (_formType == EnumFormType.Edit)
+                        @if (_formType == EnumFormType.Create || _formType == EnumFormType.Edit)
                         {
                             <MudTextField @bind-Value="_reqModel.Weight"
-                                          Label="Weight"
-                                          Margin="Margin.Dense"
-                                          Style="width: 100%; min-width: 500px;"
-                                          Variant="MudBlazor.Variant.Outlined"
-                                          Required="true"
-                                          AdornmentText="Kg"
-                                          RequiredError="Weight is required!" />
+                                      Label="Weight"
+                                      Margin="Margin.Dense"
+                                      Style="width: 100%; min-width: 500px;"
+                                      Variant="MudBlazor.Variant.Outlined"
+                                      Required="true"
+                                      AdornmentText="Kg"
+                                      RequiredError="Weight is required!" />
                         }
                     </EditTemplate>
                 </PropertyColumn>

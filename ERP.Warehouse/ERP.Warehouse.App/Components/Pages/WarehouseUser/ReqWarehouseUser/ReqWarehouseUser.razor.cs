@@ -103,12 +103,6 @@ public partial class ReqWarehouseUser
     {
         try
         {
-            if (reqModel is null || string.IsNullOrEmpty(reqModel.ReqWarehouseUserId))
-            {
-                _formType = EnumFormType.Create;
-                return;
-            }
-
             await GetRole();
             await GetBranch();
 

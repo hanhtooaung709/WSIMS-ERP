@@ -7,7 +7,7 @@
 @using WSIMS_ERP.Shared.Enums
 @inject HttpClient httpClient
 
-@if (_formType is EnumFormType.List or EnumFormType.Edit or EnumFormType.Create)
+@if (_formType is EnumFormType.List or EnumFormType.Edit)
 {
     <MudPaper Class="pa-4 mb-4">
         <MudText Typo="Typo.h6" Style="font-weight: 600; color: #333; margin-bottom: 12px;">Requested Products</MudText>

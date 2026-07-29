@@ -19,6 +19,11 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// Quanitity is can't be 0!
+    /// </summary>
+    public static readonly string WHE100 = "WH#E100";
+
+    /// <summary>
     /// You are wasn't choose Destination Branch! Please choose Destination Branch.
     /// </summary>
     public static readonly string WHE099 = "WH#E099";

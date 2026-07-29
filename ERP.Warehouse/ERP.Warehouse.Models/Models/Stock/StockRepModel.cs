@@ -20,4 +20,5 @@ public class StockModel
     public string? BranchCode { get; set; }
     public string? SourceBranch { get; set; }
     public string? Status { get; set; }
+    public string? ImagePath { get; set; }
 }

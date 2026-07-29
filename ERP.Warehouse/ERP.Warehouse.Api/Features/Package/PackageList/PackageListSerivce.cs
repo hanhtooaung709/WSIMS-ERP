@@ -500,9 +500,23 @@ public class PackageListSerivce : AuthorizationService
         PackageDetailModel model = new PackageDetailModel();
         try
         {
+            #region Check User
+
+            var user = await _db.TblWarehouseUsers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.WarehouseUserId == AuthorizedUserId &&
+                                          x.DelFlag == 0);
+            if (user is null)
+            {
+                return Result<PackageDetailModel>.Error(JsonResource.WHE001);
+            }
+
+            #endregion
+
             var detail = await _dapperService.GetDetailAsync<PackageDetailInfoModel>(
                SqlQueries.Sp_GetPackageDetail, new
                {
+                   BranchCode = user.BranchCode,
                    PackageId = reqModel.PackageInfoId
                }, CommandType.StoredProcedure);
 
@@ -599,6 +613,16 @@ public class PackageListSerivce : AuthorizationService
             if (reqPackage)
             {
                 model = Result<PackageModel>.Error(JsonResource.WHE093);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Stock Quantity
+
+            if (reqModel.Quantity == 0)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE100);
                 return model;
             }
 

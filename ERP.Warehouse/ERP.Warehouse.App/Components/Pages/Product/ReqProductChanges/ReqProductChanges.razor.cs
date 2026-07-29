@@ -108,12 +108,6 @@ public partial class ReqProductChanges
     {
         try
         {
-            if (reqModel is null || string.IsNullOrEmpty(reqModel.ReqProductChangesId))
-            {
-                _formType = EnumFormType.Create;
-                return;
-            }
-
             _edit.ReqProductChangesId = reqModel.ReqProductChangesId!;
 
             await _injectService.EnableLoading();

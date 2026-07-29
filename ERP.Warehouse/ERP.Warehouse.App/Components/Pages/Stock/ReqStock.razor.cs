@@ -81,14 +81,88 @@ public partial class ReqStock
         }
     }
 
-    private async Task Save(StockModel reqModel)
+    private async Task Save()
     {
+        try
+        {
+            bool confirm = await _injectService.ShowUpdateDialog();
+            if (!confirm) return;
 
+            await _injectService.EnableLoading();
+            var result = await _apiService.Update(_reqModel);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            await _injectService.ShowDialog(result);
+
+            _reqModel = new();
+            _formType = EnumFormType.List;
+            await List();
+        }
+
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
     }
 
     private async Task Edit(StockModel reqModel)
     {
+        try
+        {
+            await GetBranch();
+            await GetProduct();
+            await GetCurrency();
+            await GetBox();
+            await GetOtherBranch();
+            _edit.ReqPackageId = reqModel.ReqPackageId!;
+            _edit.PackageId = reqModel.PackageId!;
 
+            await _injectService.EnableLoading();
+            var result = await _apiService.Edit(_edit);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+
+            _reqModel.ReqPackageId = result.Data.ReqPackageId;
+            _reqModel.PackageId = result.Data.PackageId;
+            _reqModel.PackageName = result.Data.PackageName;
+            _reqModel.PackageInfoCode = result.Data.PackageInfoCode;
+            _reqModel.ProductCode = result.Data.ProductCode;
+            _reqModel.BoxCode = result.Data.BoxCode;
+            _reqModel.BranchCode = result.Data.BranchCode;
+            _reqModel.Price = result.Data.Price;
+            _reqModel.Quantity = result.Data.Quantity;
+            _reqModel.InStockQuantity = result.Data.InStockQuantity;
+            _reqModel.SourceBranch = result.Data.SourceBranch;
+            _reqModel.ImagePath = result.Data.ImagePath;
+
+            if (result.Data.ChangesType == EnumRequestedType.Transfer.ToString())
+            {
+                _formType = EnumFormType.StockTransfer;
+            }
+            else
+            {
+                _formType = EnumFormType.StockModifly;
+            }
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
     }
 
     private void Cancel()
@@ -110,12 +184,66 @@ public partial class ReqStock
 
     private async Task Delete(StockModel reqModel)
     {
+        try
+        {
+            bool confirm = await _injectService.Confirm();
+            if (!confirm)
+            {
+                return;
+            }
 
+            _edit.ReqPackageId = reqModel.ReqPackageId!;
+            _edit.PackageId = reqModel.PackageId;
+
+            await _injectService.EnableLoading();
+            var result = await _apiService.Delete(_edit);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            await _injectService.ShowDialog(result);
+
+            await List();
+            _formType = EnumFormType.List;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
     }
 
     private async Task Details(StockModel reqModel)
     {
+        try
+        {
+            _edit.ReqPackageId = reqModel.ReqPackageId!;
 
+            await _injectService.EnableLoading();
+            var result = await _apiService.Details(_edit);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+
+            _details = result.Data!;
+            _formType = EnumFormType.Detail;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
     }
 
     private string GetBadgeClass(string status)
