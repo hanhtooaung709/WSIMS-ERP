@@ -9,7 +9,6 @@ using WSIMS_ERP.Shared.Models.ConfigModel;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
 using WSIMS_ERP.Shared;
-using ERP.Warehouse.Models.Models.Product.ReqProductChanges;
 using Microsoft.EntityFrameworkCore;
 using WSIMS_ERP.Shared.Enums;
 

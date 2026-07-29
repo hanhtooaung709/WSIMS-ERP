@@ -1,9 +1,7 @@
 ﻿using ERP.Warehouse.Api.Common;
 using ERP.Warehouse.Models.Models.Box;
-using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
-using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Queries;

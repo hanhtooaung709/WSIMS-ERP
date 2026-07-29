@@ -1,6 +1,4 @@
 ﻿using ERP.Warehouse.Api.Controller;
-using ERP.Warehouse.Api.Features.Box;
-using ERP.Warehouse.Models.Models.Box;
 using ERP.Warehouse.Models.Models.Currency;
 using Microsoft.AspNetCore.Mvc;
 using WSIMS_ERP.Shared.Services;

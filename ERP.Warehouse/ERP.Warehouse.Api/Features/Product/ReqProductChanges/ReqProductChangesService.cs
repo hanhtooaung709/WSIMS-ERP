@@ -1,5 +1,4 @@
 ﻿using ERP.Warehouse.Api.Common;
-using ERP.Warehouse.Models.Models.Product.ReqProduct;
 using ERP.Warehouse.Models.Models.Product.ReqProductChanges;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

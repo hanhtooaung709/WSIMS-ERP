@@ -9,7 +9,6 @@ using WSIMS_ERP.Shared.Models.DynamicModel;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
-using ERP.Warehouse.Models.Models.Product.ReqProduct;
 using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared.Models.ConfigModel;
 

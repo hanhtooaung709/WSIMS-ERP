@@ -1,7 +1,5 @@
 ﻿using ERP.Warehouse.Api.Controller;
-using ERP.Warehouse.Api.Features.Package.ReqPackage;
 using ERP.Warehouse.Models.Models.Package.PackageList;
-using ERP.Warehouse.Models.Models.Package.ReqPackage;
 using Microsoft.AspNetCore.Mvc;
 using WSIMS_ERP.Shared.Services;
 

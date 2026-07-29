@@ -1,6 +1,5 @@
 ﻿using ERP.Warehouse.App.Common;
 using ERP.Warehouse.Models.Models.Package.ReqPackage;
-using ERP.Warehouse.Models.Models.Product.ReqProduct;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;

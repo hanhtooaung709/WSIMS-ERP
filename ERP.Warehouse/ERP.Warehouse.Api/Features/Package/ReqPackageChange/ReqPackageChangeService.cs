@@ -11,7 +11,6 @@ using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
 using ERP.Warehouse.Models;
 using System.Data;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace ERP.Warehouse.Api.Features.Package.ReqPackageChange;
 

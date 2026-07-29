@@ -1,6 +1,5 @@
 ﻿using ERP.Warehouse.Api.Common;
 using ERP.Warehouse.Models;
-using ERP.Warehouse.Models.Models.Box;
 using WSIMS_ERP.Shared.Models.DynamicModel;
 using ERP.Warehouse.Models.Models.Currency;
 using Microsoft.EntityFrameworkCore;

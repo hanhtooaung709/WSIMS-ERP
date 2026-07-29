@@ -1,7 +1,5 @@
 ﻿using ERP.Warehouse.Api.Controller;
-using ERP.Warehouse.Api.Features.WarehouseUser.ReqWarehouseUser;
 using ERP.Warehouse.Models.Models.Product.ReqProduct;
-using ERP.Warehouse.Models.Models.WarehouseUser.ReqWarehouseUser;
 using Microsoft.AspNetCore.Mvc;
 using WSIMS_ERP.Shared.Services;
 

@@ -11,8 +11,6 @@ using WSIMS_ERP.Shared.Enums;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
-using Microsoft.Extensions.Options;
-using System.Runtime.InteropServices.JavaScript;
 using WSIMS_ERP.Shared.Models.ConfigModel;
 
 namespace ERP.Warehouse.Api.Features.Product.ProductList;
