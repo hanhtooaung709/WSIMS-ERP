@@ -212,13 +212,15 @@
                         <div style="display: inline-block; white-space: nowrap;">
                             @{
                                 var _isDisable = context.Item.Status != EnumRequestedStatus.Pending.ToString();
+                                var _isDisableEdit = context.Item.ChangesType != EnumRequestedType.Update.ToString() ||
+                                context.Item.Status != EnumRequestedStatus.Pending.ToString();
                             }
                             <MudFab Size="@Size.Small"
                                     Class="mr-2"
                                     StartIcon="@Icons.Material.Filled.Edit"
                                     Color="Color.Warning"
                                     OnClick="@context.Actions.StartEditingItemAsync"
-                                    Disabled="_isDisable" />
+                                    Disabled="_isDisableEdit" />
 
                             <MudFab Size="@Size.Small"
                                     Class="mr-2"

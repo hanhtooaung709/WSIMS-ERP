@@ -352,10 +352,13 @@ public class ReqStockService : AuthorizationService
             packageInfo.Add("Package Name", detail.PackageName!);
             packageInfo.Add("Product Name", detail.ProductName!);
             packageInfo.Add("PackageInfo Code", detail.PackageInfoCode!);
+            packageInfo.Add("Branch Name", detail.BranchName!);
+            packageInfo.Add("Quantity", detail.Quantity!);
             packageInfo.Add("Price", detail.Price!);
             packageInfo.Add("Currency Code", detail.CurrencyCode!);
             packageInfo.Add("Weight", detail.Weight!);
             packageInfo.Add("Box", detail.Box!);
+            packageInfo.Add("Changes Type", detail.ChangesType!);
             model.Package = packageInfo;
             model.ItemImagePath = detail.ImagePath;
 
@@ -363,7 +366,7 @@ public class ReqStockService : AuthorizationService
             makerChecker.Add("Requested User", detail.ReqUser!);
             makerChecker.Add("Requested DateTime", detail.ReqDateTime!);
             makerChecker.Add("Approved User", detail.ApprovedUser!.ToDashFromNull());
-            makerChecker.Add("Approved DateTime ", detail.ApprovedDateTime!.ToDashFromNull());
+            makerChecker.Add("Approved DateTime", detail.ApprovedDateTime!.ToDashFromNull());
             makerChecker.Add("Status", detail.Status!);
             makerChecker.Add("Reject Reason", detail.RejectReason!.ToDashFromNull());
             model.MakerChecker = makerChecker;

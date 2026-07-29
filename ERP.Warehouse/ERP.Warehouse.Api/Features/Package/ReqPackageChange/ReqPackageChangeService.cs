@@ -11,6 +11,7 @@ using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
 using ERP.Warehouse.Models;
 using System.Data;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace ERP.Warehouse.Api.Features.Package.ReqPackageChange;
 
@@ -329,6 +330,7 @@ public class ReqPackageChangeService : AuthorizationService
             packageInfo.Add("Currency Code", detail.CurrencyCode!);
             packageInfo.Add("Weight", detail.Weight!);
             packageInfo.Add("Box", detail.Box!);
+            packageInfo.Add("Changes Type", detail.ChangesType!);
             model.PackageInfo = packageInfo;
             model.ItemImagePath = detail.ImagePath;
 

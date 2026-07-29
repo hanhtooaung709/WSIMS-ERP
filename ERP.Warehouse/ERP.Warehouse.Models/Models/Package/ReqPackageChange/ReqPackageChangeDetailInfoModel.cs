@@ -10,6 +10,7 @@ public class ReqPackageChangeDetailInfoModel
     public string? Weight { get; set; }
     public string? Box { get; set; }
     public string? Status { get; set; }
+    public string? ChangesType { get; set; }
     public string? ImagePath { get; set; }
     public string? RejectReason { get; set; }
     public string? ReqUser { get; set; }
