@@ -162,32 +162,32 @@ public class ReqProductChangesService : AuthorizationService
 
             #region Check Duplicate Product Name
 
-            bool userName = await _db.TblProducts
+            bool name = await _db.TblProducts
                 .AsNoTracking()
                 .AnyAsync(x => x.ProductName.Trim().ToLower() == reqModel.ProductName!.Trim().ToLower() &&
                           x.ProductId.Trim().ToLower() == reqModel.ProductId);
-            if (userName)
+            if (name)
             {
                 model = Result<ReqProductChangesModel>.Error(JsonResource.WHE029);
                 return model;
             }
 
-            userName = await _db.TblReqProducts
+            name = await _db.TblReqProducts
                 .AsNoTracking()
                 .AnyAsync(x => x.ProductName.Trim().ToLower() == reqModel.ProductName!.Trim().ToLower() &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
-            if (userName)
+            if (name)
             {
                 model = Result<ReqProductChangesModel>.Error(JsonResource.WHE030);
                 return model;
             }
 
-            userName = await _db.TblReqProductChanges
+            name = await _db.TblReqProductChanges
                 .AsNoTracking()
                 .AnyAsync(x => x.ProductName.Trim().ToLower() == reqModel.ProductName!.Trim().ToLower() &&
                                x.ReqProductChangesId != reqModel.ReqProductChangesId &&
                                x.Status == EnumRequestedStatus.Pending.ToString());
-            if (userName)
+            if (name)
             {
                 model = Result<ReqProductChangesModel>.Error(JsonResource.WHE031);
                 return model;
@@ -244,12 +244,16 @@ public class ReqProductChangesService : AuthorizationService
                 var fileName = product.ReqProductChangesId + ".jpg";
                 imagePath = Path.Combine(imgFolder, fileName);
                 await DevCode.WriteBase64ToFileAsync(reqModel.ImageData, imagePath);
-                product.ImagePath = imagePath;
+            }
+            else
+            {
+                 imagePath = product.ImagePath;
             }
 
             product.ProductName = reqModel.ProductName!;
             product.ProductCode = reqModel.ProductCode!;
             product.SupplierName = reqModel.SupplierName!;
+            product.ImagePath = imagePath;
             product.ReqDateTime = DevCode.GetServerDateTime();
 
             _db.Entry(product).State = EntityState.Modified;

@@ -32,7 +32,7 @@ public class ReqStockService : AuthorizationService
         _dapperService = dapperService;
     }
 
-    #region Get/Create/Edit/Update/Delete/Details
+    #region Get/Edit/Update/Delete/Details
 
     public async Task<Result<StockRepModel>> Get(StockReqModel reqModel)
     {
