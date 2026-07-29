@@ -14,6 +14,7 @@ public class StockModel
     public string? ProductCode { get; set; }
     public string? ChangesType { get; set; }
     public string? BoxCode { get; set; }
+    public string? Price { get; set; }
     public int Quantity { get; set; }
     public string? BranchCode { get; set; }
     public string? Status { get; set; }

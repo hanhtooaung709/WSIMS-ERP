@@ -40,7 +40,7 @@ public partial class ReqStock
         {
             if (firstRender)
             {
-                /*await List();*/
+                await List();
             }
         }
         catch (Exception ex)
@@ -52,7 +52,225 @@ public partial class ReqStock
 
     #region Get/Edit/Update/Delete/Details
 
+    private async Task List()
+    {
+        try
+        {
+            await GetProduct();
+            await GetBox();
 
+            await _injectService.EnableLoading();
+            var result = await _apiService.Get(_reqModel);
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                _reqModel = new();
+                return;
+            }
+
+            _model = result.Data!.list!;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private async Task Save(StockModel reqModel)
+    {
+
+    }
+
+    private async Task Edit(StockModel reqModel)
+    {
+
+    }
+
+    private void Cancel()
+    {
+        try
+        {
+            _reqModel = new();
+            StateHasChanged();
+            List();
+            _formType = EnumFormType.List;
+        }
+        catch (Exception ex)
+        {
+            _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private async Task Delete(StockModel reqModel)
+    {
+
+    }
+
+    private async Task Details(StockModel reqModel)
+    {
+
+    }
+
+    private string GetBadgeClass(string status)
+    {
+        var statusStr = "";
+        try
+        {
+            statusStr = _injectService.GetBadgeClass(status.ToEnum<EnumRequestedStatus>());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCustomError(ex);
+            _ = _injectService.ErrorDialogMessage(ex.Message);
+        }
+
+        return statusStr;
+    }
+
+    private string GetImageUrl(string? imagePath)
+    {
+        if (string.IsNullOrEmpty(imagePath)) return "";
+        var folder = Path.GetFileName(Path.GetDirectoryName(imagePath));
+        var fileName = Path.GetFileName(imagePath);
+        var apiUrl = _setting?.CurrentValue?.WarehouseApp?.WarehouseApiBaseUrl;
+        var baseUrl = string.IsNullOrEmpty(apiUrl) ? _nav.BaseUri.TrimEnd('/') : apiUrl.TrimEnd('/');
+        return $"{baseUrl}/api/image/{folder}/{fileName}";
+    }
+
+    #endregion
+
+    #region DropDown
+
+    private async Task GetBranch()
+    {
+        try
+        {
+            await _injectService.EnableLoading();
+            var result = await _apiService.GetBranch();
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            _banchList = result.Data;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private async Task GetProduct()
+    {
+        try
+        {
+            await _injectService.EnableLoading();
+            var result = await _apiService.GetProduct();
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            _productList = result.Data;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private async Task GetCurrency()
+    {
+        try
+        {
+            await _injectService.EnableLoading();
+            var result = await _apiService.GetCurrency();
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            _currencyList = result.Data;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    private async Task GetBox()
+    {
+        try
+        {
+            await _injectService.EnableLoading();
+            var result = await _apiService.GetBox();
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            _boxList = result.Data;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
+
+    #endregion
+
+    #region Get Other Branch
+
+    private async Task GetOtherBranch()
+    {
+        try
+        {
+            await _injectService.EnableLoading();
+            var result = await _apiService.GetOtherBranch();
+            await _injectService.DisableLoading();
+
+            if (result.IsError)
+            {
+                await _injectService.ShowDialog(result);
+                return;
+            }
+            _otherBanchList = result.Data;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await _injectService.DisableLoading();
+            _logger.LogCustomError(ex);
+            await _injectService.ErrorDialogMessage(ex.Message);
+        }
+    }
 
     #endregion
 }

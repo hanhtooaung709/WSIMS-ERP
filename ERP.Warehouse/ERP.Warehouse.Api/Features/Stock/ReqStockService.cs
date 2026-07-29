@@ -14,6 +14,9 @@ using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Models.ConfigModel;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
+using ERP.Warehouse.Models.Models.Package.PackageList;
+using Npgsql.TypeMapping;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace ERP.Warehouse.Api.Features.Stock;
 
@@ -96,6 +99,7 @@ public class ReqStockService : AuthorizationService
                 PackageInfoCode = reqStock.PackageInfoCode,
                 ProductCode = package.ProductCode,
                 BoxCode = package.BoxCode,
+                Price = package.Price.ToString(),
                 Quantity = reqStock.Quantity,
                 BranchCode = reqStock.BranchCode
             };
@@ -115,7 +119,20 @@ public class ReqStockService : AuthorizationService
         var model = new Result<StockModel>();
         try
         {
-            #region Check ReqStock
+            #region Check User
+
+            var user = await _db.TblWarehouseUsers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.WarehouseUserId == AuthorizedUserId);
+            if (user is null)
+            {
+                model = Result<StockModel>.Error(JsonResource.WHE001);
+                return model;
+            }
+
+            #endregion
+
+            #region Check ReqStock & Stock
 
             var reqStock = await _db.TblReqPackages
                 .AsNoTracking()
@@ -139,6 +156,31 @@ public class ReqStockService : AuthorizationService
             #endregion
 
             #region Prepare Data
+
+            if (reqStock.ChangesType == EnumRequestedType.Transfer.ToString())
+            {
+                var inStock = await _db.TblPackages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.PackageId == reqModel.PackageId &&
+                                          x.BranchCode == user.BranchCode &&
+                                          x.DelFlag == 0);
+                if (inStock is null)
+                {
+                    model = Result<StockModel>.Error(JsonResource.WHE083);
+                    return model;
+                }
+
+                if (reqStock.Quantity > reqModel.Quantity)
+                {
+                    inStock.Quantity += reqStock.Quantity - reqModel.Quantity;
+                }
+                else
+                {
+                    inStock.Quantity -= reqModel.Quantity - reqStock.Quantity;
+                }
+                _db.Entry(inStock).State = EntityState.Modified;
+                _db.TblPackages.Update(inStock);
+            }
 
             reqStock.Quantity = reqModel.Quantity!;
             reqStock.BranchCode = reqModel.BranchCode!;
@@ -163,6 +205,19 @@ public class ReqStockService : AuthorizationService
         var model = new Result<StockModel>();
         try
         {
+            #region Check User
+
+            var user = await _db.TblWarehouseUsers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.WarehouseUserId == AuthorizedUserId);
+            if (user is null)
+            {
+                model = Result<StockModel>.Error(JsonResource.WHE001);
+                return model;
+            }
+
+            #endregion
+
             #region Check ReqStock
 
             var reqStock = await _db.TblReqPackages
@@ -187,6 +242,21 @@ public class ReqStockService : AuthorizationService
             #endregion
 
             #region Prepare Data
+
+            if (reqStock.ChangesType == EnumRequestedType.Transfer.ToString())
+            {
+                var inStock = await _db.TblPackages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.PackageId == reqModel.PackageId &&
+                                          x.BranchCode == user.BranchCode &&
+                                          x.DelFlag == 0);
+                if (inStock is null)
+                {
+                    model = Result<StockModel>.Error(JsonResource.WHE083);
+                    return model;
+                }
+                inStock.Quantity += reqStock.Quantity;
+            }
 
             _db.TblReqPackages.Remove(reqStock);
             var result = _db.SaveChanges();
