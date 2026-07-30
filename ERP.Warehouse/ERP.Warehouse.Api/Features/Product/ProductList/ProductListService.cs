@@ -12,6 +12,7 @@ using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
 using WSIMS_ERP.Shared.Models.ConfigModel;
+using DocumentFormat.OpenXml.Bibliography;
 
 namespace ERP.Warehouse.Api.Features.Product.ProductList;
 
@@ -327,6 +328,18 @@ public class ProductListService : AuthorizationService
             if (email)
             {
                 model = Result<ProductModel>.Error(JsonResource.WHE033);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Change Data
+
+            if (product.ProductId == reqModel.ProductId && product.ProductName == reqModel.ProductName &&
+                product.ProductCode == reqModel.ProductCode && product.SupplierName == reqModel.SupplierName &&
+                reqModel.ImageData.IsNullOrEmpty())
+            {
+                model = Result<ProductModel>.Warning(JsonResource.WHE101);
                 return model;
             }
 

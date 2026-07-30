@@ -12,8 +12,6 @@ using WSIMS_ERP.Shared.Models.ConfigModel;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
-using ERP.Warehouse.Models.Models.Product.ProductList;
-using ERP.Warehouse.Models.Models.Currency;
 
 namespace ERP.Warehouse.Api.Features.Package.PackageList;
 
