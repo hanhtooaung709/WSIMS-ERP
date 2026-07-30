@@ -198,6 +198,17 @@ public class ReqStockService : AuthorizationService
 
             #endregion
 
+            #region Check Change Data
+
+            if (reqStock.Quantity == reqModel.Quantity && reqStock.BranchCode == reqModel.BranchCode)
+            {
+                model = Result<StockModel>.Warning(JsonResource.WHE101);
+                return model;
+            }
+
+
+            #endregion
+
             #region Prepare Data
 
             if (reqStock.ChangesType == EnumRequestedType.Transfer.ToString())
