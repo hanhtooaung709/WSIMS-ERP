@@ -237,6 +237,19 @@ public class ReqPackageChangeService : AuthorizationService
 
             #endregion
 
+            #region Check Change Data
+
+            if (reqPackage.PackageName == reqModel.PackageName && reqPackage.PackageInfoCode == reqModel.PackageInfoCode &&
+                reqPackage.ProductCode == reqModel.ProductCode && reqPackage.Price == reqModel.Price!.ToInt32() &&
+                reqPackage.CurrencyCode == reqModel.CurrencyCode && reqPackage.Weight == reqModel.Weight!.ToInt32() &&
+                reqPackage.BoxCode == reqModel.BoxCode)
+            {
+                model = Result<ReqPackageChangeModel>.Warning(JsonResource.WHE101);
+                return model;
+            }
+
+            #endregion
+
             #region Prepare Data
 
             reqPackage.PackageName = reqModel.PackageName!;
