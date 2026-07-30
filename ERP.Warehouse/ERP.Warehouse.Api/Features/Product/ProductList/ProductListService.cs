@@ -12,7 +12,6 @@ using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
 using WSIMS_ERP.Shared.Models.ConfigModel;
-using DocumentFormat.OpenXml.Bibliography;
 
 namespace ERP.Warehouse.Api.Features.Product.ProductList;
 

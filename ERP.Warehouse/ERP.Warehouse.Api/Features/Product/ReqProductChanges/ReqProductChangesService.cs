@@ -229,6 +229,17 @@ public class ReqProductChangesService : AuthorizationService
 
             #endregion
 
+            #region Check Change Data
+
+            if (product.ProductName == reqModel.ProductName && product.ProductCode == reqModel.ProductCode &&
+                product.SupplierName == reqModel.SupplierName && reqModel.ImageData.IsNullOrEmpty())
+            {
+                model = Result<ReqProductChangesModel>.Warning(JsonResource.WHE101);
+                return model;
+            }
+
+            #endregion
+
             #region Prepare Data
 
             var imagePath = "";
