@@ -19,6 +19,11 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// Nothing data you have changed!
+    /// </summary>
+    public static readonly string WHE101 = "WH#E101";
+
+    /// <summary>
     /// Quanitity is can't be 0!
     /// </summary>
     public static readonly string WHE100 = "WH#E100";

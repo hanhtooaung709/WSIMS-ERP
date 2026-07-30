@@ -134,7 +134,7 @@ public class BoxService : AuthorizationService
                 Type = box.Type!,
                 Size = box.Size!,
                 TareWeight = box.TareWeight!,
-                MaxNetWeight = box.TareWeight!,
+                MaxNetWeight = box.MaxNetWeight!,
             };
             model = Result<BoxModel>.Success(response);
 
@@ -188,6 +188,18 @@ public class BoxService : AuthorizationService
             if (type)
             {
                 model = Result<BoxModel>.Error(JsonResource.WHE057);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Change Data
+
+            if (box.BoxCode == reqModel.BoxCode! && box.Type == reqModel.Type! &&
+                box.Size == reqModel.Size! && box.TareWeight == reqModel.TareWeight! &&
+                box.MaxNetWeight == reqModel.MaxNetWeight!)
+            {
+                model = Result<BoxModel>.Warning(JsonResource.WHE101);
                 return model;
             }
 

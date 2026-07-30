@@ -64,13 +64,20 @@ public class HttpClientService
                         respDesp = respDespElement.GetString() ?? "";
                     }
 
-                    if (respType == 1)
+                    switch (respType)
                     {
-                        return new Result<TResponse>
-                        {
-                            RespDesp = respDesp,
-                            RespType = EnumRespType.Error
-                        };
+                        case 1:
+                            return new Result<TResponse>
+                            {
+                                RespDesp = respDesp,
+                                RespType = EnumRespType.Error
+                            };
+                        case 2:
+                            return new Result<TResponse>
+                            {
+                                RespDesp = respDesp,
+                                RespType = EnumRespType.Warning
+                            };
                     }
 
                     if (!root.TryGetProperty("data", out JsonElement dataElement) &&

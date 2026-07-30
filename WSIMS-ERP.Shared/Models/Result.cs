@@ -59,5 +59,15 @@ public class Result<T>
             RespType = EnumRespType.Error
         };
     }
+
+    public static Result<T> Warning(string respCode)
+    {
+        return new Result<T>
+        {
+            RespCode = respCode,
+            RespType = EnumRespType.Warning
+        };
+    }
+
     #endregion
 }
