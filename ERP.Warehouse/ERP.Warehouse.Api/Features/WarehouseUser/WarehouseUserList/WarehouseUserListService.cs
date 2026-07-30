@@ -10,6 +10,8 @@ using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
 using WSIMS_ERP.Shared.Models.DynamicModel;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
+using DocumentFormat.OpenXml.Spreadsheet;
+using ERP.Warehouse.Models.Models.Branch;
 
 namespace ERP.Warehouse.Api.Features.WarehouseUser.WarehouseUserList;
 
@@ -367,6 +369,18 @@ public class WarehouseUserListService : AuthorizationService
             if (email)
             {
                 model = Result<WarehouseUserModel>.Error(JsonResource.WHE013);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Change Data
+
+            if (user.WarehouseUserId == reqModel.UserId && user.FullName == reqModel.FullName &&
+                user.Phone == reqModel.PhoneNo && user.Email == reqModel.Email &&
+                user.RoleCode == reqModel.RoleCode && user.BranchCode == reqModel.BranchCode)
+            {
+                model = Result<WarehouseUserModel>.Warning(JsonResource.WHE101);
                 return model;
             }
 

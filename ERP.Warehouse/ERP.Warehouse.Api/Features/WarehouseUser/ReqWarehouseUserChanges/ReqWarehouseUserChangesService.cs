@@ -267,6 +267,18 @@ public class ReqWarehouseUserChangesService : AuthorizationService
 
             #endregion
 
+            #region Check Change Data
+
+            if (user.FullName == reqModel.FullName && user.Phone == reqModel.Phone &&
+                user.Email == reqModel.Email && user.RoleCode == reqModel.RoleCode &&
+                user.BranchCode == reqModel.BranchCode)
+            {
+                model = Result<ReqWarehouseUserChangesModel>.Warning(JsonResource.WHE101);
+                return model;
+            }
+
+            #endregion
+
             #region Prepare Data
 
             user.FullName = reqModel.FullName!;

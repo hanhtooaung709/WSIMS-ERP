@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="Features\Product\ProductList\ProductListService.cs~RF2731df.TMP" />
+    <None Remove="Features\WarehouseUser\ReqWarehouseUser\ReqWarehouseUserService.cs~RF8d9d0d.TMP" />
   </ItemGroup>
 
   <ItemGroup>
