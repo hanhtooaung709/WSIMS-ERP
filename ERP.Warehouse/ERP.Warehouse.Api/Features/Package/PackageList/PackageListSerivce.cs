@@ -12,6 +12,8 @@ using WSIMS_ERP.Shared.Models.ConfigModel;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
 using ERP.Warehouse.Models.Models.WarehouseUser.WarehouseUserList;
+using ERP.Warehouse.Models.Models.Product.ProductList;
+using ERP.Warehouse.Models.Models.Currency;
 
 namespace ERP.Warehouse.Api.Features.Package.PackageList;
 
@@ -391,6 +393,19 @@ public class PackageListSerivce : AuthorizationService
             if (item)
             {
                 model = Result<PackageModel>.Error(JsonResource.WHE082);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Change Data
+
+            if (packageInfo.PackageInfoId == reqModel.PackageInfoId && packageInfo.PackageName == reqModel.PackageName &&
+                packageInfo.PackageInfoCode == reqModel.PackageInfoCode && packageInfo.ProductCode == reqModel.ProductCode &&
+                packageInfo.Price == reqModel.Price!.ToInt32() && packageInfo.CurrencyCode == reqModel.CurrencyCode &&
+                packageInfo.Weight == reqModel.Weight!.ToInt32() && packageInfo.BoxCode == reqModel.BoxCode)
+            {
+                model = Result<PackageModel>.Warning(JsonResource.WHE101);
                 return model;
             }
 
