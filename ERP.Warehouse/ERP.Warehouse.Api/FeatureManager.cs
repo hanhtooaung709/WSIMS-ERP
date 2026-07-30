@@ -78,7 +78,7 @@ public static class FeatureManager
         builder.Services.AddScoped<ReqProductChangesService>();
         builder.Services.AddScoped<ApproveReqProductService>();
         builder.Services.AddScoped<ApproveReqProductChangesService>();
-        builder.Services.AddScoped<PackageListSerivce>();
+        builder.Services.AddScoped<PackageListService>();
         builder.Services.AddScoped<ReqPackageService>();
         builder.Services.AddScoped<ReqPackageChangeService>();
         builder.Services.AddScoped<ApproveReqPackageSevice>();

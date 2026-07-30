@@ -9,9 +9,9 @@ namespace ERP.Warehouse.Api.Features.Package.PackageList;
 [ApiController]
 public class PackageListController : BaseController
 {
-    private readonly PackageListSerivce _packageListSerivce;
+    private readonly PackageListService _packageListSerivce;
 
-    public PackageListController(PackageListSerivce packageListSerivce, ResponseService responseService) : base(responseService)
+    public PackageListController(PackageListService packageListSerivce, ResponseService responseService) : base(responseService)
     {
         _packageListSerivce = packageListSerivce;
     }

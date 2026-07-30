@@ -17,13 +17,13 @@ using ERP.Warehouse.Models.Models.Currency;
 
 namespace ERP.Warehouse.Api.Features.Package.PackageList;
 
-public class PackageListSerivce : AuthorizationService
+public class PackageListService : AuthorizationService
 {
 
     private readonly AppDbContext _db;
     private readonly DapperService _dapperService;
 
-    public PackageListSerivce(IHttpContextAccessor httpContextAccessor,
+    public PackageListService(IHttpContextAccessor httpContextAccessor,
         AppDbContext db,
         DapperService dapperService,
         ILogger<AuthorizationService> logger,
