@@ -251,6 +251,20 @@ public class ReqPackageService : AuthorizationService
 
             #endregion
 
+            #region Check Change Data
+
+            if (reqPackage.PackageName == reqModel.PackageName && reqPackage.PackageInfoCode == reqModel.PackageInfoCode &&
+                reqPackage.Quantity == reqModel.Quantity && reqPackage.BranchCode == reqModel.BranchCode &&
+                reqPackage.ProductCode == reqModel.ProductCode && reqPackage.Price == reqModel.Price!.ToInt32() &&
+                reqPackage.CurrencyCode == reqModel.CurrencyCode && reqPackage.Weight == reqModel.Weight!.ToInt32() &&
+                reqPackage.BoxCode == reqModel.BoxCode)
+            {
+                model = Result<ReqPackageModel>.Warning(JsonResource.WHE101);
+                return model;
+            }
+
+            #endregion
+
             #region Prepare Data
 
             reqPackage.PackageName = reqModel.PackageName!;
