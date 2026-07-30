@@ -151,6 +151,7 @@ public class CurrencyService : AuthorizationService
 
             var response = new CurrencyModel
             {
+                CurrencyId = reqModel.CurrencyId,
                 CurrencyCode = box.CurrencyCode!,
                 CurrencyDes = box.CurrencyDescription!
             };
@@ -211,13 +212,23 @@ public class CurrencyService : AuthorizationService
 
             #endregion
 
+            #region Check Change Data
+
+            if (currency.CurrencyCode == reqModel.CurrencyCode &&
+                currency.CurrencyDescription == reqModel.CurrencyDes)
+            {
+                model = Result<CurrencyModel>.Warning(JsonResource.WHE101);
+                return model;
+            }
+
+            #endregion
+
             #region Prepare Data
 
             currency.CurrencyCode = reqModel.CurrencyCode!;
             currency.CurrencyDescription = reqModel.CurrencyDes!;
             currency.ModifiedUserId = AuthorizedUserId;
             currency.ModifiedDateTime = DevCode.GetServerDateTime();
-
 
             _db.Entry(currency).State = EntityState.Modified;
             _db.TblCurrencies.Update(currency);

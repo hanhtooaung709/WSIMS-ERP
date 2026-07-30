@@ -195,9 +195,9 @@ public class BoxService : AuthorizationService
 
             #region Check Change Data
 
-            if (box.BoxCode == reqModel.BoxCode! && box.Type == reqModel.Type! &&
-                box.Size == reqModel.Size! && box.TareWeight == reqModel.TareWeight! &&
-                box.MaxNetWeight == reqModel.MaxNetWeight!)
+            if (box.BoxCode == reqModel.BoxCode && box.Type == reqModel.Type &&
+                box.Size == reqModel.Size && box.TareWeight == reqModel.TareWeight &&
+                box.MaxNetWeight == reqModel.MaxNetWeight)
             {
                 model = Result<BoxModel>.Warning(JsonResource.WHE101);
                 return model;
