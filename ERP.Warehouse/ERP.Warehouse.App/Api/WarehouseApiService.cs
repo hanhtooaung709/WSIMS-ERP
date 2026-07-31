@@ -1,5 +1,6 @@
 ﻿using ERP.Warehouse.App.Api.Endpoints.ApprovePackage;
 using ERP.Warehouse.App.Api.Endpoints.ApproveProduct;
+using ERP.Warehouse.App.Api.Endpoints.ApproveStock;
 using ERP.Warehouse.App.Api.Endpoints.Box;
 using ERP.Warehouse.App.Api.Endpoints.Branch;
 using ERP.Warehouse.App.Api.Endpoints.Currency;
@@ -481,6 +482,26 @@ public class WarehouseApiService
     public async Task<Result<StockDetailModel>> Details(StockEditModel reqModel)
        => await _httpClientService.ExecuteAsync<StockEditModel, StockDetailModel>
        (ReqStockEndpoints.Details, reqModel);
+
+    #endregion
+
+    #region ApproveReqPackage
+
+    public async Task<Result<StockRepModel>> GetApproveStock(StockReqModel reqModel)
+        => await _httpClientService.ExecuteAsync<StockReqModel, StockRepModel>
+        (ApproveStockApiEndpoints.Get, reqModel);
+
+    public async Task<Result<StockModel>> Approve(StockEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<StockEditModel, StockModel>
+       (ApproveStockApiEndpoints.Approve, reqModel);
+
+    public async Task<Result<StockModel>> Reject(StockEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<StockEditModel, StockModel>
+       (ApproveStockApiEndpoints.Reject, reqModel);
+
+    public async Task<Result<StockDetailModel>> ApproveReqPackageDetails(StockEditModel reqModel)
+       => await _httpClientService.ExecuteAsync<StockEditModel, StockDetailModel>
+       (ApproveStockApiEndpoints.Details, reqModel);
 
     #endregion
 }
