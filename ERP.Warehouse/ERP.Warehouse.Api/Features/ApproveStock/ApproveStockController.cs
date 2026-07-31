@@ -1,4 +1,5 @@
 ﻿using ERP.Warehouse.Api.Controller;
+using ERP.Warehouse.Api.Features.Stock;
 using ERP.Warehouse.Models.Models.Stock;
 using Microsoft.AspNetCore.Mvc;
 using WSIMS_ERP.Shared.Services;
@@ -23,6 +24,14 @@ public class ApproveStockController : BaseController
     public async Task<IActionResult> Get(StockReqModel reqModel)
     {
         var result = await _approveStockService.Get(reqModel);
+        return await Execute(result);
+    }
+
+    [HttpPost]
+    [Route("Details")]
+    public async Task<IActionResult> Details(StockEditModel reqModel)
+    {
+        var result = await _approveStockService.Details(reqModel);
         return await Execute(result);
     }
 

@@ -1,11 +1,15 @@
 ﻿using ERP.Warehouse.Api.Common;
+using ERP.Warehouse.Models;
 using ERP.Warehouse.Models.Models.Stock;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
+using WSIMS_ERP.Shared.Models.DynamicModel;
+using System.Data;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Models.ConfigModel;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
+using WSIMS_ERP.Shared;
 
 namespace ERP.Warehouse.Api.Features.ApproveStock;
 
@@ -62,6 +66,48 @@ public class ApproveStockService : AuthorizationService
         catch (Exception ex)
         {
             return Result<StockRepModel>.Error(ex);
+        }
+    }
+
+    public async Task<Result<StockDetailModel>> Details(StockEditModel reqModel)
+    {
+        StockDetailModel model = new();
+        try
+        {
+            var detail = await _dapperService.GetDetailAsync<StockDetailInfoModel>(
+                SqlQueries.Sp_GetStockDetail, new
+                {
+                    ReqPackageId = reqModel.ReqPackageId
+                }, CommandType.StoredProcedure);
+
+            List<DynamicReportModel> packageInfo = new List<DynamicReportModel>();
+            packageInfo.Add("Package Name", detail.PackageName!);
+            packageInfo.Add("Product Name", detail.ProductName!);
+            packageInfo.Add("PackageInfo Code", detail.PackageInfoCode!);
+            packageInfo.Add("Branch Name", detail.BranchName!);
+            packageInfo.Add("Quantity", detail.Quantity!);
+            packageInfo.Add("Price", detail.Price!);
+            packageInfo.Add("Currency Code", detail.CurrencyCode!);
+            packageInfo.Add("Weight", detail.Weight!);
+            packageInfo.Add("Box", detail.Box!);
+            packageInfo.Add("Changes Type", detail.ChangesType!);
+            model.Package = packageInfo;
+            model.ItemImagePath = detail.ImagePath;
+
+            List<DynamicReportModel> makerChecker = new List<DynamicReportModel>();
+            makerChecker.Add("Requested User", detail.ReqUser!);
+            makerChecker.Add("Requested DateTime", detail.ReqDateTime!);
+            makerChecker.Add("Approved User", detail.ApprovedUser!.ToDashFromNull());
+            makerChecker.Add("Approved DateTime", detail.ApprovedDateTime!.ToDashFromNull());
+            makerChecker.Add("Status", detail.Status!);
+            makerChecker.Add("Reject Reason", detail.RejectReason!.ToDashFromNull());
+            model.MakerChecker = makerChecker;
+
+            return Result<StockDetailModel>.Success(model);
+        }
+        catch (Exception ex)
+        {
+            return Result<StockDetailModel>.Error(ex);
         }
     }
 
