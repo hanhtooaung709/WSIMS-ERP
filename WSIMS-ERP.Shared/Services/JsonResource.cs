@@ -19,6 +19,16 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// Requested Stock is successfully Rejected.
+    /// </summary>
+    public static readonly string WHS104 = "WH#S104";
+
+    /// <summary>
+    /// Stock does not exist!
+    /// </summary>
+    public static readonly string WHE103 = "WH#E103";
+
+    /// <summary>
     /// Requested Stock is successfully Approved.
     /// </summary>
     public static readonly string WHS102 = "WH#S102";

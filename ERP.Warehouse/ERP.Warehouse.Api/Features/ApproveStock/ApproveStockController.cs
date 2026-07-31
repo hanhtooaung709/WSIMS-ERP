@@ -36,6 +36,14 @@ public class ApproveStockController : BaseController
     }
 
     [HttpPost]
+    [Route("Reject")]
+    public async Task<IActionResult> Reject(StockEditModel reqModel)
+    {
+        var result = await _approveStockService.Reject(reqModel);
+        return await Execute(result);
+    }
+
+    [HttpPost]
     [Route("Details")]
     public async Task<IActionResult> Details(StockEditModel reqModel)
     {

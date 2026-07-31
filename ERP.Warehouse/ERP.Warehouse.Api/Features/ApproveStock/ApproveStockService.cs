@@ -162,6 +162,87 @@ public class ApproveStockService : AuthorizationService
         return model;
     }
 
+    public async Task<Result<StockModel>> Reject(StockEditModel reqModel)
+    {
+        var model = new Result<StockModel>();
+        try
+        {
+            #region Check ReqStock
+
+            var reqPackage = await _db.TblReqPackages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ReqPackageId == reqModel.ReqPackageId);
+            if (reqPackage is null)
+            {
+                model = Result<StockModel>.Error(JsonResource.WHE094);
+                return model;
+            }
+
+            bool package = await _db.TblReqPackages
+                .AsNoTracking()
+                .AnyAsync(x => x.ReqPackageId == reqModel.ReqPackageId &&
+                               x.Status != EnumRequestedStatus.Pending.ToString());
+            if (package)
+            {
+                model = Result<StockModel>.Error(JsonResource.WHE095);
+                return model;
+            }
+
+            #endregion
+
+            #region Check ReqUser
+
+            var user = await _db.TblWarehouseUsers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.WarehouseUserId == reqPackage.ReqUserId);
+            if (user is null)
+            {
+                return Result<StockModel>.Error(JsonResource.WHE019);
+            }
+
+            #endregion
+
+            #region Check Stock
+
+            var stock = await _db.TblPackages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.PackageId == reqModel.PackageId &&
+                                          x.BranchCode == user.BranchCode);
+
+            if (stock is null)
+            {
+                return Result<StockModel>.Error(JsonResource.WHE103);
+            }
+
+            #endregion
+
+            #region Prepare Data
+
+            if (reqPackage.ChangesType == EnumRequestedType.Transfer.ToString())
+            {
+                stock.Quantity += reqPackage.Quantity;
+                _db.Entry(stock).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+            }
+
+            reqPackage.Status = EnumRequestedStatus.Rejected.ToString();
+            reqPackage.ApprovedUserId = AuthorizedUserId;
+            reqPackage.ApprovedDateTime = DevCode.GetServerDateTime();
+            reqPackage.RejectReason = reqModel.RejectReason;
+            _db.Entry(reqPackage).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+
+            model = Result<StockModel>.Success(JsonResource.WHS066);
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<StockModel>.Error(ex);
+        }
+        return model;
+    }
+
     public async Task<Result<StockDetailModel>> Details(StockEditModel reqModel)
     {
         StockDetailModel model = new();
