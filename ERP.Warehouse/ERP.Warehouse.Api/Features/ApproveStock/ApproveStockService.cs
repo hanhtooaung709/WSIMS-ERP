@@ -10,6 +10,11 @@ using WSIMS_ERP.Shared.Models.ConfigModel;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
 using WSIMS_ERP.Shared;
+using ERP.Warehouse.Models.Models.Package.ReqPackage;
+using WSIMS_ERP.Shared.Enums;
+using ERP.Warehouse.Models.Models.Branch;
+using System.IO.Packaging;
+using ERP.Warehouse.Models.Models.Product.ReqProduct;
 
 namespace ERP.Warehouse.Api.Features.ApproveStock;
 
@@ -67,6 +72,94 @@ public class ApproveStockService : AuthorizationService
         {
             return Result<StockRepModel>.Error(ex);
         }
+    }
+
+    public async Task<Result<StockModel>> Approve(StockEditModel reqModel)
+    {
+        var model = new Result<StockModel>();
+        try
+        {
+            #region Check User
+
+            var user = await _db.TblWarehouseUsers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.WarehouseUserId == AuthorizedUserId);
+            if (user is null)
+            {
+                return Result<StockModel>.Error(JsonResource.WHE001);
+            }
+
+            #endregion
+
+            #region Check ReqStock
+
+            var reqPackage = await _db.TblReqPackages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ReqPackageId == reqModel.ReqPackageId);
+            if (reqPackage is null)
+            {
+                model = Result<StockModel>.Error(JsonResource.WHE094);
+                return model;
+            }
+
+            bool package = await _db.TblReqPackages
+                .AsNoTracking()
+                .AnyAsync(x => x.ReqPackageId == reqModel.ReqPackageId &&
+                               x.Status != EnumRequestedStatus.Pending.ToString());
+            if (package)
+            {
+                model = Result<StockModel>.Error(JsonResource.WHE095);
+                return model;
+            }
+
+
+            #endregion
+
+            #region Check Stock
+
+            var stock = await _db.TblPackages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.PackageId == reqModel.PackageId &&
+                                          x.BranchCode == reqPackage.BranchCode);
+
+            #endregion
+
+            #region Prepare Data
+
+            if (stock.IsNullOrEmpty())
+            {
+                TblPackage item = new TblPackage
+                {
+                    PackageId = DevCode.GenerateUlid(),
+                    PackageInfoCode = reqPackage.PackageInfoCode,
+                    Quantity = reqPackage.Quantity,
+                    BranchCode = reqPackage.BranchCode,
+                    CreatedUserId = AuthorizedUserId,
+                    CreatedDateTime = DevCode.GetServerDateTime()
+                };
+
+                await _db.TblPackages.AddAsync(item);
+                await _db.SaveChangesAsync();
+            }
+            else
+            {
+                stock!.Quantity += reqPackage.Quantity;
+                stock.ModifiedUserId = AuthorizedUserId;
+                stock.ModifiedDateTime = DevCode.GetServerDateTime();
+
+                _db.Entry(stock).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+            }
+
+            model = Result<StockModel>.Success(JsonResource.WHS102);
+
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            return Result<StockModel>.Error(ex);
+        }
+        return model;
     }
 
     public async Task<Result<StockDetailModel>> Details(StockEditModel reqModel)

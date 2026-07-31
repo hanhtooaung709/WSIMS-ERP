@@ -19,6 +19,11 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// Requested Stock is successfully Approved.
+    /// </summary>
+    public static readonly string WHS102 = "WH#S102";
+
+    /// <summary>
     /// Nothing data you have changed!
     /// </summary>
     public static readonly string WHE101 = "WH#E101";

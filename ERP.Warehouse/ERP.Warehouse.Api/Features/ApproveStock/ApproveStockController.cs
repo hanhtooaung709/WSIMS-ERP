@@ -28,6 +28,14 @@ public class ApproveStockController : BaseController
     }
 
     [HttpPost]
+    [Route("Approve")]
+    public async Task<IActionResult> Approve(StockEditModel reqModel)
+    {
+        var result = await _approveStockService.Approve(reqModel);
+        return await Execute(result);
+    }
+
+    [HttpPost]
     [Route("Details")]
     public async Task<IActionResult> Details(StockEditModel reqModel)
     {
