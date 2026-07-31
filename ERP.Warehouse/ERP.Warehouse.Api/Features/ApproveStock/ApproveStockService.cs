@@ -119,7 +119,7 @@ public class ApproveStockService : AuthorizationService
 
             var stock = await _db.TblPackages
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.PackageId == reqModel.PackageId &&
+                .FirstOrDefaultAsync(x => x.PackageInfoCode == reqPackage.PackageInfoCode &&
                                           x.BranchCode == reqPackage.BranchCode);
 
             #endregion
@@ -150,6 +150,12 @@ public class ApproveStockService : AuthorizationService
                 _db.Entry(stock).State = EntityState.Modified;
                 await _db.SaveChangesAsync();
             }
+
+            reqPackage.Status = EnumRequestedStatus.Approved.ToString();
+            reqPackage.ApprovedUserId = AuthorizedUserId;
+            reqPackage.ApprovedDateTime = DevCode.GetServerDateTime();
+            _db.Entry(reqPackage).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
 
             model = Result<StockModel>.Success(JsonResource.WHS102);
 
