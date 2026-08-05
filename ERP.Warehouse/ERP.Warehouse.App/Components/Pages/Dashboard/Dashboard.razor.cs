@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using ERP.Warehouse.Models.Models.Dashboard.Box;
+﻿using Microsoft.JSInterop;
 using MudBlazor;
 using WSIMS_ERP.Shared;
 
@@ -9,6 +8,11 @@ public partial class Dashboard
 {
     private int _index = -1;
     private int _height = 420;
+    private AxisChartOptions _chartOptions = new()
+    {
+        XAxisLabelRotation = 90,
+        MatchBoundsToSize = true
+    };
     private List<ChartSeries> _series = new();
     private List<string> _boxTypes = new();
     private string[] _productNames = Array.Empty<string>();
@@ -21,6 +25,8 @@ public partial class Dashboard
             {
                 await GetDashboardData();
             }
+
+            await JSRuntime.InvokeVoidAsync("fixMudChartXAxisLabels");
         }
         catch (Exception ex)
         {
@@ -45,7 +51,7 @@ public partial class Dashboard
 
             #region GetProductName
 
-            List<string> productList = result.Data?.ProductName;
+            var productList = result.Data?.ProductName ?? new List<string>();
             _productNames = productList.ToArray();
 
             #endregion

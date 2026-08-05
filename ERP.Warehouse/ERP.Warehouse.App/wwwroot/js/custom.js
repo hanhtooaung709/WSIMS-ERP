@@ -711,3 +711,43 @@ window.getInputValue = (id) => {
     const el = document.getElementById(id);
     return el ? el.value : '';
 };
+
+/**
+ * MudBlazor 8.7.0 anchors rotated (90°) chart x-axis labels at boundHeight - 10,
+ * so the first character of vertical labels is clipped below the viewBox.
+ * This shifts the x-axis group up by the exact overflow so full names are visible.
+ */
+window.fixMudChartXAxisLabels = function () {
+    const apply = function () {
+        const svg = document.querySelector('.mud-chart-line');
+        if (!svg || !svg.viewBox || !svg.viewBox.baseVal) return;
+        const xaxis = svg.querySelector('.mud-charts-xaxis');
+        if (!xaxis) return;
+
+        const bbox = xaxis.getBBox();
+        if (!bbox || !bbox.height) return;
+
+        const viewBoxHeight = svg.viewBox.baseVal.height;
+        const bottom = bbox.y + bbox.height;
+        const shift = Math.max(0, Math.ceil(bottom - (viewBoxHeight - 2)));
+        if (!shift) return;
+
+        const target = 'translate(0 ' + (-shift) + ')';
+        if (xaxis.getAttribute('transform') !== target) {
+            xaxis.setAttribute('transform', target);
+        }
+    };
+
+    apply();
+
+    if (!window.__chartXAxisObserver) {
+        window.__chartXAxisObserver = new MutationObserver(apply);
+        window.__chartXAxisObserver.observe(document.body, {
+            subtree: true,
+            childList: true,
+            characterData: true,
+            attributes: true,
+            attributeFilter: ['x', 'y', 'transform']
+        });
+    }
+};
