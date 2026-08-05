@@ -7,6 +7,7 @@ using ERP.Warehouse.Api.Features.ApproveStock;
 using ERP.Warehouse.Api.Features.Box;
 using ERP.Warehouse.Api.Features.Branch;
 using ERP.Warehouse.Api.Features.Currency;
+using ERP.Warehouse.Api.Features.Dashboard;
 using ERP.Warehouse.Api.Features.Package.PackageList;
 using ERP.Warehouse.Api.Features.Package.ReqPackage;
 using ERP.Warehouse.Api.Features.Package.ReqPackageChange;
@@ -68,6 +69,7 @@ public static class FeatureManager
         builder.Services.AddScoped<AuthorizationService>();
         builder.Services.AddScoped<JwtTokenHelper>();
         builder.Services.AddScoped<SignInService>();
+        builder.Services.AddScoped<DashboardService>();
         builder.Services.AddScoped<WarehouseUserListService>();
         builder.Services.AddScoped<ReqWarehouseUserService>();
         builder.Services.AddScoped<ReqWarehouseUserChangesService>();
