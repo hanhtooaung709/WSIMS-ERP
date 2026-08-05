@@ -8,10 +8,10 @@ namespace ERP.Warehouse.App.Components.Pages.Dashboard;
 public partial class Dashboard
 {
     private int _index = -1;
-    private int _height = 350;
-    private string[] _xAxisLabels = { "January", "February", "March", "April", "May", "June", "July", "August", "September" };
+    private int _height = 420;
     private List<ChartSeries> _series = new();
     private List<string> _boxTypes = new();
+    private string[] _productNames = Array.Empty<string>();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -43,11 +43,23 @@ public partial class Dashboard
                 return;
             }
 
+            #region GetProductName
+
+            List<string> productList = result.Data?.ProductName;
+            _productNames = productList.ToArray();
+
+            #endregion
+
+            #region GetBoxType
+
             _boxTypes = result.Data!.BoxType! ?? new();
             _series = _boxTypes.Select(boxType => new ChartSeries
             {
-                Name = boxType
+                Name = boxType,
+                Data = new double[_productNames.Length]
             }).ToList();
+
+            #endregion
 
             StateHasChanged();
         }

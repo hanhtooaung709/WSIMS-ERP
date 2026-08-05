@@ -1,6 +1,7 @@
 ﻿using ERP.Warehouse.Api.Common;
 using ERP.Warehouse.Models.Models.Dashboard;
 using ERP.Warehouse.Models.Models.Dashboard.Box;
+using ERP.Warehouse.Models.Models.Dashboard.Product;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
 using WSIMS_ERP.Shared.Models;
@@ -29,6 +30,17 @@ public class DashboardService : AuthorizationService
         DashboardModel model = new();
         try
         {
+            #region GetProductName
+
+            var productName = await GetProductName();
+
+            if (productName.IsSuccess && productName.Data != null)
+            {
+                model.ProductName = productName.Data.Select(x => x.ProductName).ToList();
+            }
+
+            #endregion
+
             #region GetBoxType
 
             var boxType = await GetBoxType();
@@ -45,6 +57,28 @@ public class DashboardService : AuthorizationService
         catch (Exception ex)
         {
             return Result<DashboardModel>.Error(ex);
+        }
+    }
+
+    private async Task<Result<List<ProductResponceModel>>> GetProductName()
+    {
+        try
+        {
+            var result = await _db.TblProducts
+                .AsNoTracking()
+                .Where(x => x.DelFlag == 0)
+                .OrderByDescending(x => x.CreatedDateTime)
+                .Select(x => new ProductResponceModel
+                {
+                    ProductName = x.ProductName
+                })
+                .ToListAsync();
+
+            return Result<List<ProductResponceModel>>.Success(result);
+        }
+        catch (Exception ex)
+        {
+            return Result<List<ProductResponceModel>>.Error(ex);
         }
     }
 

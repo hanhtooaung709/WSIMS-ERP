@@ -5,4 +5,5 @@ namespace ERP.Warehouse.Models.Models.Dashboard;
 public class DashboardModel
 {
     public List<string> BoxType { get; set; }
+    public List<string> ProductName { get; set; }
 }
