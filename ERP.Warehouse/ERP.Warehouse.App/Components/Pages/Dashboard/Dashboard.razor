@@ -1,5 +1,14 @@
 ﻿@page "/dashboard"
 @using Microsoft.AspNetCore.Authorization
+@inject ILogger<Dashboard> _logger
 @attribute [Authorize]
+@inject HttpClient httpClient
 
-<h3>Dashboard</h3>
+<MudPaper Class="doc-section-component-container">
+    <MudChart ChartType="ChartType.Bar"
+              ChartSeries="@_series"
+              @bind-SelectedIndex="_index"
+              XAxisLabels="@_xAxisLabels"
+              Width="100%"
+              Height="@($"{_height}px")" />
+</MudPaper>
