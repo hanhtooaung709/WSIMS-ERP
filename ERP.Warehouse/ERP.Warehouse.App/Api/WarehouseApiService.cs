@@ -4,6 +4,7 @@ using ERP.Warehouse.App.Api.Endpoints.ApproveStock;
 using ERP.Warehouse.App.Api.Endpoints.Box;
 using ERP.Warehouse.App.Api.Endpoints.Branch;
 using ERP.Warehouse.App.Api.Endpoints.Currency;
+using ERP.Warehouse.App.Api.Endpoints.Dashboard;
 using ERP.Warehouse.App.Api.Endpoints.Package;
 using ERP.Warehouse.App.Api.Endpoints.Product;
 using ERP.Warehouse.App.Api.Endpoints.SignIn;
@@ -12,6 +13,7 @@ using ERP.Warehouse.App.Api.Endpoints.WarehouseUser;
 using ERP.Warehouse.Models.Models.Box;
 using ERP.Warehouse.Models.Models.Branch;
 using ERP.Warehouse.Models.Models.Currency;
+using ERP.Warehouse.Models.Models.Dashboard;
 using ERP.Warehouse.Models.Models.Package.PackageList;
 using ERP.Warehouse.Models.Models.Package.ReqPackage;
 using ERP.Warehouse.Models.Models.Package.ReqPackageChange;
@@ -502,6 +504,14 @@ public class WarehouseApiService
     public async Task<Result<StockDetailModel>> ApproveReqPackageDetails(StockEditModel reqModel)
        => await _httpClientService.ExecuteAsync<StockEditModel, StockDetailModel>
        (ApproveStockApiEndpoints.Details, reqModel);
+
+    #endregion
+
+    #region Dashboard
+
+    public async Task<Result<DashboardModel>> GetDashboardData()
+        => await _httpClientService.ExecuteAsync<object, DashboardModel>
+        (DashboardApiEndpoints.Get, null);
 
     #endregion
 }
