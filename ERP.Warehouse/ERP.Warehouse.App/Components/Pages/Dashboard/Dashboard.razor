@@ -67,6 +67,36 @@
                 </MudCard>
             </MudItem>
 
+            <MudItem xs="12" sm="6">
+                <MudCard Elevation="25" Class="rounded-lg">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.subtitle2" Color="Color.Secondary">Total Stock Packages</MudText>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudAvatar Color="Color.Warning" Variant="MudBlazor.Variant.Filled">
+                                <MudIcon Icon="@Icons.Material.Filled.Inventory" Size="Size.Medium" />
+                            </MudAvatar>
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <div class="d-flex justify-space-between align-center">
+                            <MudText Typo="Typo.h4" Class="font-weight-bold">
+                                @_model.PackageStockCount <span style="font-size: 1rem; color: gray;">/ @_model.PackageCount</span>
+                            </MudText>
+
+                            <MudText Typo="Typo.subtitle1" Class="font-weight-bold" Color="Color.Warning">
+                                @StockPackagePercentage.ToString("F1")%
+                            </MudText>
+                        </div>
+
+                        <MudProgressLinear Color="Color.Warning" Value="@StockPackagePercentage" Class="my-2" Size="Size.Small" />
+
+                        <MudText Typo="Typo.body2" Color="Color.Warning" Class="mt-1">Available Stock Packages</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+
         </MudGrid>
 
     </MudItem>

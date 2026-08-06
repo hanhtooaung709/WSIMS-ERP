@@ -12,4 +12,5 @@ public class DashboardModel
     public int ProductCount { get; set; }
     public int PackageCount { get; set; }
     public int StockCount { get; set; }
+    public int PackageStockCount { get; set; }
 }

@@ -99,6 +99,17 @@ public class DashboardService : AuthorizationService
 
             #endregion
 
+            #region GetStockPackageCount
+
+            var stockPackageCount = await GetStockPackageCount();
+
+            if (stockPackageCount.IsSuccess)
+            {
+                model.PackageStockCount = stockPackageCount.Data;
+            }
+
+            #endregion
+
             return Result<DashboardModel>.Success(model);
         }
         catch (Exception ex)
@@ -106,6 +117,8 @@ public class DashboardService : AuthorizationService
             return Result<DashboardModel>.Error(ex);
         }
     }
+
+    #region Private Method
 
     private async Task<Result<List<ProductResponceModel>>> GetProductName()
     {
@@ -226,4 +239,29 @@ public class DashboardService : AuthorizationService
             return Result<int>.Error(ex);
         }
     }
+
+    private async Task<Result<int>> GetStockPackageCount()
+    {
+        try
+        {
+            var stockResult = await GetStock();
+
+            if (!stockResult.IsSuccess || stockResult.Data?.list == null)
+            {
+                return Result<int>.Success(0);
+            }
+
+            var activeStockPackageCount = stockResult.Data.list
+                .Where(x => x.Quantity > 0)
+                .Count();
+
+            return Result<int>.Success(activeStockPackageCount);
+        }
+        catch (Exception ex)
+        {
+            return Result<int>.Error(ex);
+        }
+    }
+
+    #endregion
 }

@@ -20,6 +20,10 @@ public partial class Dashboard
     private List<ChartSeries> _series = new();
     private string[] _productNames = Array.Empty<string>();
 
+    private double StockPackagePercentage => _model.PackageCount > 0
+        ? ((double)_model.PackageStockCount / _model.PackageCount) * 100
+        : 0;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         try
@@ -111,6 +115,13 @@ public partial class Dashboard
 
             var stockCount = result.Data.StockCount;
             _model.StockCount = stockCount;
+
+            #endregion
+
+            #region GetStockPackageCount
+
+            var packageStockCount = result.Data.PackageStockCount;
+            _model.PackageStockCount = packageStockCount;
 
             #endregion
 
