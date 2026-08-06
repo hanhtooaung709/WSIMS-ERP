@@ -4,14 +4,14 @@
 @attribute [Authorize]
 @inject HttpClient httpClient
 
-<MudGrid>
+<MudGrid Class="align-stretch">
 
-    <MudItem xs="12" md="6">
-
+    <MudItem xs="12" md="6" Class="d-flex flex-column justify-between">
         <MudGrid Spacing="3">
 
+            @* 1. Total Products *@
             <MudItem xs="12" sm="6">
-                <MudCard Elevation="25" Class="rounded-lg">
+                <MudCard Elevation="25" Class="rounded-lg h-100 d-flex flex-column justify-space-between">
                     <MudCardHeader>
                         <CardHeaderContent>
                             <MudText Typo="Typo.subtitle2" Color="Color.Secondary">Total Products</MudText>
@@ -29,8 +29,9 @@
                 </MudCard>
             </MudItem>
 
+            @* 2. Total Packages *@
             <MudItem xs="12" sm="6">
-                <MudCard Elevation="25" Class="rounded-lg">
+                <MudCard Elevation="25" Class="rounded-lg h-100 d-flex flex-column justify-space-between">
                     <MudCardHeader>
                         <CardHeaderContent>
                             <MudText Typo="Typo.subtitle2" Color="Color.Secondary">Total Packages</MudText>
@@ -48,8 +49,9 @@
                 </MudCard>
             </MudItem>
 
+            @* 3. Total Stock Quantity *@
             <MudItem xs="12" sm="6">
-                <MudCard Elevation="25" Class="rounded-lg">
+                <MudCard Elevation="25" Class="rounded-lg h-100 d-flex flex-column justify-space-between">
                     <MudCardHeader>
                         <CardHeaderContent>
                             <MudText Typo="Typo.subtitle2" Color="Color.Secondary">Total Stock Quantity</MudText>
@@ -67,8 +69,9 @@
                 </MudCard>
             </MudItem>
 
+            @* 4. Total Stock Packages *@
             <MudItem xs="12" sm="6">
-                <MudCard Elevation="25" Class="rounded-lg">
+                <MudCard Elevation="25" Class="rounded-lg h-100 d-flex flex-column justify-space-between">
                     <MudCardHeader>
                         <CardHeaderContent>
                             <MudText Typo="Typo.subtitle2" Color="Color.Secondary">Total Stock Packages</MudText>
@@ -84,32 +87,31 @@
                             <MudText Typo="Typo.h4" Class="font-weight-bold">
                                 @_model.PackageStockCount <span style="font-size: 1rem; color: gray;">/ @_model.PackageCount</span>
                             </MudText>
-
                             <MudText Typo="Typo.subtitle1" Class="font-weight-bold" Color="Color.Warning">
                                 @StockPackagePercentage.ToString("F1")%
                             </MudText>
                         </div>
-
                         <MudProgressLinear Color="Color.Warning" Value="@StockPackagePercentage" Class="my-2" Size="Size.Small" />
-
-                        <MudText Typo="Typo.body2" Color="Color.Warning" Class="mt-1">Available Stock Packages</MudText>
+                        <MudText Typo="Typo.body2" Color="Color.Warning">Available Stock Packages</MudText>
                     </MudCardContent>
                 </MudCard>
             </MudItem>
 
         </MudGrid>
-
     </MudItem>
 
-    <MudItem xs="6">
-        <MudPaper Class="doc-section-component-container">
-            <MudChart ChartType="ChartType.Bar"
-                      ChartSeries="@_series"
-                      AxisChartOptions="@_chartOptions"
-                      @bind-SelectedIndex="_index"
-                      XAxisLabels="@_productNames"
-                      Width="100%"
-                      Height="@($"{_height}px")" />
+    <MudItem xs="12" md="6" Class="d-flex">
+        <MudPaper Class="rounded-lg pa-4 w-100 d-flex align-center justify-center" Elevation="25" Style="height: 100%; min-height: 100%;">
+            <div style="width: 100%; height: 100%; max-height: 380px; overflow: hidden;" class="d-flex align-center justify-center">
+                <MudChart ChartType="ChartType.Bar"
+                          ChartSeries="@_series"
+                          AxisChartOptions="@_chartOptions"
+                          @bind-SelectedIndex="_index"
+                          XAxisLabels="@_productNames"
+                          Width="100%"
+                          Height="@($"{_height}px")" />
+            </div>
         </MudPaper>
     </MudItem>
+
 </MudGrid>

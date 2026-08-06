@@ -10,7 +10,7 @@ namespace ERP.Warehouse.App.Components.Pages.Dashboard;
 public partial class Dashboard
 {
     private int _index = -1;
-    private int _height = 350;
+    private int _height = 270;
     private AxisChartOptions _chartOptions = new()
     {
         XAxisLabelRotation = 90,
