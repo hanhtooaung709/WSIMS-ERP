@@ -11,4 +11,5 @@ public class DashboardModel
     public List<PackageModel> Packages { get; set; } = new();
     public int ProductCount { get; set; }
     public int PackageCount { get; set; }
+    public int StockCount { get; set; }
 }

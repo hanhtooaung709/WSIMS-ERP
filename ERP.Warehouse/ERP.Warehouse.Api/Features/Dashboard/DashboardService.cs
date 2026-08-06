@@ -88,6 +88,17 @@ public class DashboardService : AuthorizationService
 
             #endregion
 
+            #region GetStockCount
+
+            var stockCount = await GetStockCount();
+
+            if (stockCount.IsSuccess)
+            {
+                model.StockCount = stockCount.Data;
+            }
+
+            #endregion
+
             return Result<DashboardModel>.Success(model);
         }
         catch (Exception ex)
@@ -188,6 +199,27 @@ public class DashboardService : AuthorizationService
                 .CountAsync();
 
             return Result<int>.Success(count);
+        }
+        catch (Exception ex)
+        {
+            return Result<int>.Error(ex);
+        }
+    }
+
+    private async Task<Result<int>> GetStockCount()
+    {
+        try
+        {
+            var stockResult = await GetStock();
+
+            if (!stockResult.IsSuccess || stockResult.Data?.list == null)
+            {
+                return Result<int>.Success(0);
+            }
+
+            var totalStockQuantity = stockResult.Data.list.Sum(x => x.Quantity);
+
+            return Result<int>.Success(totalStockQuantity);
         }
         catch (Exception ex)
         {

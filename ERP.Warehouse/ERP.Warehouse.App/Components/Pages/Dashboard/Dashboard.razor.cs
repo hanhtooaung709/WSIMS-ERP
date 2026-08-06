@@ -107,6 +107,13 @@ public partial class Dashboard
 
             #endregion
 
+            #region GetStockCount
+
+            var stockCount = result.Data.StockCount;
+            _model.StockCount = stockCount;
+
+            #endregion
+
             StateHasChanged();
         }
         catch (Exception ex)

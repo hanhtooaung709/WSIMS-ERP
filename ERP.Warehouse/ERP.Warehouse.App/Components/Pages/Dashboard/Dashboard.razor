@@ -48,6 +48,25 @@
                 </MudCard>
             </MudItem>
 
+            <MudItem xs="12" sm="6">
+                <MudCard Elevation="25" Class="rounded-lg">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.subtitle2" Color="Color.Secondary">Total Stock Quantity</MudText>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudAvatar Color="Color.Success" Variant="MudBlazor.Variant.Filled">
+                                <MudIcon Icon="@Icons.Material.Filled.Analytics" Size="Size.Medium" />
+                            </MudAvatar>
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudText Typo="Typo.h4" Class="font-weight-bold">@_model.StockCount</MudText>
+                        <MudText Typo="Typo.body2" Color="Color.Success" Class="mt-1">Total Items in Stock</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+
         </MudGrid>
 
     </MudItem>
