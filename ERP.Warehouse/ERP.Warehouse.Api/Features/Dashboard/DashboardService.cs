@@ -2,10 +2,12 @@
 using ERP.Warehouse.Models.Models.Dashboard;
 using ERP.Warehouse.Models.Models.Dashboard.Box;
 using ERP.Warehouse.Models.Models.Dashboard.Product;
+using ERP.Warehouse.Models.Models.Package.PackageList;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Models.ConfigModel;
+using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
 
 namespace ERP.Warehouse.Api.Features.Dashboard;
@@ -30,6 +32,17 @@ public class DashboardService : AuthorizationService
         DashboardModel model = new();
         try
         {
+            #region GetStock
+
+            var stockQuantity = await GetStock();
+
+            if (stockQuantity.IsSuccess && stockQuantity.Data.list != null)
+            {
+                model.StockQty = stockQuantity.Data.list.Select(x => x.Quantity).ToList();
+            }
+
+            #endregion
+
             #region GetProductName
 
             var productName = await GetProductName();
@@ -57,6 +70,29 @@ public class DashboardService : AuthorizationService
         catch (Exception ex)
         {
             return Result<DashboardModel>.Error(ex);
+        }
+    }
+
+    public async Task<Result<PackageRepModel>> GetStock()
+    {
+        PackageRepModel model = new();
+        try
+        {
+            var parameters = new
+            {
+                CurrentUserId = AuthorizedUserId,
+                PackageName = "",
+                ProductName = "",
+                Box = "",
+            };
+            var result = await _dapperService.QueryStoredProcedureAsync<PackageModel>
+                (SqlQueries.Sp_GetPackageList, parameters);
+            model.list = result;
+            return Result<PackageRepModel>.Success(model);
+        }
+        catch (Exception ex)
+        {
+            return Result<PackageRepModel>.Error(ex);
         }
     }
 

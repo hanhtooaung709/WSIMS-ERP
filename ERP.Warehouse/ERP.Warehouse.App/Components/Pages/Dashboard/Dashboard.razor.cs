@@ -49,6 +49,12 @@ public partial class Dashboard
                 return;
             }
 
+            #region GetStock
+
+
+
+            #endregion
+
             #region GetProductName
 
             var productList = result.Data?.ProductName ?? new List<string>();
