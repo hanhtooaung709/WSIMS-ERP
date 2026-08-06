@@ -4,12 +4,63 @@
 @attribute [Authorize]
 @inject HttpClient httpClient
 
-<MudPaper Class="doc-section-component-container">
-    <MudChart ChartType="ChartType.Bar"
-              ChartSeries="@_series"
-              AxisChartOptions="@_chartOptions"
-              @bind-SelectedIndex="_index"
-              XAxisLabels="@_productNames"
-              Width="100%"
-              Height="@($"{_height}px")" />
-</MudPaper>
+<MudGrid>
+
+    <MudItem xs="12" md="6">
+
+        <MudGrid Spacing="3">
+
+            <MudItem xs="12" sm="6">
+                <MudCard Elevation="25" Class="rounded-lg">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.subtitle2" Color="Color.Secondary">Total Products</MudText>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudAvatar Color="Color.Primary" Variant="MudBlazor.Variant.Filled">
+                                <MudIcon Icon="@Icons.Material.Filled.Category" Size="Size.Medium" />
+                            </MudAvatar>
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudText Typo="Typo.h4" Class="font-weight-bold">@_model.ProductCount</MudText>
+                        <MudText Typo="Typo.body2" Color="Color.Success" Class="mt-1">Registered Products</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudCard Elevation="25" Class="rounded-lg">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.subtitle2" Color="Color.Secondary">Total Packages</MudText>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudAvatar Color="Color.Info" Variant="MudBlazor.Variant.Filled">
+                                <MudIcon Icon="@Icons.Material.Filled.Inventory2" Size="Size.Medium" />
+                            </MudAvatar>
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudText Typo="Typo.h4" Class="font-weight-bold">@_model.PackageCount</MudText>
+                        <MudText Typo="Typo.body2" Color="Color.Info" Class="mt-1">Available Packages</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+
+        </MudGrid>
+
+    </MudItem>
+
+    <MudItem xs="6">
+        <MudPaper Class="doc-section-component-container">
+            <MudChart ChartType="ChartType.Bar"
+                      ChartSeries="@_series"
+                      AxisChartOptions="@_chartOptions"
+                      @bind-SelectedIndex="_index"
+                      XAxisLabels="@_productNames"
+                      Width="100%"
+                      Height="@($"{_height}px")" />
+        </MudPaper>
+    </MudItem>
+</MudGrid>

@@ -1,4 +1,5 @@
-﻿using ERP.Warehouse.Models.Models.Dashboard.Box;
+﻿using ERP.Warehouse.Models.Models.Dashboard;
+using ERP.Warehouse.Models.Models.Dashboard.Box;
 using ERP.Warehouse.Models.Models.Package.PackageList;
 using Microsoft.JSInterop;
 using MudBlazor;
@@ -9,15 +10,14 @@ namespace ERP.Warehouse.App.Components.Pages.Dashboard;
 public partial class Dashboard
 {
     private int _index = -1;
-    private int _height = 420;
+    private int _height = 350;
     private AxisChartOptions _chartOptions = new()
     {
         XAxisLabelRotation = 90,
         MatchBoundsToSize = true
     };
+    private DashboardModel _model = new();
     private List<ChartSeries> _series = new();
-    private List<string> _boxTypes = new();
-    private List<string> _boxCodes = new();
     private string[] _productNames = Array.Empty<string>();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -90,6 +90,20 @@ public partial class Dashboard
                     Data = dataPerProduct
                 });
             }
+
+            #endregion
+
+            #region GetProductCount
+
+            var productCount = result.Data.ProductCount;
+            _model.ProductCount = productCount;
+
+            #endregion
+
+            #region GetPackageCount
+
+            var packageCount = result.Data.PackageCount;
+            _model.PackageCount = packageCount;
 
             #endregion
 

@@ -70,7 +70,7 @@ public class DashboardService : AuthorizationService
 
             var productCount = await GetProductCount();
 
-            if (productCount.IsSuccess && productCount.Data.IsNullOrEmpty())
+            if (productCount.IsSuccess)
             {
                 model.ProductCount = productCount.Data;
             }
@@ -81,7 +81,7 @@ public class DashboardService : AuthorizationService
 
             var packageCount = await GetPackageCount();
 
-            if (packageCount.IsSuccess && packageCount.Data.IsNullOrEmpty())
+            if (packageCount.IsSuccess)
             {
                 model.PackageCount = packageCount.Data;
             }
