@@ -74,6 +74,19 @@ public class PackageListService : AuthorizationService
 
             #endregion
 
+            #region Check Duplicate PackageInfoCode
+
+            bool infoCode = await _db.TblPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.PackageInfoCode.Trim().ToLower() == reqModel.PackageInfoCode!.Trim().ToLower());
+            if (infoCode)
+            {
+                model = Result<PackageModel>.Error(JsonResource.WHE105);
+                return model;
+            }
+
+            #endregion
+
             #region Check Duplicate PackageName
 
             bool name = await _db.TblPackageInfos

@@ -11,6 +11,7 @@ using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Models.ConfigModel;
 using WSIMS_ERP.Shared.Queries;
 using WSIMS_ERP.Shared.Services;
+using ERP.Warehouse.Models.Models.Package.PackageList;
 
 namespace ERP.Warehouse.Api.Features.Package.ReqPackage;
 
@@ -175,6 +176,19 @@ public class ReqPackageService : AuthorizationService
             if (package)
             {
                 model = Result<ReqPackageModel>.Error(JsonResource.WHE073);
+                return model;
+            }
+
+            #endregion
+
+            #region Check Duplicate PackageInfoCode
+
+            bool infoCode = await _db.TblPackageInfos
+                .AsNoTracking()
+                .AnyAsync(x => x.PackageInfoCode.Trim().ToLower() == reqModel.PackageInfoCode!.Trim().ToLower());
+            if (infoCode)
+            {
+                model = Result<ReqPackageModel>.Error(JsonResource.WHE105);
                 return model;
             }
 

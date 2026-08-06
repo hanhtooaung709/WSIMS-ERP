@@ -19,6 +19,11 @@ public class JsonResource
     #region Warehouse Response
 
     /// <summary>
+    /// PackageInfoCode is already exist!
+    /// </summary>
+    public static readonly string WHE105 = "WH#E105";
+
+    /// <summary>
     /// Requested Stock is successfully Rejected.
     /// </summary>
     public static readonly string WHS104 = "WH#S104";
