@@ -5,6 +5,7 @@ using ERP.Warehouse.Models.Models.Dashboard.Product;
 using ERP.Warehouse.Models.Models.Package.PackageList;
 using Microsoft.EntityFrameworkCore;
 using Module.CommonDbService.EfAppDbContextModels;
+using WSIMS_ERP.Shared;
 using WSIMS_ERP.Shared.Models;
 using WSIMS_ERP.Shared.Models.ConfigModel;
 using WSIMS_ERP.Shared.Queries;
@@ -61,6 +62,28 @@ public class DashboardService : AuthorizationService
             {
                 model.Packages = stockQuantity.Data.list;
                 model.StockQty = stockQuantity.Data.list.Select(x => x.Quantity).ToList();
+            }
+
+            #endregion
+
+            #region GetProductCount
+
+            var productCount = await GetProductCount();
+
+            if (productCount.IsSuccess && productCount.Data.IsNullOrEmpty())
+            {
+                model.ProductCount = productCount.Data;
+            }
+
+            #endregion
+
+            #region GetPackageCount
+
+            var packageCount = await GetPackageCount();
+
+            if (packageCount.IsSuccess && packageCount.Data.IsNullOrEmpty())
+            {
+                model.PackageCount = packageCount.Data;
             }
 
             #endregion
@@ -135,6 +158,40 @@ public class DashboardService : AuthorizationService
         catch (Exception ex)
         {
             return Result<PackageRepModel>.Error(ex);
+        }
+    }
+
+    private async Task<Result<int>> GetProductCount()
+    {
+        try
+        {
+            var count = await _db.TblProducts
+                .AsNoTracking()
+                .Where(x => x.DelFlag == 0)
+                .CountAsync();
+
+            return Result<int>.Success(count);
+        }
+        catch (Exception ex)
+        {
+            return Result<int>.Error(ex);
+        }
+    }
+
+    private async Task<Result<int>> GetPackageCount()
+    {
+        try
+        {
+            var count = await _db.TblPackageInfos
+                .AsNoTracking()
+                .Where(x => x.DelFlag == 0)
+                .CountAsync();
+
+            return Result<int>.Success(count);
+        }
+        catch (Exception ex)
+        {
+            return Result<int>.Error(ex);
         }
     }
 }

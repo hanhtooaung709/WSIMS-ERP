@@ -86,7 +86,7 @@ public partial class Dashboard
 
                 _series.Add(new ChartSeries
                 {
-                    Name = box.BoxType,
+                    Name = box.BoxType!,
                     Data = dataPerProduct
                 });
             }
