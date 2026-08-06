@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using ERP.Warehouse.Models.Models.Package.PackageList;
+using Microsoft.JSInterop;
 using MudBlazor;
 using WSIMS_ERP.Shared;
 
@@ -15,6 +16,7 @@ public partial class Dashboard
     };
     private List<ChartSeries> _series = new();
     private List<string> _boxTypes = new();
+    private List<string> _boxCodes = new();
     private string[] _productNames = Array.Empty<string>();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -43,33 +45,49 @@ public partial class Dashboard
             var result = await _apiService.GetDashboardData();
             await _injectService.DisableLoading();
 
-            if (result.IsError)
+            if (result.IsError || result.Data == null)
             {
                 await _injectService.ShowDialog(result);
                 return;
             }
 
-            #region GetStock
-
-
-
-            #endregion
-
             #region GetProductName
 
-            var productList = result.Data?.ProductName ?? new List<string>();
+            var productList = result.Data.ProductName ?? new List<string>();
             _productNames = productList.ToArray();
 
             #endregion
 
-            #region GetBoxType
+            #region GetBoxType & Stock Mapping
 
-            _boxTypes = result.Data!.BoxType! ?? new();
-            _series = _boxTypes.Select(boxType => new ChartSeries
+            _boxTypes = result.Data.BoxType ?? new List<string>();
+            _boxCodes = result.Data.BoxCode ?? new List<string>();
+            var packages = result.Data.Packages ?? new List<PackageModel>();
+
+            _series = new List<ChartSeries>();
+
+            foreach (var boxCodes in _boxCodes)
             {
-                Name = boxType,
-                Data = new double[_productNames.Length]
-            }).ToList();
+                var dataPerProduct = new double[_productNames.Length];
+
+                for (int i = 0; i < _productNames.Length; i++)
+                {
+                    string productName = _productNames[i];
+
+                    var matchedQty = packages
+                        .Where(p => (p.ProductCode == productName)
+                                 && (p.BoxCode == boxCodes))
+                        .Sum(p => p.Quantity);
+
+                    dataPerProduct[i] = Convert.ToDouble(matchedQty);
+                }
+
+                _series.Add(new ChartSeries
+                {
+                    Name = boxCodes,       
+                    Data = dataPerProduct
+                });
+            }
 
             #endregion
 

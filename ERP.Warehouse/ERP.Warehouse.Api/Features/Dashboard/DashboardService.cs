@@ -32,17 +32,6 @@ public class DashboardService : AuthorizationService
         DashboardModel model = new();
         try
         {
-            #region GetStock
-
-            var stockQuantity = await GetStock();
-
-            if (stockQuantity.IsSuccess && stockQuantity.Data.list != null)
-            {
-                model.StockQty = stockQuantity.Data.list.Select(x => x.Quantity).ToList();
-            }
-
-            #endregion
-
             #region GetProductName
 
             var productName = await GetProductName();
@@ -61,6 +50,19 @@ public class DashboardService : AuthorizationService
             if (boxType.IsSuccess && boxType.Data != null)
             {
                 model.BoxType = boxType.Data.Select(x => x.BoxType).ToList();
+                model.BoxCode = boxType.Data.Select(x => x.BoxCode).ToList();
+            }
+
+            #endregion
+
+            #region GetStock
+
+            var stockQuantity = await GetStock();
+
+            if (stockQuantity.IsSuccess && stockQuantity.Data?.list != null)
+            {
+                model.Packages = stockQuantity.Data.list;
+                model.StockQty = stockQuantity.Data.list.Select(x => x.Quantity).ToList();
             }
 
             #endregion
@@ -70,29 +72,6 @@ public class DashboardService : AuthorizationService
         catch (Exception ex)
         {
             return Result<DashboardModel>.Error(ex);
-        }
-    }
-
-    public async Task<Result<PackageRepModel>> GetStock()
-    {
-        PackageRepModel model = new();
-        try
-        {
-            var parameters = new
-            {
-                CurrentUserId = AuthorizedUserId,
-                PackageName = "",
-                ProductName = "",
-                Box = "",
-            };
-            var result = await _dapperService.QueryStoredProcedureAsync<PackageModel>
-                (SqlQueries.Sp_GetPackageList, parameters);
-            model.list = result;
-            return Result<PackageRepModel>.Success(model);
-        }
-        catch (Exception ex)
-        {
-            return Result<PackageRepModel>.Error(ex);
         }
     }
 
@@ -128,7 +107,8 @@ public class DashboardService : AuthorizationService
                 .OrderByDescending(x => x.Size)
                 .Select(x => new BoxResponseModel
                 {
-                    BoxType = x.Type
+                    BoxType = x.Type,
+                    BoxCode = x.BoxCode
                 })
                 .ToListAsync();
 
@@ -137,6 +117,26 @@ public class DashboardService : AuthorizationService
         catch (Exception ex)
         {
             return Result<List<BoxResponseModel>>.Error(ex);
+        }
+    }
+
+    public async Task<Result<PackageRepModel>> GetStock()
+    {
+        PackageRepModel model = new();
+        try
+        {
+            var parameters = new
+            {
+                CurrentUserId = AuthorizedUserId
+            };
+            var result = await _dapperService.QueryStoredProcedureAsync<PackageModel>
+                (SqlQueries.Sp_GetStockQuantity, parameters);
+            model.list = result;
+            return Result<PackageRepModel>.Success(model);
+        }
+        catch (Exception ex)
+        {
+            return Result<PackageRepModel>.Error(ex);
         }
     }
 }

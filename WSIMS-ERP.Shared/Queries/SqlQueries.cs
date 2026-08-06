@@ -43,4 +43,6 @@ public class SqlQueries
     public const string Sp_GetStockDetail = "Sp_GetStockDetail";
 
     public const string Sp_GetApproveStockList = "Sp_GetApproveStockList";
+
+    public const string Sp_GetStockQuantity = "Sp_GetStockQuantity";
 }
