@@ -46,11 +46,9 @@ public class DashboardService : AuthorizationService
             #region GetBoxType
 
             var boxType = await GetBoxType();
-
             if (boxType.IsSuccess && boxType.Data != null)
             {
-                model.BoxType = boxType.Data.Select(x => x.BoxType).ToList();
-                model.BoxCode = boxType.Data.Select(x => x.BoxCode).ToList();
+                model.Boxes = boxType.Data;
             }
 
             #endregion

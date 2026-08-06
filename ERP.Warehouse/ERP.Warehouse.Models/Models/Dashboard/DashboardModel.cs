@@ -6,8 +6,7 @@ namespace ERP.Warehouse.Models.Models.Dashboard;
 public class DashboardModel
 {
     public List<int> StockQty {  get; set; }
-    public List<string> BoxType { get; set; }
-    public List<string> BoxCode { get; set; }
+    public List<BoxResponseModel> Boxes { get; set; } = new();
     public List<string> ProductName { get; set; }
 
     public List<PackageModel> Packages { get; set; } = new();

@@ -1,4 +1,5 @@
-﻿using ERP.Warehouse.Models.Models.Package.PackageList;
+﻿using ERP.Warehouse.Models.Models.Dashboard.Box;
+using ERP.Warehouse.Models.Models.Package.PackageList;
 using Microsoft.JSInterop;
 using MudBlazor;
 using WSIMS_ERP.Shared;
@@ -60,14 +61,15 @@ public partial class Dashboard
 
             #region GetBoxType & Stock Mapping
 
-            _boxTypes = result.Data.BoxType ?? new List<string>();
-            _boxCodes = result.Data.BoxCode ?? new List<string>();
+            var boxes = result.Data.Boxes ?? new List<BoxResponseModel>();
             var packages = result.Data.Packages ?? new List<PackageModel>();
 
             _series = new List<ChartSeries>();
 
-            foreach (var boxCodes in _boxCodes)
+            foreach (var box in boxes)
             {
+                if (string.IsNullOrEmpty(box.BoxCode)) continue;
+
                 var dataPerProduct = new double[_productNames.Length];
 
                 for (int i = 0; i < _productNames.Length; i++)
@@ -75,8 +77,8 @@ public partial class Dashboard
                     string productName = _productNames[i];
 
                     var matchedQty = packages
-                        .Where(p => (p.ProductCode == productName)
-                                 && (p.BoxCode == boxCodes))
+                        .Where(p => (p.ProductCode == productName || p.PackageName == productName)
+                                 && p.BoxCode == box.BoxCode)
                         .Sum(p => p.Quantity);
 
                     dataPerProduct[i] = Convert.ToDouble(matchedQty);
@@ -84,7 +86,7 @@ public partial class Dashboard
 
                 _series.Add(new ChartSeries
                 {
-                    Name = boxCodes,       
+                    Name = box.BoxType,
                     Data = dataPerProduct
                 });
             }
