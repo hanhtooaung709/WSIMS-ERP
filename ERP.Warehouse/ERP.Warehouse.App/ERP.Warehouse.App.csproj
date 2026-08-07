@@ -11,6 +11,7 @@
   </ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Blazor-ApexCharts" Version="7.0.0" />
 		<PackageReference Include="BlazorDownloadFile" Version="2.4.0.2" />
 		<PackageReference Include="Humanizer.Core" Version="2.14.1" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.19" />

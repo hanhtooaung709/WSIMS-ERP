@@ -1,12 +1,20 @@
 ﻿@page "/dashboard"
 @using Microsoft.AspNetCore.Authorization
+@using ApexCharts
+@using ERP.Warehouse.Models.Models.Dashboard
+@using ERP.Warehouse.Models.Models.Dashboard.Box
+@using ERP.Warehouse.Models.Models.Package.PackageList
+@using Microsoft.JSInterop
+@using MudBlazor
+@using WSIMS_ERP.Shared
+
 @inject ILogger<Dashboard> _logger
 @attribute [Authorize]
 @inject HttpClient httpClient
 
 <MudGrid Class="align-stretch">
 
-    <MudItem xs="12" md="6" Class="d-flex flex-column justify-between">
+    <MudItem xs="12" md="6">
         <MudGrid Spacing="3">
 
             @* 1. Total Products *@
@@ -14,17 +22,17 @@
                 <MudCard Elevation="25" Class="rounded-lg h-100 d-flex flex-column justify-space-between">
                     <MudCardHeader>
                         <CardHeaderContent>
-                            <MudText Typo="Typo.subtitle2" Color="Color.Secondary">Total Products</MudText>
+                            <MudText Typo="Typo.subtitle2" Color="MudBlazor.Color.Secondary">Total Products</MudText>
                         </CardHeaderContent>
                         <CardHeaderActions>
-                            <MudAvatar Color="Color.Primary" Variant="MudBlazor.Variant.Filled">
-                                <MudIcon Icon="@Icons.Material.Filled.Category" Size="Size.Medium" />
+                            <MudAvatar Color="MudBlazor.Color.Primary" Variant="MudBlazor.Variant.Filled">
+                                <MudIcon Icon="@Icons.Material.Filled.Category" Size="MudBlazor.Size.Medium" />
                             </MudAvatar>
                         </CardHeaderActions>
                     </MudCardHeader>
                     <MudCardContent>
                         <MudText Typo="Typo.h4" Class="font-weight-bold">@_model.ProductCount</MudText>
-                        <MudText Typo="Typo.body2" Color="Color.Success" Class="mt-1">Registered Products</MudText>
+                        <MudText Typo="Typo.body2" Color="MudBlazor.Color.Success" Class="mt-1">Registered Products</MudText>
                     </MudCardContent>
                 </MudCard>
             </MudItem>
@@ -34,17 +42,17 @@
                 <MudCard Elevation="25" Class="rounded-lg h-100 d-flex flex-column justify-space-between">
                     <MudCardHeader>
                         <CardHeaderContent>
-                            <MudText Typo="Typo.subtitle2" Color="Color.Secondary">Total Packages</MudText>
+                            <MudText Typo="Typo.subtitle2" Color="MudBlazor.Color.Secondary">Total Packages</MudText>
                         </CardHeaderContent>
                         <CardHeaderActions>
-                            <MudAvatar Color="Color.Info" Variant="MudBlazor.Variant.Filled">
-                                <MudIcon Icon="@Icons.Material.Filled.Inventory2" Size="Size.Medium" />
+                            <MudAvatar Color="MudBlazor.Color.Info" Variant="MudBlazor.Variant.Filled">
+                                <MudIcon Icon="@Icons.Material.Filled.Inventory2" Size="MudBlazor.Size.Medium" />
                             </MudAvatar>
                         </CardHeaderActions>
                     </MudCardHeader>
                     <MudCardContent>
                         <MudText Typo="Typo.h4" Class="font-weight-bold">@_model.PackageCount</MudText>
-                        <MudText Typo="Typo.body2" Color="Color.Info" Class="mt-1">Available Packages</MudText>
+                        <MudText Typo="Typo.body2" Color="MudBlazor.Color.Info" Class="mt-1">Available Packages</MudText>
                     </MudCardContent>
                 </MudCard>
             </MudItem>
@@ -54,17 +62,17 @@
                 <MudCard Elevation="25" Class="rounded-lg h-100 d-flex flex-column justify-space-between">
                     <MudCardHeader>
                         <CardHeaderContent>
-                            <MudText Typo="Typo.subtitle2" Color="Color.Secondary">Total Stock Quantity</MudText>
+                            <MudText Typo="Typo.subtitle2" Color="MudBlazor.Color.Secondary">Total Stock Quantity</MudText>
                         </CardHeaderContent>
                         <CardHeaderActions>
-                            <MudAvatar Color="Color.Success" Variant="MudBlazor.Variant.Filled">
-                                <MudIcon Icon="@Icons.Material.Filled.Analytics" Size="Size.Medium" />
+                            <MudAvatar Color="MudBlazor.Color.Success" Variant="MudBlazor.Variant.Filled">
+                                <MudIcon Icon="@Icons.Material.Filled.Analytics" Size="MudBlazor.Size.Medium" />
                             </MudAvatar>
                         </CardHeaderActions>
                     </MudCardHeader>
                     <MudCardContent>
                         <MudText Typo="Typo.h4" Class="font-weight-bold">@_model.StockCount</MudText>
-                        <MudText Typo="Typo.body2" Color="Color.Success" Class="mt-1">Total Items in Stock</MudText>
+                        <MudText Typo="Typo.body2" Color="MudBlazor.Color.Success" Class="mt-1">Total Items in Stock</MudText>
                     </MudCardContent>
                 </MudCard>
             </MudItem>
@@ -74,11 +82,11 @@
                 <MudCard Elevation="25" Class="rounded-lg h-100 d-flex flex-column justify-space-between">
                     <MudCardHeader>
                         <CardHeaderContent>
-                            <MudText Typo="Typo.subtitle2" Color="Color.Secondary">Total Stock Packages</MudText>
+                            <MudText Typo="Typo.subtitle2" Color="MudBlazor.Color.Secondary">Total Stock Packages</MudText>
                         </CardHeaderContent>
                         <CardHeaderActions>
-                            <MudAvatar Color="Color.Warning" Variant="MudBlazor.Variant.Filled">
-                                <MudIcon Icon="@Icons.Material.Filled.Inventory" Size="Size.Medium" />
+                            <MudAvatar Color="MudBlazor.Color.Warning" Variant="MudBlazor.Variant.Filled">
+                                <MudIcon Icon="@Icons.Material.Filled.Inventory" Size="MudBlazor.Size.Medium" />
                             </MudAvatar>
                         </CardHeaderActions>
                     </MudCardHeader>
@@ -87,12 +95,12 @@
                             <MudText Typo="Typo.h4" Class="font-weight-bold">
                                 @_model.PackageStockCount <span style="font-size: 1rem; color: gray;">/ @_model.PackageCount</span>
                             </MudText>
-                            <MudText Typo="Typo.subtitle1" Class="font-weight-bold" Color="Color.Warning">
+                            <MudText Typo="Typo.subtitle1" Class="font-weight-bold" Color="MudBlazor.Color.Warning">
                                 @StockPackagePercentage.ToString("F1")%
                             </MudText>
                         </div>
-                        <MudProgressLinear Color="Color.Warning" Value="@StockPackagePercentage" Class="my-2" Size="Size.Small" />
-                        <MudText Typo="Typo.body2" Color="Color.Warning">Available Stock Packages</MudText>
+                        <MudProgressLinear Color="MudBlazor.Color.Warning" Value="@StockPackagePercentage" Class="my-2" Size="MudBlazor.Size.Small" />
+                        <MudText Typo="Typo.body2" Color="MudBlazor.Color.Warning">Available Stock Packages</MudText>
                     </MudCardContent>
                 </MudCard>
             </MudItem>
@@ -101,16 +109,46 @@
     </MudItem>
 
     <MudItem xs="12" md="6" Class="d-flex">
-        <MudPaper Class="rounded-lg pa-4 w-100 d-flex align-center justify-center" Elevation="25" Style="height: 100%; min-height: 100%;">
-            <div style="width: 100%; height: 100%; max-height: 380px; overflow: hidden;" class="d-flex align-center justify-center">
-                <MudChart ChartType="ChartType.Bar"
+        <MudPaper Class="rounded-lg pa-4 w-100 d-flex align-center justify-center" Elevation="25" Style="max-height: 380px;">
+            <div style="width: 100%; height: 100%; overflow: hidden;" class="d-flex align-center justify-center">
+                <MudChart ChartType="MudBlazor.ChartType.Bar"
                           ChartSeries="@_series"
                           AxisChartOptions="@_chartOptions"
                           @bind-SelectedIndex="_index"
                           XAxisLabels="@_productNames"
                           Width="100%"
-                          Height="@($"{_height}px")" />
+                          Height="250px" />
             </div>
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12" md="6">
+        <MudPaper Class="rounded-lg pa-4 w-100 d-flex flex-column align-center justify-center" Elevation="25">
+            <MudText Typo="Typo.h6" Class="mb-2">Stock Distribution by Box Type</MudText>
+
+            @if (_radarItems.Any())
+            {
+                <ApexChart TItem="RadarItem"
+                           Title="Products vs Box Types"
+                           Options="_radarOptions"
+                           Width="@("100%")"
+                           Height="380">
+
+                    @foreach (var boxType in _radarBoxTypes)
+                    {
+                        <ApexPointSeries TItem="RadarItem"
+                                         Items="_radarItems"
+                                         Name="@boxType"
+                                         XValue="e => e.ProductName"
+                                         YValue="e => (decimal?)(e.BoxQuantities.ContainsKey(boxType) ? e.BoxQuantities[boxType] : 0)"
+                                         SeriesType="SeriesType.Radar" />
+                    }
+                </ApexChart>
+            }
+            else
+            {
+                <MudText Typo="Typo.body2" Color="MudBlazor.Color.Secondary">No Radar Data Available</MudText>
+            }
         </MudPaper>
     </MudItem>
 

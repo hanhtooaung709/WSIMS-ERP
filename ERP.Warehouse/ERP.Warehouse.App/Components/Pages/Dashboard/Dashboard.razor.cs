@@ -1,4 +1,5 @@
-﻿using ERP.Warehouse.Models.Models.Dashboard;
+﻿using ApexCharts;
+using ERP.Warehouse.Models.Models.Dashboard;
 using ERP.Warehouse.Models.Models.Dashboard.Box;
 using ERP.Warehouse.Models.Models.Package.PackageList;
 using Microsoft.JSInterop;
@@ -23,6 +24,14 @@ public partial class Dashboard
     private double StockPackagePercentage => _model.PackageCount > 0
         ? ((double)_model.PackageStockCount / _model.PackageCount) * 100
         : 0;
+
+    private List<RadarItem> _radarItems = new();
+    private List<string> _radarBoxTypes = new();
+    private ApexChartOptions<RadarItem> _radarOptions = new()
+    {
+        Chart = new Chart { Height = 350 },
+        DataLabels = new DataLabels { Enabled = true }
+    };
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -70,6 +79,17 @@ public partial class Dashboard
 
             _series = new List<ChartSeries>();
 
+            _radarItems.Clear();
+            _radarBoxTypes = boxes.Select(b => b.BoxType ?? "Unknown").Distinct().ToList();
+
+            foreach (var prodName in _productNames)
+            {
+                _radarItems.Add(new RadarItem
+                {
+                    ProductName = prodName
+                });
+            }
+
             foreach (var box in boxes)
             {
                 if (string.IsNullOrEmpty(box.BoxCode)) continue;
@@ -85,7 +105,14 @@ public partial class Dashboard
                                  && p.BoxCode == box.BoxCode)
                         .Sum(p => p.Quantity);
 
-                    dataPerProduct[i] = Convert.ToDouble(matchedQty);
+                    double qty = Convert.ToDouble(matchedQty);
+                    dataPerProduct[i] = qty;
+
+                    var item = _radarItems.FirstOrDefault(r => r.ProductName == productName);
+                    if (item != null && !string.IsNullOrEmpty(box.BoxType))
+                    {
+                        item.BoxQuantities[box.BoxType] = qty;
+                    }
                 }
 
                 _series.Add(new ChartSeries
@@ -97,31 +124,12 @@ public partial class Dashboard
 
             #endregion
 
-            #region GetProductCount
+            #region GetCounts
 
-            var productCount = result.Data.ProductCount;
-            _model.ProductCount = productCount;
-
-            #endregion
-
-            #region GetPackageCount
-
-            var packageCount = result.Data.PackageCount;
-            _model.PackageCount = packageCount;
-
-            #endregion
-
-            #region GetStockCount
-
-            var stockCount = result.Data.StockCount;
-            _model.StockCount = stockCount;
-
-            #endregion
-
-            #region GetStockPackageCount
-
-            var packageStockCount = result.Data.PackageStockCount;
-            _model.PackageStockCount = packageStockCount;
+            _model.ProductCount = result.Data.ProductCount;
+            _model.PackageCount = result.Data.PackageCount;
+            _model.StockCount = result.Data.StockCount;
+            _model.PackageStockCount = result.Data.PackageStockCount;
 
             #endregion
 
@@ -133,5 +141,11 @@ public partial class Dashboard
             _logger.LogCustomError(ex);
             await _injectService.ErrorDialogMessage(ex.Message);
         }
+    }
+
+    public class RadarItem
+    {
+        public string ProductName { get; set; } = string.Empty;
+        public Dictionary<string, double> BoxQuantities { get; set; } = new();
     }
 }
