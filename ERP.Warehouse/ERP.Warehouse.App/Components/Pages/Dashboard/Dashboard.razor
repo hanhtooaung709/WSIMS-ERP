@@ -175,4 +175,24 @@
         </MudPaper>
     </MudItem>
 
+    <MudItem xs="12" md="6">
+        <MudPaper Class="rounded-lg pa-4 w-100" Elevation="25">
+            <MudChart ChartType="MudBlazor.ChartType.Donut"
+                      Width="100%"
+                      Height="300px"
+                      InputData="@Data.Select(x => (double)x).ToArray()"
+                      InputLabels="@Labels.ToArray()">
+                <CustomGraphics>
+                    <text class="mud-typography-h3"
+                          x="50%"
+                          y="50%"
+                          dominant-baseline="middle"
+                          text-anchor="middle">
+                        @Data.Sum()
+                    </text>
+                </CustomGraphics>
+            </MudChart>
+        </MudPaper>
+    </MudItem>
+
 </MudGrid>

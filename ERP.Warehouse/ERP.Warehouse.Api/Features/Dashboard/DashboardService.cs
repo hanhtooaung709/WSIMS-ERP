@@ -1,6 +1,7 @@
 ﻿using ERP.Warehouse.Api.Common;
 using ERP.Warehouse.Models.Models.Dashboard;
 using ERP.Warehouse.Models.Models.Dashboard.Box;
+using ERP.Warehouse.Models.Models.Dashboard.Package;
 using ERP.Warehouse.Models.Models.Dashboard.Product;
 using ERP.Warehouse.Models.Models.Package.PackageList;
 using Microsoft.EntityFrameworkCore;
@@ -106,6 +107,17 @@ public class DashboardService : AuthorizationService
             if (stockPackageCount.IsSuccess)
             {
                 model.PackageStockCount = stockPackageCount.Data;
+            }
+
+            #endregion
+
+            #region GetPackageName
+
+            var packageName = await GetPackageName();
+
+            if (packageName.IsSuccess && packageName.Data != null)
+            {
+                model.PackageName = packageName.Data;
             }
 
             #endregion
@@ -260,6 +272,34 @@ public class DashboardService : AuthorizationService
         catch (Exception ex)
         {
             return Result<int>.Error(ex);
+        }
+    }
+
+    private async Task<Result<List<PackageResponceModel>>> GetPackageName()
+    {
+        try
+        {
+            var stockResult = await GetStock();
+
+            if (!stockResult.IsSuccess || stockResult.Data?.list == null)
+            {
+                return Result<List<PackageResponceModel>>.Error();
+            }
+
+            var packageName = stockResult.Data.list
+                .Where(x => x.Quantity > 0)
+                .Select(x => new PackageResponceModel
+                {
+                    PackageName = x.PackageName!,
+                    Quantity = x.Quantity
+                })
+                .ToList();
+
+            return Result<List<PackageResponceModel>>.Success(packageName);
+        }
+        catch (Exception ex)
+        {
+            return Result<List<PackageResponceModel>>.Error(ex);
         }
     }
 

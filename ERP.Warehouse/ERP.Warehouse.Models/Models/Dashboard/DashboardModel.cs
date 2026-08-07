@@ -1,4 +1,5 @@
 ﻿using ERP.Warehouse.Models.Models.Dashboard.Box;
+using ERP.Warehouse.Models.Models.Dashboard.Package;
 using ERP.Warehouse.Models.Models.Package.PackageList;
 
 namespace ERP.Warehouse.Models.Models.Dashboard;
@@ -13,4 +14,5 @@ public class DashboardModel
     public int PackageCount { get; set; }
     public int StockCount { get; set; }
     public int PackageStockCount { get; set; }
+    public List<PackageResponceModel> PackageName { get; set; } = new();
 }

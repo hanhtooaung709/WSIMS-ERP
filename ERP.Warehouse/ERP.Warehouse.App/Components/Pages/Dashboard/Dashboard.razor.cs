@@ -1,6 +1,7 @@
 ﻿using ApexCharts;
 using ERP.Warehouse.Models.Models.Dashboard;
 using ERP.Warehouse.Models.Models.Dashboard.Box;
+using ERP.Warehouse.Models.Models.Dashboard.Package;
 using ERP.Warehouse.Models.Models.Package.PackageList;
 using Microsoft.JSInterop;
 using MudBlazor;
@@ -20,6 +21,10 @@ public partial class Dashboard
     private DashboardModel _model = new();
     private List<ChartSeries> _series = new();
     private string[] _productNames = Array.Empty<string>();
+
+    private PackageResponceModel _package = new();
+    private static readonly List<int> Data = new();
+    private static readonly List<string> Labels = new();
 
     private double StockPackagePercentage => _model.PackageCount > 0
         ? ((double)_model.PackageStockCount / _model.PackageCount) * 100
@@ -132,6 +137,26 @@ public partial class Dashboard
             _model.PackageCount = result.Data.PackageCount;
             _model.StockCount = result.Data.StockCount;
             _model.PackageStockCount = result.Data.PackageStockCount;
+
+            #endregion
+
+            #region Get PackageName & Quantity
+
+            if (result.Data?.PackageName != null)
+            {
+                _model.PackageName = result.Data.PackageName;
+
+                _package = _model.PackageName.FirstOrDefault() ?? new PackageResponceModel();
+
+                Data.Clear();
+                Labels.Clear();
+
+                foreach (var item in _model.PackageName)
+                {
+                    Labels.Add(item.PackageName);
+                    Data.Add(item.Quantity);
+                }
+            }
 
             #endregion
 
