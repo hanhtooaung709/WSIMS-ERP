@@ -27,9 +27,11 @@ public partial class Dashboard
 
     private List<RadarItem> _radarItems = new();
     private List<string> _radarBoxTypes = new();
+
     private ApexChartOptions<RadarItem> _radarOptions = new()
     {
         Chart = new Chart { Height = 350 },
+        Legend = new Legend { Show = false },
         DataLabels = new DataLabels { Enabled = true }
     };
 
@@ -147,5 +149,23 @@ public partial class Dashboard
     {
         public string ProductName { get; set; } = string.Empty;
         public Dictionary<string, double> BoxQuantities { get; set; } = new();
+    }
+
+    private string GetColorHexForIndex(int index)
+    {
+        string[] colors = new string[]
+        {
+            "#594AE2", // Primary Blue/Purple
+            "#00C853", // Green
+            "#FFB300", // Yellow/Orange
+            "#FF4081", // Pink
+            "#00E5FF"  // Cyan
+        };
+        return colors[index % colors.Length];
+    }
+
+    private double GetTotalQuantityForBoxType(string boxType)
+    {
+        return _radarItems.Sum(item => item.BoxQuantities.ContainsKey(boxType) ? item.BoxQuantities[boxType] : 0);
     }
 }
