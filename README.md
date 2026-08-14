@@ -1,0 +1,17 @@
+# Warehouse Management System
+
+Hi! I'm your first Markdown file in **StackEdit**. If you want to learn about StackEdit, you can read me. If you want to play with Markdown, you can edit me. Once you have finished with me, you can create new files by opening the **file explorer** on the left corner of the navigation bar.
+
+
+## Project Feature
+
+ခု project က Warehouse ဆိုင်ခွဲတွေမှာရှိတဲ့ကုန်ပစ္စည်းတွေကို တစ်နေရာနှင့်တစ်နေရာ package transfer တွေလုပ်မယ်။ Package တွေအသစ်ထည့်တာတွေ ပြင်တာတွေ ဖျက်ပစ်တာတွေလုပ်ဆောင်နိုင်သည်။ Package တစ်ခုတွင်ဘာ product တွေပါလဲ အလေးချိန်ဘယ်လောက်ရှိမလဲ ဈေးနှုန်းဘယ်လောက်သက်မှတ်မလဲ ဆိုပြီး management လုပ်နိုင်သည်။ Package များပြုလုပ်ရာတွင်အသုံးပြုသော Box များကိုလဲ ပြင်တာတွေ ဖျက်ပစ်တာတွေလုပ်ဆောင်နိုင်သည်။ Box တစ်ခုတွင် Box name, size နဲ့ weight စသည့်အချက်အလက်များပါဝင်သည်။ Package transfer လုပ်ရာတွင် Pending, Approved နဲ့ Rejected ဆိုပြီး Status သုံးမျိုးရှိပါတယ်။
+
+>ဥပမာ - ဂိုဒေါင်-A ကနေ ဂိုဒေါင်-B သို့ package transfer လုပ်တဲ့ process တွင် ဂိုဒေါင်-A ကနေပစ္စည်းလွှဲလိုက်ပြီ သို့သော် ဂိုဒေါင်-B သို့မရောက်ရှိသေးရင် Pending status အနေနဲ့ရှိနေမယ်။ ဂိုဒေါင်-B သို့ အမှန်တကယ် ပစ္စည်းရောက်ရှိကြောင်းစစ်ဆေးပြီးမှ ဂိုဒေါင်-B ဘက်က Approved ပေးလိုက်ရင် package transfer approved success ဖြစ်သွားပါပြီ။ အကြောင်းအမျိုးမျိုးကြောင့် ဂိုဒေါင်-B သို့ပစ္စည်းမရောက်ရှိခဲ့ရင် ဂိုဒေါင်-A ဘက်က cancel လုပ်နိုင်သလို ဂိုဒေါင်-B ဘက်ကလဲ Rejected လုပ်နိုင်သည်။ ဘယ်လိုအကြောင်းအရင်းကြောင့် Rejected လုပ်ရသလဲဆိုတဲ့ Rejected reason လဲထည့်သွင်းရေးသားဖော်ပြနိုင်သည်။
+
+Package transfer လုပ်ရာတွင် Requested UserName, Requested datetime, Approved UserName နှင့် Approved datetime များပါဝင် ကြည့်ရှုနိုင်မယ်။ Warehouse ဆိုင်ခွဲများကို Branch တစ်ခုစီအလိုက်အသီးသီးခွဲခြားထားသည်။ Branch တစ်ခုချင်းစီတွင် State name, City name, Township name နဲ့ Address စသည့် အချက်အလက်များပါဝင်သည်။ ထို Branch တစ်ခုနှင့်တစ်ခု အပြန်အလှန် package transfer လုပ်ပါမယ်။
+Warehouse user တစ်ယောက်ချင်းစီတွင် branch အလိုက် account တစ်ခုစီရှိပါမယ်။ Account များတွင် employee information များပါဝင်ပါသည်။ Warehouse user တစ်ယောက်သည် သူ့၏ branch တွင်ရှိသော package များကိုသာလျှင် management လုပ်နိုင်ပါမယ်။
+
+>ဥပမာ - Branch-A တွင်ရှိသော user တစ်ယောက်သည် branch-A တွင်ရှိသော package များကိုသာ transfer လုပ်ခြင်း ပြုပြင်ခြင်း Quality တိုးခြင်းစသည့်များပြုလုပ်နိုင်မည်။ တခြားသော branch မှ ကိုယ့် branch သို့ transfer request ထားသော package များကို approved ပေးခြင်း rejected လုပ်ခြင်းများလဲပြုလုပ်နိုင်ပါမယ်။
+
+Warehouse user တစ်ယောက်အတွက် account တစ်ခု ဖွင့်ပေးရမယ်ဆိုလျှင် Warehouse တွင်ရာထူးအကြီးပိုင်းတစ်ယောက်ယောက်က employee ၏ information များကိုထည့်သွင်း၍ request လုပ်ရပါမယ်။ အဲ request ကို Hr (Admin) က Approved ပေးလိုက်လျှင် account တစ်ခုရပါပြီ။ Request မလုပ်ဘဲ Hr (Admin) မှတိုက်ရိုက် account ဖွင့်ပေးလို့လဲရပါတယ်။ Account အသစ်တစ်ခုရသွားလျှင် Hr (Admin) ဘက်ကပေးသော user name နဲ့ password ဖြင့် login ဝင်ရပါမယ်။ Account အသစ်ကို ပထမဆုံးအကြိမ် login ဝင်တာဖြစ်သောကြောင့် password အရင် change ခိုင်းပါမယ်။ ပြီးရင် Warehouse user account ကိုအသုံးပြုလို့ရပါပြီ။ Warehouse user account ၏ employee information များပြုပြင်ပြောင်းလဲချင်လျှင် Hr (Admin) ဘက်ကို Warehouse တွင်ရာထူးအကြီးပိုင်းတစ်ယောက်ယောက်က request လုပ်ရပါမယ်။ Account တစ်ခု password မေ့သွားလို့ reset password လုပ်ရန် account lock ချရန် လိုအပ်လာပါက Hr (Admin) ဘက်ကတိုက်ရိုက်လုပ်‌ပေးမှရပါမယ်။ ကိုယ့်ရဲ့ယခုလက်ရှိ password ကို ပြောင်းလဲချင်လျှင် ကိုယ်တိုင်ပြောင်းလဲလိုရပါမယ်။ Warehouse user account နှင့်ပတ်သက်သော request များသည်လည်း Pending, Approved နဲ့ Rejected ဆိုပြီး Status သုံးမျိုးရှိပါမယ်။
