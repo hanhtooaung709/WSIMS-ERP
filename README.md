@@ -1,8 +1,4 @@
 # Warehouse Management System
-
-Hi! I'm your first Markdown file in **StackEdit**. If you want to learn about StackEdit, you can read me. If you want to play with Markdown, you can edit me. Once you have finished with me, you can create new files by opening the **file explorer** on the left corner of the navigation bar.
-
-
 ## Project Feature
 
 ခု project က Warehouse ဆိုင်ခွဲတွေမှာရှိတဲ့ကုန်ပစ္စည်းတွေကို တစ်နေရာနှင့်တစ်နေရာ package transfer တွေလုပ်မယ်။ Package တွေအသစ်ထည့်တာတွေ ပြင်တာတွေ ဖျက်ပစ်တာတွေလုပ်ဆောင်နိုင်သည်။ Package တစ်ခုတွင်ဘာ product တွေပါလဲ အလေးချိန်ဘယ်လောက်ရှိမလဲ ဈေးနှုန်းဘယ်လောက်သက်မှတ်မလဲ ဆိုပြီး management လုပ်နိုင်သည်။ Package များပြုလုပ်ရာတွင်အသုံးပြုသော Box များကိုလဲ ပြင်တာတွေ ဖျက်ပစ်တာတွေလုပ်ဆောင်နိုင်သည်။ Box တစ်ခုတွင် Box name, size နဲ့ weight စသည့်အချက်အလက်များပါဝင်သည်။ Package transfer လုပ်ရာတွင် Pending, Approved နဲ့ Rejected ဆိုပြီး Status သုံးမျိုးရှိပါတယ်။
