@@ -18,7 +18,7 @@ Warehouse user တစ်ယောက်အတွက် account တစ်ခု �
   <img src="GitImage/EditProduct.png" width="30%" />
 </p>
 <p>
-  <img src="GitImage/PackageList.png" width="33%" />
-  <img src="GitImage/ReqPackageDetail.png" width="33%" />
-  <img src="GitImage/StockTransfer.png" width="33%" />
+  <img src="GitImage/PackageList.png" width="30%" />
+  <img src="GitImage/ReqPackageDetail.png" width="30%" />
+  <img src="GitImage/StockTransfer.png" width="30%" />
 </p>
